@@ -1,6 +1,7 @@
 import { Command } from "commander";
 import pc from "picocolors";
 import { createRequire } from "node:module";
+import { realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { registerNewCommand } from "./commands/new.js";
 import { setLang, t } from "./i18n/index.js";
@@ -40,8 +41,15 @@ function applyLangFromArgv(argv: string[]): void {
   if (eq) setLang(eq.slice("--lang=".length));
 }
 
-const isEntry =
-  !!process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href;
+const isEntry = (() => {
+  const entry = process.argv[1];
+  if (!entry) return false;
+  try {
+    return import.meta.url === pathToFileURL(realpathSync(entry)).href;
+  } catch {
+    return import.meta.url === pathToFileURL(entry).href;
+  }
+})();
 
 if (isEntry) {
   main(process.argv).catch((err) => {
