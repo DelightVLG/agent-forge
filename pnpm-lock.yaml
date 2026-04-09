@@ -37,9 +37,9 @@ importers:
         specifier: ^5.5.0
         version: 5.9.3
 
-  packages/create-agentforge:
+  packages/create-agent-forge:
     dependencies:
-      agentforge:
+      '@delightvlg/agent-forge':
         specifier: workspace:*
         version: link:../..
 

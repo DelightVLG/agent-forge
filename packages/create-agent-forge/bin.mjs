@@ -1,7 +1,7 @@
 #!/usr/bin/env node
-// Thin initializer so that `pnpm create agentforge my-app` works.
+// Thin initializer so that `pnpm create @delightvlg/agent-forge my-app` works.
 // It simply forwards its arguments to `agentforge new ...`.
-import { main } from "agentforge";
+import { main } from "@delightvlg/agent-forge";
 
 const forwarded = ["new", ...process.argv.slice(2)];
 await main([process.argv[0], "agentforge", ...forwarded]);

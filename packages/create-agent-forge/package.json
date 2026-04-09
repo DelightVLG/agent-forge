@@ -1,11 +1,11 @@
 {
-  "name": "create-agentforge",
+  "name": "@delightvlg/create-agent-forge",
   "author": "Sergey Kompanietc",
   "version": "0.1.0",
   "description": "Initializer for agentforge. Enables `pnpm create agentforge my-app`.",
   "type": "module",
   "bin": {
-    "create-agentforge": "bin.mjs"
+    "create-agent-forge": "bin.mjs"
   },
   "files": [
     "bin.mjs",
@@ -23,6 +23,6 @@
   ],
   "license": "MIT",
   "dependencies": {
-    "agentforge": "workspace:*"
+    "@delightvlg/agent-forge": "workspace:*"
   }
 }

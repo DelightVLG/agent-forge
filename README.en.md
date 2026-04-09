@@ -10,10 +10,11 @@ Stack-agnostic: the template does not assume a backend/frontend stack. On first 
 
 ```bash
 # global
-npm i -g agentforge
+npm i -g @delightvlg/agent-forge
 # or one-shot
-pnpm dlx agentforge new my-app
-npx agentforge new my-app
+pnpm create @delightvlg/agent-forge my-app
+pnpm dlx @delightvlg/agent-forge new my-app
+npx @delightvlg/agent-forge new my-app
 ```
 
 ## Usage

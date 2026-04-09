@@ -6,7 +6,7 @@
 
 - [ ] **Дополнительные шаблоны.** `minimal` (без `apps/backend` и `apps/frontend`), `backend-only`, `frontend-only`. Выбор через `--template <name>` или интерактивный селектор.
 - [ ] **Флаг `--pm <npm|pnpm|yarn|bun>`.** Сейчас всегда запускается `pnpm install` — дать выбор пакетного менеджера и подставлять корректные инструкции в «Next steps».
-- [ ] **Автоопределение пакетного менеджера.** По `npm_config_user_agent`, чтобы `pnpm create agentforge` → pnpm, `npm create` → npm и т.д.
+- [ ] **Автоопределение пакетного менеджера.** По `npm_config_user_agent`, чтобы `pnpm create @delightvlg/agent-forge` → pnpm, `npm create` → npm и т.д.
 - [ ] **`agentforge doctor`.** Проверка окружения сгенерированного проекта: `claude --version`, `codex --version`, `gh auth status`, `pnpm --version`, Node ≥ 20.
 - [ ] **`agentforge upgrade`.** Обновить `.claude/`, `.agent-memory/` структуры в уже существующем проекте из новой версии шаблона (diff + merge).
 - [ ] **`agentforge list-templates`.** Показать доступные шаблоны с описанием.
