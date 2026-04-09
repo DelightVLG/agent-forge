@@ -1,0 +1,14 @@
+pre-commit:
+  parallel: true
+  commands:
+    lint:
+      run: pnpm -r lint --if-present
+    format-check:
+      run: pnpm -r format:check --if-present
+
+pre-push:
+  commands:
+    tests:
+      run: pnpm -r test --if-present
+    review:
+      run: ./scripts/review.sh || true  # non-blocking locally; remove `|| true` to hard-block
