@@ -1,5 +1,6 @@
 {
   "name": "create-agentforge",
+  "author": "Sergey Kompanietc",
   "version": "0.1.0",
   "description": "Initializer for agentforge. Enables `pnpm create agentforge my-app`.",
   "type": "module",
