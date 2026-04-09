@@ -1,127 +1,149 @@
-# Agent Framework
+# agentforge
 
-Base monorepo for agent-driven development with Claude Code + OpenAI Codex CLI. Stack-agnostic — a one-time interview populates the real stack on first run.
+> **Русский** · [English](./README.en.md)
 
-## Stack
+CLI, который разворачивает новый проект, уже настроенный под работу с sub-агентами Claude Code (PM → dev → tester → reviewer), с markdown-памятью в `.agent-memory/`.
 
-- **pnpm workspaces** monorepo (`apps/backend`, `apps/frontend`)
-- **Claude Code** for planning, implementation, testing orchestration (subagents in `.claude/agents/`)
-- **OpenAI Codex CLI** as external reviewer
-- **GitHub Issues** as task tracker (via `gh` CLI)
-- **lefthook** for local git hooks (no Claude API needed → no GH Actions for Claude)
-- **Markdown** memory in `.agent-memory/` (git-tracked, human-readable, agent-writable)
+Стек-агностично: шаблон не навязывает backend/frontend стек. При первом запуске сгенерированного проекта одноразовое интервью наполняет `.agent-memory/project.md` реальным стеком.
 
-## Prerequisites
+## Установка
 
 ```bash
-# Required
-claude --version      # Claude Code CLI
-codex --version       # OpenAI Codex CLI
-gh auth status        # GitHub CLI, authenticated
-pnpm --version        # pnpm 9+
-node --version        # Node 20+
+# глобально
+npm i -g agentforge
+# или одноразово
+pnpm create agentforge my-app
+npm create agentforge my-app
+pnpm dlx agentforge new my-app
+npx agentforge new my-app
 ```
 
-## First-time setup
+## Использование
 
 ```bash
-pnpm install                   # installs lefthook
-pnpm exec lefthook install     # activate git hooks
-./scripts/init-project.sh      # interview to populate .agent-memory/project.md
+agentforge new my-app                     # интерактивно
+agentforge new my-app --yes --no-install  # без вопросов, без pnpm install
+agentforge new my-app -t default          # выбрать шаблон (пока только "default")
+agentforge new my-app --lang en           # язык интерфейса CLI
 ```
 
-The interview (run by the `context-collector` subagent, Opus 4.6) asks about stack, architecture, deploy, conventions, and hard constraints. Answers are written to `.agent-memory/project.md` and `apps/*/CLAUDE.md`. **Agents refuse to work until this is done.**
+Флаги:
 
-## Daily flow
+| Флаг | По умолчанию | Описание |
+| --- | --- | --- |
+| `-t, --template <name>` | `default` | Используемый шаблон (должен быть в `templates/`). |
+| `--git / --no-git` | спрашивает | `git init` в новом проекте. |
+| `--install / --no-install` | спрашивает | `pnpm install` в новом проекте. |
+| `-y, --yes` | `false` | Принять значения по умолчанию; требует передать название проекта аргументом. |
+| `--lang <en\|ru>` | авто | Язык интерфейса CLI. Автодетект по `LANG` / `LC_ALL`. Можно также задать `AGENTFORGE_LANG=ru`. |
+
+После создания:
 
 ```bash
-# 1. Plan a feature → PM decomposes into tasks + GitHub Issues
-claude
-> /plan Add passwordless email login
-
-# 2. Dispatch a task → dev agent implements + writes tests,
-#    tester runs suite, codex-reviewer reviews
-> /implement 001
-
-# 3. See what's in flight
-./scripts/status.sh
-
-# 4. Manual review on current branch
-./scripts/review.sh
-
-# 5. Create PR → you approve on GitHub
-gh pr create
+cd my-app
+pnpm install
+claude           # открой Claude Code
+> /init-project  # context-collector наполнит .agent-memory/project.md
 ```
 
-## Layout
+## Локализация
+
+CLI поддерживает два языка: **английский** (по умолчанию) и **русский**.
+
+Порядок определения языка:
+
+1. Флаг `--lang en|ru` (приоритет).
+2. Переменная окружения `AGENTFORGE_LANG=ru`.
+3. Системная локаль (`LC_ALL`, `LC_MESSAGES`, `LANG`). Если начинается с `ru` — русский.
+4. Иначе — английский.
+
+```bash
+AGENTFORGE_LANG=ru agentforge new my-app   # русский через env
+agentforge --lang ru new my-app            # русский через флаг
+agentforge --lang en new my-app            # английский принудительно
+```
+
+Добавить новый язык — значит положить файл `src/i18n/<lang>.ts` с тем же набором ключей, что `en.ts`, и зарегистрировать его в `src/i18n/index.ts`. Никакого внешнего рантайма не требуется.
+
+## Что получаешь
+
+Шаблон `default` создаёт монорепо на `pnpm workspaces`, настроенный под sub-агентов Claude Code:
 
 ```
 .claude/
-  agents/        subagents (project-manager, context-collector, backend-dev,
-                 frontend-dev, tester, codex-reviewer)
-  commands/      slash commands (/init-project, /plan, /implement, /review, /status)
-  skills/        reusable guidance
-    common/      git-flow, conventions, security-basics
-    backend/     api-design, db-migrations, testing-be
-    frontend/    component-design, a11y, testing-fe
-  settings.json  tool permissions
-
-.agent-memory/   long-term memory (git-tracked, always read before planning)
-  project.md     stack + conventions, filled by context-collector
-  session-log.md append-only log, newest on top
-  tasks/         one file per task, status lifecycle
-  decisions/     ADR-style records
-
+  agents/        project-manager, context-collector, backend-dev, frontend-dev, tester, codex-reviewer
+  commands/      /init-project /plan /implement /review /status
+  skills/        переиспользуемые инструкции (common/backend/frontend)
+  settings.json  права на инструменты
+.agent-memory/   долговременная память, git-tracked, читается каждой сессией
+  project.md     стек + конвенции (наполняется context-collector при первом запуске)
+  session-log.md append-only лог
+  tasks/         одна задача = один файл
+  decisions/     ADR-стиль записи решений
 apps/
-  backend/       CLAUDE.md with BE rules (seeded by context-collector)
-  frontend/      CLAUDE.md with FE rules (seeded by context-collector)
-
-scripts/
-  init-project.sh  bootstrap
-  dev-task.sh      run full dev cycle for one task
-  review.sh        codex review of current diff
-  status.sh        tasks + branch + open PRs
-
-CLAUDE.md        root rules (read every session)
-lefthook.yml     pre-commit (lint) + pre-push (tests + codex)
+  backend/       CLAUDE.md с BE-правилами
+  frontend/      CLAUDE.md с FE-правилами
+scripts/         init-project.sh, dev-task.sh, review.sh, status.sh
+CLAUDE.md        корневые правила
+lefthook.yml     pre-commit (lint) + pre-push (тесты + codex)
+pnpm-workspace.yaml
 ```
 
-## Development flow
+Агенты рассчитывают на локальный Claude Code CLI, `codex` CLI (OpenAI) для внешнего ревью и `gh` для GitHub Issues/PR. Ключ Claude API не используется — всё идёт через локальный Claude Code CLI.
+
+## Флоу разработки (внутри сгенерированного проекта)
 
 ```
-user idea
+идея пользователя
    │
    ▼
-[project-manager / opus]
-   │  clarify → decompose → write task files → create GH Issues
+[project-manager / opus]    уточнение → декомпозиция → файлы задач → GitHub Issues
    ▼
-[backend-dev or frontend-dev / sonnet]
-   │  implement + write tests in same change → update task log
+[backend-dev | frontend-dev / sonnet]   реализация + тесты в том же изменении
    ▼
-[tester / sonnet]
-   │  run suite → report pass/fail + AC coverage
+[tester / sonnet]           прогон тестов → отчёт pass/fail + покрытие AC
    ▼
-[codex-reviewer / sonnet]
-   │  shell out to `codex exec` on diff → APPROVE / REQUEST_CHANGES / BLOCK
+[codex-reviewer / sonnet]   `codex exec` на диффе → APPROVE / REQUEST_CHANGES / BLOCK
    ▼
-gh pr create  →  user reviews  →  user merges
+gh pr create                ты ревьюишь и мерджишь
 ```
 
-## Memory model
+## Структура этого репозитория
 
-Everything important is a markdown file in `.agent-memory/`. Agents read it at session start and append to it as they work. Nothing magical — just files, git-tracked, PR-reviewable.
+```
+src/                исходники CLI (TypeScript, ESM)
+  index.ts          вход на commander
+  commands/new.ts   команда `agentforge new`
+  lib/              copy-template, render, paths
+  i18n/             en.ts, ru.ts, index.ts
+templates/
+  default/          сам шаблон — дотфайлы хранятся как _name, шаблонные файлы как *.hbs
+packages/
+  create-agentforge/  тонкий пакет-инициализатор для `pnpm create agentforge`
+scripts/
+  smoke.mjs         E2E smoke-тест
+dist/               собранный CLI (публикуется в npm)
+package.json        манифест пакета CLI
+tsup.config.ts      конфиг сборки
+ROADMAP.md          будущие доработки
+```
 
-If a piece of state needs structure beyond what markdown allows (e.g. you want a dashboard), add a `tasks.json` later. Start simple.
+### Правила авторинга шаблонов
 
-## Extending
+- Дотфайлы хранятся с префиксом `_`: `_claude/`, `_gitignore`. При копировании переименовываются обратно в `.name`.
+- Файлы с суффиксом `.hbs` проходят через рендер с подстановкой `{{projectName}}` и теряют суффикс: `package.json.hbs` → `package.json`.
+- Обычные файлы копируются без изменений, байт в байт.
 
-- **New skill:** drop a file in `.claude/skills/{common,backend,frontend}/`. Agents pick it up via the CLAUDE.md pointer.
-- **New agent:** add a file to `.claude/agents/` with frontmatter (`name`, `description`, `model`, `tools`).
-- **New command:** add a file to `.claude/commands/`. Referenced as `/<filename>` in Claude Code.
-- **New ADR:** write it to `.agent-memory/decisions/`.
+## Разработка CLI
 
-## Notes
+```bash
+pnpm install
+pnpm dev new /tmp/smoke --yes --no-install --no-git     # запуск из исходников через tsx
+pnpm build                                               # сборка в dist/
+node dist/index.js new /tmp/smoke --yes --no-install --no-git
+pnpm smoke                                               # E2E: собирает, скафолдит, проверяет файлы
+```
 
-- Nothing in this repo requires the Claude API. All Claude calls go through the local Claude Code CLI.
-- GitHub Actions can still run your own tests/deploys — just don't expect Claude to run inside them.
-- `lefthook` pre-push runs tests and codex review locally as the safety net instead of CI-based Claude review.
+## Лицензия
+
+MIT
