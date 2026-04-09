@@ -1,17 +1,49 @@
 {
-  "name": "agent-framework",
-  "private": true,
-  "version": "0.0.1",
+  "name": "agentforge",
+  "version": "0.1.0",
+  "description": "CLI that scaffolds new projects pre-wired for Claude Code sub-agent workflows.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "exports": {
+    ".": "./dist/index.js"
+  },
+  "bin": {
+    "agentforge": "dist/index.js"
+  },
+  "files": [
+    "dist",
+    "templates"
+  ],
   "scripts": {
-    "init": "./scripts/init-project.sh",
-    "task": "./scripts/dev-task.sh",
-    "review": "./scripts/review.sh",
-    "status": "./scripts/status.sh",
-    "test": "pnpm -r test",
-    "lint": "pnpm -r lint"
+    "build": "tsup",
+    "dev": "tsx src/index.ts",
+    "prepublishOnly": "pnpm build",
+    "smoke": "node scripts/smoke.mjs"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "agents",
+    "scaffold",
+    "cli",
+    "template"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "@clack/prompts": "^0.7.0",
+    "commander": "^12.1.0",
+    "fs-extra": "^11.2.0",
+    "picocolors": "^1.0.1"
   },
   "devDependencies": {
-    "lefthook": "^1.7.0"
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^20.14.0",
+    "tsup": "^8.1.0",
+    "tsx": "^4.15.0",
+    "typescript": "^5.5.0"
   },
   "packageManager": "pnpm@9.0.0"
 }

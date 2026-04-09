@@ -1,0 +1,12 @@
+node_modules/
+dist/
+build/
+.next/
+.turbo/
+coverage/
+.env
+.env.local
+.DS_Store
+*.log
+/tmp/review-*.txt
+/tmp/review-*.patch

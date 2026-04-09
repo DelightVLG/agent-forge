@@ -1,0 +1,27 @@
+{
+  "name": "create-agentforge",
+  "version": "0.1.0",
+  "description": "Initializer for agentforge. Enables `pnpm create agentforge my-app`.",
+  "type": "module",
+  "bin": {
+    "create-agentforge": "bin.mjs"
+  },
+  "files": [
+    "bin.mjs",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
+  "keywords": [
+    "claude",
+    "claude-code",
+    "agents",
+    "scaffold",
+    "agentforge"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "agentforge": "workspace:*"
+  }
+}
