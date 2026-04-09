@@ -29,14 +29,14 @@ Managed by **pnpm workspaces** (`pnpm-workspace.yaml`). Use `pnpm --filter <app>
 
 ## Agents
 
-| Agent | Model | Role |
-|---|---|---|
-| `project-manager` | opus | Decomposes features into tasks, writes task specs to `.agent-memory/tasks/` |
-| `context-collector` | opus | One-time interview to populate `.agent-memory/project.md` |
-| `backend-dev` | sonnet | Implements BE tasks + writes tests |
-| `frontend-dev` | sonnet | Implements FE tasks + writes tests |
-| `tester` | sonnet | Runs tests, reports failures (does **not** write tests) |
-| `codex-reviewer` | sonnet | Shells out to `codex` CLI for external code review |
+| Agent               | Model  | Role                                                                        |
+| ------------------- | ------ | --------------------------------------------------------------------------- |
+| `project-manager`   | opus   | Decomposes features into tasks, writes task specs to `.agent-memory/tasks/` |
+| `context-collector` | opus   | One-time interview to populate `.agent-memory/project.md`                   |
+| `backend-dev`       | sonnet | Implements BE tasks + writes tests                                          |
+| `frontend-dev`      | sonnet | Implements FE tasks + writes tests                                          |
+| `tester`            | sonnet | Runs tests, reports failures (does **not** write tests)                     |
+| `codex-reviewer`    | sonnet | Shells out to `codex` CLI for external code review                          |
 
 ## Development flow
 

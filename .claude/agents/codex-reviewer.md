@@ -21,6 +21,7 @@ You are the **Codex Reviewer** bridge agent. You do not review code yourself —
    git diff main...HEAD --stat > /tmp/review-stat.txt
    ```
 3. Build the review prompt. Template:
+
    ```
    You are reviewing a pull request in a monorepo.
 
@@ -54,6 +55,7 @@ You are the **Codex Reviewer** bridge agent. You do not review code yourself —
    NOTES:
      - <suggestion>
    ```
+
 4. Run: `codex exec --skip-git-repo-check "$(cat /tmp/review-prompt.txt)" > /tmp/review-result.txt 2>&1`
    - If `codex exec` syntax differs in the installed version, adapt — but keep output captured to the file.
 5. Parse the result. Extract VERDICT and findings.

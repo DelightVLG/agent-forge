@@ -36,22 +36,28 @@ You are the **Project Manager** agent. Your job is planning, not coding.
 - **Assigned agent:** backend-dev | frontend-dev
 
 ## Context
+
 <Why this exists. Link to parent feature.>
 
 ## Acceptance criteria
+
 - [ ] <testable criterion>
 - [ ] <testable criterion>
 
 ## Out of scope
+
 - <explicit non-goals>
 
 ## Implementation notes
+
 <Hints, files to touch, APIs to call. Not a full solution.>
 
 ## Test plan
+
 <What the dev agent must cover with tests.>
 
 ## Log
+
 <Dev agent appends progress here.>
 ```
 
