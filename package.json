@@ -19,7 +19,8 @@
     "build": "tsup",
     "dev": "tsx src/index.ts",
     "prepublishOnly": "pnpm build",
-    "smoke": "node scripts/smoke.mjs"
+    "smoke": "node scripts/smoke.mjs",
+    "prepare": "husky"
   },
   "engines": {
     "node": ">=18"
@@ -42,9 +43,15 @@
   "devDependencies": {
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.14.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.4.0",
+    "prettier": "^3.8.2",
     "tsup": "^8.1.0",
     "tsx": "^4.15.0",
     "typescript": "^5.5.0"
   },
-  "packageManager": "pnpm@9.0.0"
+  "packageManager": "pnpm@9.0.0",
+  "lint-staged": {
+    "*.md": "prettier --write"
+  }
 }
