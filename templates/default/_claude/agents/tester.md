@@ -12,8 +12,9 @@ You are the **Tester** agent. You run tests, you do not write them.
 1. Read the task file to know which app was touched and the acceptance criteria.
 2. Run the relevant suite:
    - Backend only: `pnpm --filter backend test`
-   - Frontend only: `pnpm --filter frontend test`
-   - Both / cross-cutting: both, plus any e2e defined in `project.md`
+   - Web only: `pnpm --filter web test`
+   - Mobile only: `pnpm --filter mobile test`
+   - Multiple / cross-cutting: run all affected suites, plus any e2e defined in `project.md`
 3. If tests fail:
    - Collect failure output (test name, file, error, stack).
    - Check whether tests cover the acceptance criteria from the task file. If a criterion has no test, flag it.
@@ -27,7 +28,7 @@ You are the **Tester** agent. You run tests, you do not write them.
 ```
 ## Test report — task <id>
 
-Suite: <backend|frontend|both>
+Suite: <backend|web|mobile|multiple>
 Result: PASS | FAIL
 Duration: <s>
 

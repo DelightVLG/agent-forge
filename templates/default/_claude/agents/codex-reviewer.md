@@ -62,7 +62,7 @@ You are the **Codex Reviewer** bridge agent. You do not review code yourself —
 6. Append the review to the task file under a `## Review` section with timestamp.
 7. Report:
    - **APPROVE** → tell orchestrator it's ready for PR creation.
-   - **REQUEST_CHANGES** → return findings to the original dev agent (backend-dev / frontend-dev) for fixes. Loop.
+   - **REQUEST_CHANGES** → return findings to the original dev agent (backend-dev / web-dev / mobile-dev) for fixes. Loop.
    - **BLOCK** → stop entirely and surface to the user — something structurally wrong.
 
 ## Rules

@@ -4,7 +4,7 @@
 
 ## Ближайшее
 
-- [ ] **Дополнительные шаблоны.** `minimal` (без `apps/backend` и `apps/frontend`), `backend-only`, `frontend-only`. Выбор через `--template <name>` или интерактивный селектор.
+- [ ] **Дополнительные шаблоны.** `minimal` (без `apps/`), `backend-only`, `web-only`, `mobile-only`. Выбор через `--template <name>` или интерактивный селектор.
 - [ ] **Флаг `--pm <npm|pnpm|yarn|bun>`.** Сейчас всегда запускается `pnpm install` — дать выбор пакетного менеджера и подставлять корректные инструкции в «Next steps».
 - [ ] **Автоопределение пакетного менеджера.** По `npm_config_user_agent`, чтобы `pnpm create @delightvlg/agent-forge` → pnpm, `npm create` → npm и т.д.
 - [ ] **`agentforge doctor`.** Проверка окружения сгенерированного проекта: `claude --version`, `codex --version`, `gh auth status`, `pnpm --version`, Node ≥ 20.
@@ -30,6 +30,46 @@
 - [ ] **README на английском** уже есть (`README.en.md`). Держать в синхроне.
 - [ ] **Расширить i18n CLI** на `en` + `ru` — сейчас покрыт базовый набор. По мере добавления команд переводить новые строки в обе локали.
 - [ ] **Больше локалей** (es, de, zh) — после стабилизации API сообщений.
+
+## Скиллы для технологий
+
+Специализированные скиллы (`.claude/skills/`) под конкретные технологии. Агенты подключают их на основе стека из `project.md`.
+
+### Backend
+- [ ] **NestJS** — модули, контроллеры, провайдеры, guards, interceptors, pipes, декораторы
+- [ ] **Express** — middleware, роутинг, error handling
+- [ ] **TypeScript (backend)** — строгая типизация, generics, utility types, конвенции
+- [ ] **PostgreSQL** — запросы, индексы, миграции, оптимизация, партиционирование
+- [ ] **Prisma** — схема, миграции, seeding, relations, client generation
+- [ ] **TypeORM** — entities, repositories, migrations, query builder, relations
+- [ ] **Drizzle** — schema definition, migrations, queries
+- [ ] **Redis** — кэширование, pub/sub, сессии
+- [ ] **GraphQL** — schema-first / code-first, resolvers, dataloaders
+- [ ] **REST API** — OpenAPI/Swagger, валидация, versioning
+
+### Web frontend
+- [ ] **React** — хуки, паттерны композиции, memo, Suspense, Server Components
+- [ ] **Next.js** — App Router, SSR/SSG/ISR, middleware, API routes
+- [ ] **Vite + React** — конфигурация, плагины, HMR
+- [ ] **Tailwind CSS** — утилиты, кастомизация темы, responsive design
+- [ ] **TypeScript (frontend)** — типизация компонентов, пропсов, событий
+- [ ] **Zustand / Redux Toolkit** — state management patterns
+- [ ] **React Query / TanStack Query** — data fetching, caching, mutations
+- [ ] **React Hook Form + Zod** — формы и валидация
+
+### Mobile
+- [ ] **React Native** — компоненты, стилизация, платформо-специфичный код, производительность
+- [ ] **Expo** — managed workflow, config plugins, EAS Build, EAS Update, OTA
+- [ ] **Expo Router** — file-based routing, layouts, deep linking
+- [ ] **React Navigation** — stack, tab, drawer navigators, deep linking
+- [ ] **React Native Testing Library** — тестирование компонентов и хуков
+- [ ] **App Store / Google Play** — подготовка к публикации, скриншоты, metadata
+
+### Common
+- [ ] **Monorepo** — pnpm workspaces, shared packages, зависимости между apps
+- [ ] **Docker** — Dockerfile, multi-stage builds, docker-compose
+- [ ] **CI/CD** — GitHub Actions, pipelines для тестов и деплоя
+- [ ] **Auth** — JWT, OAuth2, session-based, роли и permissions
 
 ## Крупное
 
