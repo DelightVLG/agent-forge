@@ -1,123 +1,229 @@
-# agentforge
+<div align="center">
+
+# Agent Forge
+
+**Scaffold projects pre-wired for Claude Code multi-agent workflows**
+
+[![npm](https://img.shields.io/npm/v/@delightvlg/agent-forge?color=CB3837&label=npm&logo=npm&logoColor=white)](https://www.npmjs.com/package/@delightvlg/agent-forge)
+[![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![node](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 
 > [Русский](./README.md) · **English**
 
-CLI that scaffolds a new project pre-wired for Claude Code sub-agent workflows (PM → dev → tester → reviewer), with a markdown-based memory layer in `.agent-memory/`.
+</div>
 
-Stack-agnostic: the template does not assume a backend/frontend/mobile stack. On first run inside the generated project, a one-time interview determines platforms (Web, Mobile, Backend) and populates `.agent-memory/project.md` with the real stack.
+---
 
-## Install
+One command — and you get a ready-made monorepo with a team of AI agents: PM
+plans, developer writes code, tester verifies, reviewer checks the diff.
+Everything runs through the local Claude Code CLI, no API keys needed.
+
+## ![Quick Start](https://img.shields.io/badge/Quick_Start-6C47FF?style=for-the-badge&logo=terminal&logoColor=white)
 
 ```bash
-# global
+# Install globally
 npm i -g @delightvlg/agent-forge
-# or one-shot
-pnpm create @delightvlg/agent-forge my-app
-pnpm dlx @delightvlg/agent-forge new my-app
+
+# Create a project
+agentforge new my-app
+
+# Or without installing — via npx / pnpm
 npx @delightvlg/agent-forge new my-app
+pnpm dlx @delightvlg/agent-forge new my-app
 ```
-
-## Usage
 
 ```bash
-agentforge new my-app                     # interactive
-agentforge new my-app --yes --no-install  # non-interactive, skip pnpm install
-agentforge new my-app -t default          # pick template (only "default" for now)
+cd my-app && pnpm install
+claude                    # open Claude Code
+> /init-project           # interview → fills in the stack and configures the project
 ```
 
-Flags:
+---
 
-| Flag | Default | Description |
-| --- | --- | --- |
-| `-t, --template <name>` | `default` | Template to use (must exist in `templates/`). |
-| `--git / --no-git` | prompt | `git init` inside the new project. |
-| `--install / --no-install` | prompt | `pnpm install` inside the new project. |
-| `-y, --yes` | `false` | Accept defaults; requires a project name as argument. |
+## ![What's Inside](https://img.shields.io/badge/What's_Inside-1A1A2E?style=for-the-badge&logo=files&logoColor=white)
 
-After scaffolding:
+Agent Forge creates a **pnpm workspaces monorepo** with fully configured
+infrastructure for AI-driven development:
 
-```bash
-cd my-app
-pnpm install
-claude           # open Claude Code
-> /init-project  # context-collector will populate .agent-memory/project.md
-```
+<table>
+<tr>
+<td width="50%">
 
-## What you get
+### Agents
 
-The `default` template creates a pnpm workspaces monorepo wired for Claude Code sub-agents:
+| Agent                 | Role                             |
+| --------------------- | -------------------------------- |
+| **project-manager**   | Task decomposition, planning     |
+| **context-collector** | Gathering stack and conventions  |
+| **backend-dev**       | Backend development              |
+| **web-dev**           | Web interface development        |
+| **mobile-dev**        | Mobile app development           |
+| **tester**            | Running tests, verifying AC      |
+| **codex-reviewer**    | External review via OpenAI Codex |
+
+</td>
+<td width="50%">
+
+### Structure
 
 ```
 .claude/
-  agents/        project-manager, context-collector, backend-dev, web-dev, mobile-dev, tester, codex-reviewer
-  commands/      /init-project /plan /implement /review /status
-  skills/        reusable guidance (common/backend/frontend/mobile)
-  settings.json  tool permissions
-.agent-memory/   long-term memory, git-tracked, read every session
-  project.md     stack + conventions (filled by context-collector on first run)
-  session-log.md append-only log
-  tasks/         one file per task
-  decisions/     ADR-style records
-apps/            only selected directories are created during /init-project
-  backend/       CLAUDE.md for BE rules (if backend is enabled)
-  web/           CLAUDE.md for Web rules (if web platform is enabled)
-  mobile/        CLAUDE.md for Mobile rules (if mobile, React Native + Expo)
+  agents/       ← agent configs
+  commands/     ← /plan /implement /review /status
+  skills/       ← reusable instructions
+.agent-memory/
+  project.md    ← stack + conventions
+  session-log.md
+  tasks/        ← task = file
+  decisions/    ← ADR records
+apps/
+  backend/      ← if backend is selected
+  web/          ← if web is selected
+  mobile/       ← if mobile is selected (Expo)
 packages/
-  shared/        shared types and utils (if web + mobile)
-scripts/         init-project.sh, dev-task.sh, review.sh, status.sh
-CLAUDE.md        root rules
-lefthook.yml     pre-commit (lint) + pre-push (tests + codex)
-pnpm-workspace.yaml
+  shared/       ← shared types (web + mobile)
 ```
 
-Agents expect Claude Code CLI locally, `codex` CLI (OpenAI) for external review, and `gh` for GitHub Issues/PRs. No Claude API key is used — everything goes through the local Claude Code CLI.
+</td>
+</tr>
+</table>
 
-## Development flow (in the generated project)
+> **Stack-agnostic:** the template doesn't impose a framework. On the first
+> `/init-project` interview it determines the platforms and populates
+> `.agent-memory/project.md` with the actual stack.
 
-```
-user idea
-   │
-   ▼
-[project-manager / opus]    clarify → decompose → write task files → open GH Issues
-   ▼
-[backend-dev | web-dev | mobile-dev / sonnet]   implement + write tests in the same change
-   ▼
-[tester / sonnet]           run suite → report pass/fail + AC coverage
-   ▼
-[codex-reviewer / sonnet]   shell out to `codex exec` on diff → APPROVE / REQUEST_CHANGES / BLOCK
-   ▼
-gh pr create                you review and merge
-```
+---
 
-## Repo layout (this repository)
+## ![Workflow](https://img.shields.io/badge/Development_Flow-16213E?style=for-the-badge&logo=workflow&logoColor=white)
+
+After creating a project, the entire development process goes through a chain of
+AI agents:
 
 ```
-src/                CLI source (TypeScript, ESM)
-  index.ts          commander entry
-  commands/new.ts   `agentforge new`
-  lib/              copy-template, render, paths
-templates/
-  default/          the scaffold — dotfiles stored as _name, templated files as *.hbs
-dist/               built CLI (published to npm)
-package.json        CLI manifest
-tsup.config.ts      bundler config
+  ┌─────────────────┐
+  │  Your idea       │
+  └────────┬────────┘
+           ▼
+  ┌──────────────────────────────────────────────────┐
+  │  Project Manager                        (opus)   │
+  │  Clarifies requirements → decomposes into tasks  │
+  │  → creates files in tasks/ → GitHub Issues       │
+  └────────┬─────────────────────────────────────────┘
+           ▼
+  ┌──────────────────────────────────────────────────┐
+  │  Dev Agent (backend / web / mobile)    (sonnet)  │
+  │  Implements task + writes tests                  │
+  └────────┬─────────────────────────────────────────┘
+           ▼
+  ┌──────────────────────────────────────────────────┐
+  │  Tester                                (sonnet)  │
+  │  Runs tests → pass/fail + AC coverage            │
+  └────────┬─────────────────────────────────────────┘
+           ▼
+  ┌──────────────────────────────────────────────────┐
+  │  Codex Reviewer                        (sonnet)  │
+  │  Reviews diff → APPROVE / REQUEST_CHANGES        │
+  └────────┬─────────────────────────────────────────┘
+           ▼
+  ┌───────────────────┐
+  │  PR → You merge    │
+  └───────────────────┘
 ```
 
-### Template authoring rules
+---
 
-- Dotfiles are stored with a `_` prefix: `_claude/`, `_gitignore`. They are renamed back to `.name` on copy.
-- Files with `.hbs` suffix are rendered with `{{projectName}}` substitution and lose the suffix: `package.json.hbs` → `package.json`.
-- Plain files are copied byte-for-byte.
+## ![CLI](https://img.shields.io/badge/Commands_&_Flags-0A1628?style=for-the-badge&logo=gnubash&logoColor=white)
 
-## Develop the CLI
+```bash
+agentforge new <name>                     # interactive
+agentforge new <name> --yes --no-install  # non-interactive
+agentforge new <name> -t default          # pick a template
+agentforge new <name> --lang en           # CLI language
+```
+
+| Flag                       |  Default  | Description            |
+| -------------------------- | :-------: | ---------------------- |
+| `-t, --template <name>`    | `default` | Project template       |
+| `--git / --no-git`         |  prompts  | Initialize git         |
+| `--install / --no-install` |  prompts  | Run `pnpm install`     |
+| `-y, --yes`                |  `false`  | Accept all defaults    |
+| `--lang <en\|ru>`          |   auto    | CLI interface language |
+
+### Localization
+
+The CLI detects language automatically: `--lang` flag → `AGENTFORGE_LANG` env
+variable → system locale → English.
+
+```bash
+AGENTFORGE_LANG=ru agentforge new my-app   # via env
+agentforge --lang ru new my-app            # via flag
+```
+
+---
+
+## ![Dependencies](https://img.shields.io/badge/Dependencies-1B1F3B?style=for-the-badge&logo=dependabot&logoColor=white)
+
+Agent Forge relies on:
+
+- [**Claude Code CLI**](https://docs.anthropic.com/en/docs/claude-code) — the
+  main agent engine
+- [**Codex CLI**](https://github.com/openai/codex) _(optional)_ — external
+  review
+- [**gh CLI**](https://cli.github.com/) _(optional)_ — GitHub Issues / PR
+  management
+
+> No Claude API key needed — everything works through the local Claude Code.
+
+---
+
+## ![Contributing](https://img.shields.io/badge/Contributing-2D2D2D?style=for-the-badge&logo=github&logoColor=white)
+
+<details>
+<summary><b>CLI Development</b></summary>
 
 ```bash
 pnpm install
-pnpm dev new /tmp/smoke --yes --no-install --no-git  # run from source via tsx
-pnpm build                                            # bundle to dist/
-node dist/index.js new /tmp/smoke --yes --no-install --no-git
+pnpm dev new /tmp/smoke --yes --no-install --no-git   # run from source
+pnpm build                                             # build to dist/
+pnpm smoke                                             # E2E smoke test
 ```
 
-## License
+</details>
 
-MIT
+<details>
+<summary><b>Repository structure</b></summary>
+
+```
+src/                 CLI source (TypeScript, ESM)
+  index.ts           entry point
+  commands/new.ts    `agentforge new` command
+  lib/               copy-template, render, paths
+  i18n/              en.ts, ru.ts, index.ts
+templates/
+  default/           project template
+packages/
+  create-agent-forge/  package for `pnpm create`
+scripts/
+  smoke.mjs          E2E smoke test
+```
+
+</details>
+
+<details>
+<summary><b>Template authoring rules</b></summary>
+
+- Dotfiles are stored with a `_` prefix: `_claude/`, `_gitignore` → renamed to
+  `.name` on copy
+- Files with `.hbs` suffix are rendered with `{{projectName}}` substitution and
+  lose the suffix
+- Plain files are copied byte-for-byte
+
+</details>
+
+---
+
+<div align="center">
+
+**MIT** · Made by [Sergey Kompanietc](https://github.com/DelightVLG)
+
+</div>
