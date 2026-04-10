@@ -19,13 +19,20 @@ After any meaningful action (task done, decision made, stack change), **update t
 
 ## Monorepo layout
 
+The exact layout depends on choices made during `/init-project`. Only the directories that were selected exist:
+
 ```
 apps/
-  backend/   → see apps/backend/CLAUDE.md for BE-specific rules
-  frontend/  → see apps/frontend/CLAUDE.md for FE-specific rules
+  backend/   → see apps/backend/CLAUDE.md (if backend is enabled)
+  web/       → see apps/web/CLAUDE.md (if web platform is enabled)
+  mobile/    → see apps/mobile/CLAUDE.md (if mobile platform is enabled)
+packages/
+  shared/    → shared types, API client, utils (if web + mobile)
 ```
 
 Managed by **pnpm workspaces** (`pnpm-workspace.yaml`). Use `pnpm --filter <app>` to run app-scoped commands.
+
+Check `.agent-memory/project.md` → **Platforms** section to see which apps are active.
 
 ## Agents
 
@@ -34,14 +41,17 @@ Managed by **pnpm workspaces** (`pnpm-workspace.yaml`). Use `pnpm --filter <app>
 | `project-manager`   | opus   | Decomposes features into tasks, writes task specs to `.agent-memory/tasks/` |
 | `context-collector` | opus   | One-time interview to populate `.agent-memory/project.md`                   |
 | `backend-dev`       | sonnet | Implements BE tasks + writes tests                                          |
-| `frontend-dev`      | sonnet | Implements FE tasks + writes tests                                          |
+| `web-dev`           | sonnet | Implements Web frontend tasks + writes tests                                |
+| `mobile-dev`        | sonnet | Implements Mobile (React Native + Expo) tasks + writes tests                |
 | `tester`            | sonnet | Runs tests, reports failures (does **not** write tests)                     |
 | `codex-reviewer`    | sonnet | Shells out to `codex` CLI for external code review                          |
+
+> Not all agents are relevant for every project. If `apps/mobile/` doesn't exist, don't dispatch to `mobile-dev`. Same for `backend-dev` and `web-dev`.
 
 ## Development flow
 
 1. User describes a feature → `project-manager` asks clarifying questions, writes one or more task files to `.agent-memory/tasks/<id>-<slug>.md`, creates GitHub Issues via `gh issue create`.
-2. User (or PM) dispatches a task to `backend-dev` or `frontend-dev`. Dev agent reads the task file, implements, **writes tests alongside code**, updates the task file status.
+2. User (or PM) dispatches a task to `backend-dev`, `web-dev`, or `mobile-dev`. Dev agent reads the task file, implements, **writes tests alongside code**, updates the task file status.
 3. `tester` runs the relevant test suite (`pnpm --filter <app> test`) and reports.
 4. `codex-reviewer` runs `codex exec` on the diff. Critical findings block the PR.
 5. Dev agent addresses findings. Loop until clean.

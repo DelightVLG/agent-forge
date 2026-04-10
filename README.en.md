@@ -4,7 +4,7 @@
 
 CLI that scaffolds a new project pre-wired for Claude Code sub-agent workflows (PM → dev → tester → reviewer), with a markdown-based memory layer in `.agent-memory/`.
 
-Stack-agnostic: the template does not assume a backend/frontend stack. On first run inside the generated project, a one-time interview populates `.agent-memory/project.md` with the real stack.
+Stack-agnostic: the template does not assume a backend/frontend/mobile stack. On first run inside the generated project, a one-time interview determines platforms (Web, Mobile, Backend) and populates `.agent-memory/project.md` with the real stack.
 
 ## Install
 
@@ -49,18 +49,21 @@ The `default` template creates a pnpm workspaces monorepo wired for Claude Code 
 
 ```
 .claude/
-  agents/        project-manager, context-collector, backend-dev, frontend-dev, tester, codex-reviewer
+  agents/        project-manager, context-collector, backend-dev, web-dev, mobile-dev, tester, codex-reviewer
   commands/      /init-project /plan /implement /review /status
-  skills/        reusable guidance (common/backend/frontend)
+  skills/        reusable guidance (common/backend/frontend/mobile)
   settings.json  tool permissions
 .agent-memory/   long-term memory, git-tracked, read every session
   project.md     stack + conventions (filled by context-collector on first run)
   session-log.md append-only log
   tasks/         one file per task
   decisions/     ADR-style records
-apps/
-  backend/       CLAUDE.md for BE rules
-  frontend/      CLAUDE.md for FE rules
+apps/            only selected directories are created during /init-project
+  backend/       CLAUDE.md for BE rules (if backend is enabled)
+  web/           CLAUDE.md for Web rules (if web platform is enabled)
+  mobile/        CLAUDE.md for Mobile rules (if mobile, React Native + Expo)
+packages/
+  shared/        shared types and utils (if web + mobile)
 scripts/         init-project.sh, dev-task.sh, review.sh, status.sh
 CLAUDE.md        root rules
 lefthook.yml     pre-commit (lint) + pre-push (tests + codex)
@@ -77,7 +80,7 @@ user idea
    ▼
 [project-manager / opus]    clarify → decompose → write task files → open GH Issues
    ▼
-[backend-dev | frontend-dev / sonnet]   implement + write tests in the same change
+[backend-dev | web-dev | mobile-dev / sonnet]   implement + write tests in the same change
    ▼
 [tester / sonnet]           run suite → report pass/fail + AC coverage
    ▼

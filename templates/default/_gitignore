@@ -10,3 +10,7 @@ coverage/
 *.log
 /tmp/review-*.txt
 /tmp/review-*.patch
+
+# Agent system files
+.agent-memory/
+.claude/

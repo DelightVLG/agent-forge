@@ -4,7 +4,7 @@
 
 CLI, который разворачивает новый проект, уже настроенный под работу с sub-агентами Claude Code (PM → dev → tester → reviewer), с markdown-памятью в `.agent-memory/`.
 
-Стек-агностично: шаблон не навязывает backend/frontend стек. При первом запуске сгенерированного проекта одноразовое интервью наполняет `.agent-memory/project.md` реальным стеком.
+Стек-агностично: шаблон не навязывает backend/frontend/mobile стек. При первом запуске сгенерированного проекта одноразовое интервью определяет платформы (Web, Mobile, Backend) и наполняет `.agent-memory/project.md` реальным стеком.
 
 ## Установка
 
@@ -29,13 +29,13 @@ agentforge new my-app --lang en           # язык интерфейса CLI
 
 Флаги:
 
-| Флаг | По умолчанию | Описание |
-| --- | --- | --- |
-| `-t, --template <name>` | `default` | Используемый шаблон (должен быть в `templates/`). |
-| `--git / --no-git` | спрашивает | `git init` в новом проекте. |
-| `--install / --no-install` | спрашивает | `pnpm install` в новом проекте. |
-| `-y, --yes` | `false` | Принять значения по умолчанию; требует передать название проекта аргументом. |
-| `--lang <en\|ru>` | авто | Язык интерфейса CLI. Автодетект по `LANG` / `LC_ALL`. Можно также задать `AGENTFORGE_LANG=ru`. |
+| Флаг                       | По умолчанию | Описание                                                                                       |
+| -------------------------- | ------------ | ---------------------------------------------------------------------------------------------- |
+| `-t, --template <name>`    | `default`    | Используемый шаблон (должен быть в `templates/`).                                              |
+| `--git / --no-git`         | спрашивает   | `git init` в новом проекте.                                                                    |
+| `--install / --no-install` | спрашивает   | `pnpm install` в новом проекте.                                                                |
+| `-y, --yes`                | `false`      | Принять значения по умолчанию; требует передать название проекта аргументом.                   |
+| `--lang <en\|ru>`          | авто         | Язык интерфейса CLI. Автодетект по `LANG` / `LC_ALL`. Можно также задать `AGENTFORGE_LANG=ru`. |
 
 После создания:
 
@@ -71,18 +71,21 @@ agentforge --lang en new my-app            # английский принуди
 
 ```
 .claude/
-  agents/        project-manager, context-collector, backend-dev, frontend-dev, tester, codex-reviewer
+  agents/        project-manager, context-collector, backend-dev, web-dev, mobile-dev, tester, codex-reviewer
   commands/      /init-project /plan /implement /review /status
-  skills/        переиспользуемые инструкции (common/backend/frontend)
+  skills/        переиспользуемые инструкции (common/backend/frontend/mobile)
   settings.json  права на инструменты
 .agent-memory/   долговременная память, git-tracked, читается каждой сессией
   project.md     стек + конвенции (наполняется context-collector при первом запуске)
   session-log.md append-only лог
   tasks/         одна задача = один файл
   decisions/     ADR-стиль записи решений
-apps/
-  backend/       CLAUDE.md с BE-правилами
-  frontend/      CLAUDE.md с FE-правилами
+apps/            создаются только выбранные при /init-project
+  backend/       CLAUDE.md с BE-правилами (если есть backend)
+  web/           CLAUDE.md с Web-правилами (если есть web)
+  mobile/        CLAUDE.md с Mobile-правилами (если есть mobile, React Native + Expo)
+packages/
+  shared/        общие типы и утилиты (если web + mobile)
 scripts/         init-project.sh, dev-task.sh, review.sh, status.sh
 CLAUDE.md        корневые правила
 lefthook.yml     pre-commit (lint) + pre-push (тесты + codex)
@@ -99,7 +102,7 @@ pnpm-workspace.yaml
    ▼
 [project-manager / opus]    уточнение → декомпозиция → файлы задач → GitHub Issues
    ▼
-[backend-dev | frontend-dev / sonnet]   реализация + тесты в том же изменении
+[backend-dev | web-dev | mobile-dev / sonnet]   реализация + тесты в том же изменении
    ▼
 [tester / sonnet]           прогон тестов → отчёт pass/fail + покрытие AC
    ▼
