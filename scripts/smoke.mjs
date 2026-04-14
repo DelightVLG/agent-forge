@@ -57,7 +57,7 @@ const expected = [
   "apps/backend/CLAUDE.md",
   "apps/web/CLAUDE.md",
   "apps/mobile/CLAUDE.md",
-  "scripts/init-project.sh",
+  ".scripts/init-project.sh",
   "lefthook.yml",
   "pnpm-workspace.yaml",
   "package.json",

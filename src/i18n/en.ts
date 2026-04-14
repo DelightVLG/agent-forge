@@ -32,6 +32,12 @@ const en = {
   optYes: "accept defaults, no prompts",
   optLang: "language: en or ru",
   optVersion: "output the current version",
+  selectTemplate: "Choose a template",
+  templateDefaultLabel: "default — full stack (backend + web + mobile)",
+  templateBackendLabel: "backend-only — server-side only",
+  templateWebLabel: "web-only — web frontend only",
+  templateMobileLabel: "mobile-only — React Native + Expo only",
+  templateMinimalLabel: "minimal — agent framework, no apps",
 };
 
 export default en;

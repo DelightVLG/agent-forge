@@ -34,6 +34,12 @@ const ru: Messages = {
   optYes: "принять значения по умолчанию, без вопросов",
   optLang: "язык: en или ru",
   optVersion: "показать текущую версию",
+  selectTemplate: "Выбери шаблон",
+  templateDefaultLabel: "default — полный стек (backend + web + mobile)",
+  templateBackendLabel: "backend-only — только серверная часть",
+  templateWebLabel: "web-only — только веб-фронтенд",
+  templateMobileLabel: "mobile-only — только React Native + Expo",
+  templateMinimalLabel: "minimal — фреймворк агентов, без apps",
 };
 
 export default ru;
