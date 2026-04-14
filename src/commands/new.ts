@@ -31,7 +31,10 @@ export function registerNewCommand(program: Command): void {
     });
 }
 
-async function runNew(nameArg: string | undefined, options: NewOptions): Promise<void> {
+async function runNew(
+  nameArg: string | undefined,
+  options: NewOptions,
+): Promise<void> {
   p.intro(pc.bgCyan(pc.black(t("intro"))));
 
   const projectName = await resolveProjectName(nameArg, options.yes);
@@ -63,8 +66,18 @@ async function runNew(nameArg: string | undefined, options: NewOptions): Promise
     process.exit(1);
   }
 
-  const shouldGit = await resolveBool(options.git, options.yes, t("confirmGit"), true);
-  const shouldInstall = await resolveBool(options.install, options.yes, t("confirmInstall"), false);
+  const shouldGit = await resolveBool(
+    options.git,
+    options.yes,
+    t("confirmGit"),
+    true,
+  );
+  const shouldInstall = await resolveBool(
+    options.install,
+    options.yes,
+    t("confirmInstall"),
+    false,
+  );
 
   const spin = p.spinner();
   spin.start(t("copyingTemplate", { template }));
@@ -73,18 +86,28 @@ async function runNew(nameArg: string | undefined, options: NewOptions): Promise
     targetDir,
     variables: { projectName },
   });
-  spin.stop(t("templateCopied", { path: pc.cyan(path.relative(process.cwd(), targetDir) || ".") }));
+  spin.stop(
+    t("templateCopied", {
+      path: pc.cyan(path.relative(process.cwd(), targetDir) || "."),
+    }),
+  );
 
   if (shouldGit) {
     spin.start(t("gitInit"));
-    const res = spawnSync("git", ["init", "-q"], { cwd: targetDir, stdio: "ignore" });
+    const res = spawnSync("git", ["init", "-q"], {
+      cwd: targetDir,
+      stdio: "ignore",
+    });
     if (res.status === 0) spin.stop(t("gitInitialized"));
     else spin.stop(pc.yellow(t("gitSkipped")));
   }
 
   if (shouldInstall) {
     spin.start(t("pnpmInstall"));
-    const res = spawnSync("pnpm", ["install"], { cwd: targetDir, stdio: "ignore" });
+    const res = spawnSync("pnpm", ["install"], {
+      cwd: targetDir,
+      stdio: "ignore",
+    });
     if (res.status === 0) spin.stop(t("pnpmInstalled"));
     else spin.stop(pc.yellow(t("pnpmFailed")));
   }
@@ -104,7 +127,10 @@ async function runNew(nameArg: string | undefined, options: NewOptions): Promise
   p.outro(pc.green(t("done")));
 }
 
-async function resolveProjectName(nameArg: string | undefined, yes: boolean | undefined): Promise<string> {
+async function resolveProjectName(
+  nameArg: string | undefined,
+  yes: boolean | undefined,
+): Promise<string> {
   if (nameArg && isValidName(nameArg)) return nameArg;
   if (nameArg && !isValidName(nameArg)) {
     p.cancel(t("projectNameInvalidArg", { name: nameArg }));
@@ -162,7 +188,7 @@ async function resolveTemplate(
     p.cancel(t("aborted"));
     process.exit(1);
   }
-  return answer;
+  return answer as string;
 }
 
 function isValidName(name: string): boolean {
