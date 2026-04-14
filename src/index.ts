@@ -4,6 +4,7 @@ import { createRequire } from "node:module";
 import { realpathSync } from "node:fs";
 import { pathToFileURL } from "node:url";
 import { registerNewCommand } from "./commands/new.js";
+import { registerAddCommand } from "./commands/add.js";
 import { setLang, t } from "./i18n/index.js";
 
 const require = createRequire(import.meta.url);
@@ -22,6 +23,7 @@ export async function main(argv: string[]): Promise<void> {
     .version(pkg.version, "-v, --version", t("optVersion"));
 
   registerNewCommand(program);
+  registerAddCommand(program);
 
   program.hook("preAction", (thisCommand) => {
     const { lang } = thisCommand.optsWithGlobals<{ lang?: string }>();

@@ -8,214 +8,215 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 
-> **Русский** · [English](./README.en.md)
+> **English** · [Русский](./README.ru.md)
 
 </div>
 
 ---
 
-Одна команда — и у тебя готовое монорепо с командой AI-агентов: PM планирует,
-разработчик пишет код, тестировщик проверяет, ревьюер смотрит diff. Всё работает
-через локальный Claude Code CLI, без API-ключей.
+One command — and you get a ready-made monorepo with a team of AI agents: PM
+plans, developer writes code, tester verifies, reviewer checks the diff.
+Everything runs through the local Claude Code CLI, no API keys needed.
 
 ## ![Quick Start](https://img.shields.io/badge/Quick_Start-6C47FF?style=for-the-badge&logo=terminal&logoColor=white)
 
 ```bash
-# Установи глобально
+# Install globally
 npm i -g @delightvlg/agent-forge
 
-# Создай проект
+# Create a project
 agentforge new my-app
 
-# Или без установки — через npx / pnpm
+# Or without installing — via npx / pnpm
 npx @delightvlg/agent-forge new my-app
 pnpm dlx @delightvlg/agent-forge new my-app
 ```
 
 ```bash
 cd my-app && pnpm install
-claude                    # открой Claude Code
-> /init-project           # интервью → заполнит стек и настроит проект
+claude                    # open Claude Code
+> /init-project           # interview → fills in the stack and configures the project
 ```
 
 ---
 
-## ![What's Inside](https://img.shields.io/badge/Что_внутри-1A1A2E?style=for-the-badge&logo=files&logoColor=white)
+## ![What's Inside](https://img.shields.io/badge/What's_Inside-1A1A2E?style=for-the-badge&logo=files&logoColor=white)
 
-Agent Forge создаёт **монорепо на pnpm workspaces** с полностью настроенной
-инфраструктурой для AI-разработки:
+Agent Forge creates a **pnpm workspaces monorepo** with fully configured
+infrastructure for AI-driven development:
 
 <table>
 <tr>
 <td width="50%">
 
-### Агенты
+### Agents
 
-| Агент                 | Роль                             |
+| Agent                 | Role                             |
 | --------------------- | -------------------------------- |
-| **project-manager**   | Декомпозиция задач, планирование |
-| **context-collector** | Сбор стека и конвенций проекта   |
-| **backend-dev**       | Разработка серверной части       |
-| **web-dev**           | Разработка веб-интерфейса        |
-| **mobile-dev**        | Разработка мобильного приложения |
-| **tester**            | Прогон тестов, проверка AC       |
-| **codex-reviewer**    | Внешнее ревью через OpenAI Codex |
+| **project-manager**   | Task decomposition, planning     |
+| **context-collector** | Gathering stack and conventions  |
+| **backend-dev**       | Backend development              |
+| **web-dev**           | Web interface development        |
+| **mobile-dev**        | Mobile app development           |
+| **tester**            | Running tests, verifying AC      |
+| **codex-reviewer**    | External review via OpenAI Codex |
 
 </td>
 <td width="50%">
 
-### Структура
+### Structure
 
 ```
 .claude/
-  agents/       ← конфиги агентов
+  agents/       ← agent configs
   commands/     ← /plan /implement /review /status
-  skills/       ← переиспользуемые инструкции
+  skills/       ← reusable instructions
 .agent-memory/
-  project.md    ← стек + конвенции
+  project.md    ← stack + conventions
   session-log.md
-  tasks/        ← задача = файл
-  decisions/    ← ADR-записи
+  tasks/        ← task = file
+  decisions/    ← ADR records
 apps/
-  backend/      ← если выбран backend
-  web/          ← если выбран web
-  mobile/       ← если выбран mobile (Expo)
+  backend/      ← if backend is selected
+  web/          ← if web is selected
+  mobile/       ← if mobile is selected (Expo)
 packages/
-  shared/       ← общие типы (web + mobile)
+  shared/       ← shared types (web + mobile)
 ```
 
 </td>
 </tr>
 </table>
 
-> **Стек-агностично:** шаблон не навязывает фреймворк. При первом
-> `/init-project` интервью определяет платформы и наполняет
-> `.agent-memory/project.md` реальным стеком.
+> **Stack-agnostic:** the template doesn't impose a framework. On the first
+> `/init-project` interview it determines the platforms and populates
+> `.agent-memory/project.md` with the actual stack.
 
 ---
 
-## ![Workflow](https://img.shields.io/badge/Флоу_разработки-16213E?style=for-the-badge&logo=workflow&logoColor=white)
+## ![Workflow](https://img.shields.io/badge/Development_Flow-16213E?style=for-the-badge&logo=workflow&logoColor=white)
 
-После создания проекта, весь процесс разработки проходит через цепочку
-AI-агентов:
+After creating a project, the entire development process goes through a chain of
+AI agents:
 
 ```
   ┌─────────────────┐
-  │  Твоя идея      │
+  │  Your idea       │
   └────────┬────────┘
            ▼
   ┌──────────────────────────────────────────────────┐
   │  Project Manager                        (opus)   │
-  │  Уточняет требования → декомпозирует на задачи   │
-  │  → создаёт файлы в tasks/ → GitHub Issues        │
+  │  Clarifies requirements → decomposes into tasks  │
+  │  → creates files in tasks/ → GitHub Issues       │
   └────────┬─────────────────────────────────────────┘
            ▼
   ┌──────────────────────────────────────────────────┐
   │  Dev Agent (backend / web / mobile)    (sonnet)  │
-  │  Реализует задачу + пишет тесты                  │
+  │  Implements task + writes tests                  │
   └────────┬─────────────────────────────────────────┘
            ▼
   ┌──────────────────────────────────────────────────┐
   │  Tester                                (sonnet)  │
-  │  Прогоняет тесты → pass/fail + покрытие AC       │
+  │  Runs tests → pass/fail + AC coverage            │
   └────────┬─────────────────────────────────────────┘
            ▼
   ┌──────────────────────────────────────────────────┐
   │  Codex Reviewer                        (sonnet)  │
-  │  Ревью диффа → APPROVE / REQUEST_CHANGES         │
+  │  Reviews diff → APPROVE / REQUEST_CHANGES        │
   └────────┬─────────────────────────────────────────┘
            ▼
   ┌───────────────────┐
-  │  PR → Ты мерджишь │
+  │  PR → You merge    │
   └───────────────────┘
 ```
 
 ---
 
-## ![CLI](https://img.shields.io/badge/Команды_и_флаги-0A1628?style=for-the-badge&logo=gnubash&logoColor=white)
+## ![CLI](https://img.shields.io/badge/Commands_&_Flags-0A1628?style=for-the-badge&logo=gnubash&logoColor=white)
 
 ```bash
-agentforge new <name>                     # интерактивно
-agentforge new <name> --yes --no-install  # без вопросов
-agentforge new <name> -t default          # выбрать шаблон
-agentforge new <name> --lang en           # язык CLI
+agentforge new <name>                     # interactive
+agentforge new <name> --yes --no-install  # non-interactive
+agentforge new <name> -t default          # pick a template
+agentforge new <name> --lang en           # CLI language
 ```
 
-| Флаг                       | По умолчанию | Описание                 |
-| -------------------------- | :----------: | ------------------------ |
-| `-t, --template <name>`    |  `default`   | Шаблон проекта           |
-| `--git / --no-git`         |  спрашивает  | Инициализировать git     |
-| `--install / --no-install` |  спрашивает  | Запустить `pnpm install` |
-| `-y, --yes`                |   `false`    | Принять все умолчания    |
-| `--lang <en\|ru>`          |     авто     | Язык интерфейса CLI      |
+| Flag                       |  Default  | Description            |
+| -------------------------- | :-------: | ---------------------- |
+| `-t, --template <name>`    | `default` | Project template       |
+| `--git / --no-git`         |  prompts  | Initialize git         |
+| `--install / --no-install` |  prompts  | Run `pnpm install`     |
+| `-y, --yes`                |  `false`  | Accept all defaults    |
+| `--lang <en\|ru>`          |   auto    | CLI interface language |
 
-### Локализация
+### Localization
 
-CLI определяет язык автоматически: флаг `--lang` → переменная `AGENTFORGE_LANG`
-→ системная локаль → английский.
+The CLI detects language automatically: `--lang` flag → `AGENTFORGE_LANG` env
+variable → system locale → English.
 
 ```bash
-AGENTFORGE_LANG=ru agentforge new my-app   # через env
-agentforge --lang ru new my-app            # через флаг
+AGENTFORGE_LANG=ru agentforge new my-app   # via env
+agentforge --lang ru new my-app            # via flag
 ```
 
 ---
 
-## ![Dependencies](https://img.shields.io/badge/Зависимости-1B1F3B?style=for-the-badge&logo=dependabot&logoColor=white)
+## ![Dependencies](https://img.shields.io/badge/Dependencies-1B1F3B?style=for-the-badge&logo=dependabot&logoColor=white)
 
-Agent Forge рассчитывает на:
+Agent Forge relies on:
 
-- [**Claude Code CLI**](https://docs.anthropic.com/en/docs/claude-code) —
-  основной движок агентов
-- [**Codex CLI**](https://github.com/openai/codex) _(опционально)_ — внешнее
-  ревью
-- [**gh CLI**](https://cli.github.com/) _(опционально)_ — работа с GitHub Issues
-  / PR
+- [**Claude Code CLI**](https://docs.anthropic.com/en/docs/claude-code) — the
+  main agent engine
+- [**Codex CLI**](https://github.com/openai/codex) _(optional)_ — external
+  review
+- [**gh CLI**](https://cli.github.com/) _(optional)_ — GitHub Issues / PR
+  management
 
-> API-ключ Claude **не нужен** — всё работает через локальный Claude Code.
+> No Claude API key needed — everything works through the local Claude Code.
 
 ---
 
-## ![Contributing](https://img.shields.io/badge/Для_контрибьюторов-2D2D2D?style=for-the-badge&logo=github&logoColor=white)
+## ![Contributing](https://img.shields.io/badge/Contributing-2D2D2D?style=for-the-badge&logo=github&logoColor=white)
 
 <details>
-<summary><b>Разработка CLI</b></summary>
+<summary><b>CLI Development</b></summary>
 
 ```bash
 pnpm install
-pnpm dev new /tmp/smoke --yes --no-install --no-git   # запуск из исходников
-pnpm build                                             # сборка в dist/
-pnpm smoke                                             # E2E smoke-тест
+pnpm dev new /tmp/smoke --yes --no-install --no-git   # run from source
+pnpm build                                             # build to dist/
+pnpm smoke                                             # E2E smoke test
 ```
 
 </details>
 
 <details>
-<summary><b>Структура репозитория</b></summary>
+<summary><b>Repository structure</b></summary>
 
 ```
-src/                 исходники CLI (TypeScript, ESM)
-  index.ts           точка входа
-  commands/new.ts    команда `agentforge new`
+src/                 CLI source (TypeScript, ESM)
+  index.ts           entry point
+  commands/new.ts    `agentforge new` command
   lib/               copy-template, render, paths
   i18n/              en.ts, ru.ts, index.ts
 templates/
-  default/           шаблон проекта
+  default/           project template
 packages/
-  create-agent-forge/  пакет для `pnpm create`
+  create-agent-forge/  package for `pnpm create`
 scripts/
-  smoke.mjs          E2E smoke-тест
+  smoke.mjs          E2E smoke test
 ```
 
 </details>
 
 <details>
-<summary><b>Правила авторинга шаблонов</b></summary>
+<summary><b>Template authoring rules</b></summary>
 
-- Дотфайлы хранятся с префиксом `_`: `_claude/`, `_gitignore` → при копировании
-  становятся `.name`
-- Файлы `*.hbs` проходят через рендер с `{{projectName}}` и теряют суффикс
-- Обычные файлы копируются как есть
+- Dotfiles are stored with a `_` prefix: `_claude/`, `_gitignore` → renamed to
+  `.name` on copy
+- Files with `.hbs` suffix are rendered with `{{projectName}}` substitution and
+  lose the suffix
+- Plain files are copied byte-for-byte
 
 </details>
 
