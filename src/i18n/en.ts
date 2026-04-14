@@ -4,7 +4,8 @@ const en = {
   projectNamePlaceholder: "my-app",
   projectNameInvalid: "Use lowercase letters, digits, dashes.",
   projectNameRequiredWithYes: "Project name is required when using --yes.",
-  projectNameInvalidArg: 'Invalid project name: "{name}". Use lowercase letters, digits, dashes.',
+  projectNameInvalidArg:
+    'Invalid project name: "{name}". Use lowercase letters, digits, dashes.',
   dirNotEmpty: "Directory {name} is not empty. Continue and overwrite files?",
   dirNotEmptyFatal: "Target directory {path} is not empty.",
   templateNotFound: 'Template "{template}" not found at {path}.',
@@ -22,7 +23,8 @@ const en = {
   nextStepsComment: "# open in Claude Code, then run:",
   done: "Done.",
   aborted: "Aborted.",
-  cliDescription: "Scaffold a new project wired for Claude Code sub-agent workflows.",
+  cliDescription:
+    "Scaffold a new project wired for Claude Code sub-agent workflows.",
   newDescription: "Create a new project from an agentforge template.",
   optTemplate: "template to use",
   optInstall: "run pnpm install after scaffolding",
@@ -32,6 +34,12 @@ const en = {
   optYes: "accept defaults, no prompts",
   optLang: "language: en or ru",
   optVersion: "output the current version",
+  selectTemplate: "Choose a template",
+  templateDefaultLabel: "default — full stack (backend + web + mobile)",
+  templateBackendLabel: "backend-only — server-side only",
+  templateWebLabel: "web-only — web frontend only",
+  templateMobileLabel: "mobile-only — React Native + Expo only",
+  templateMinimalLabel: "minimal — agent framework, no apps",
 };
 
 export default en;

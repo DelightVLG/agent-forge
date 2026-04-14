@@ -20,7 +20,11 @@ export async function copyTemplate(opts: CopyTemplateOptions): Promise<void> {
   await walk(sourceDir, targetDir, variables);
 }
 
-async function walk(src: string, dest: string, vars: Record<string, string>): Promise<void> {
+async function walk(
+  src: string,
+  dest: string,
+  vars: Record<string, string>,
+): Promise<void> {
   const entries = await fse.readdir(src, { withFileTypes: true });
   for (const entry of entries) {
     const renamed = renameEntry(entry.name);

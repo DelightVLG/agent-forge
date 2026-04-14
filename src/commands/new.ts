@@ -10,7 +10,7 @@ import { resolveTemplatesDir } from "../lib/paths.js";
 import { t } from "../i18n/index.js";
 
 interface NewOptions {
-  template: string;
+  template?: string;
   install?: boolean;
   git?: boolean;
   yes?: boolean;
@@ -20,7 +20,7 @@ export function registerNewCommand(program: Command): void {
   program
     .command("new [name]")
     .description(t("newDescription"))
-    .option("-t, --template <name>", t("optTemplate"), "default")
+    .option("-t, --template <name>", t("optTemplate"))
     .option("--install", t("optInstall"))
     .option("--no-install", t("optNoInstall"))
     .option("--git", t("optGit"))
@@ -31,7 +31,10 @@ export function registerNewCommand(program: Command): void {
     });
 }
 
-async function runNew(nameArg: string | undefined, options: NewOptions): Promise<void> {
+async function runNew(
+  nameArg: string | undefined,
+  options: NewOptions,
+): Promise<void> {
   p.intro(pc.bgCyan(pc.black(t("intro"))));
 
   const projectName = await resolveProjectName(nameArg, options.yes);
@@ -56,34 +59,55 @@ async function runNew(nameArg: string | undefined, options: NewOptions): Promise
   }
 
   const templatesDir = resolveTemplatesDir();
-  const templateDir = path.join(templatesDir, options.template);
+  const template = await resolveTemplate(options.template, options.yes);
+  const templateDir = path.join(templatesDir, template);
   if (!existsSync(templateDir)) {
-    p.cancel(t("templateNotFound", { template: options.template, path: templateDir }));
+    p.cancel(t("templateNotFound", { template, path: templateDir }));
     process.exit(1);
   }
 
-  const shouldGit = await resolveBool(options.git, options.yes, t("confirmGit"), true);
-  const shouldInstall = await resolveBool(options.install, options.yes, t("confirmInstall"), false);
+  const shouldGit = await resolveBool(
+    options.git,
+    options.yes,
+    t("confirmGit"),
+    true,
+  );
+  const shouldInstall = await resolveBool(
+    options.install,
+    options.yes,
+    t("confirmInstall"),
+    false,
+  );
 
   const spin = p.spinner();
-  spin.start(t("copyingTemplate", { template: options.template }));
+  spin.start(t("copyingTemplate", { template }));
   await copyTemplate({
     sourceDir: templateDir,
     targetDir,
     variables: { projectName },
   });
-  spin.stop(t("templateCopied", { path: pc.cyan(path.relative(process.cwd(), targetDir) || ".") }));
+  spin.stop(
+    t("templateCopied", {
+      path: pc.cyan(path.relative(process.cwd(), targetDir) || "."),
+    }),
+  );
 
   if (shouldGit) {
     spin.start(t("gitInit"));
-    const res = spawnSync("git", ["init", "-q"], { cwd: targetDir, stdio: "ignore" });
+    const res = spawnSync("git", ["init", "-q"], {
+      cwd: targetDir,
+      stdio: "ignore",
+    });
     if (res.status === 0) spin.stop(t("gitInitialized"));
     else spin.stop(pc.yellow(t("gitSkipped")));
   }
 
   if (shouldInstall) {
     spin.start(t("pnpmInstall"));
-    const res = spawnSync("pnpm", ["install"], { cwd: targetDir, stdio: "ignore" });
+    const res = spawnSync("pnpm", ["install"], {
+      cwd: targetDir,
+      stdio: "ignore",
+    });
     if (res.status === 0) spin.stop(t("pnpmInstalled"));
     else spin.stop(pc.yellow(t("pnpmFailed")));
   }
@@ -103,7 +127,10 @@ async function runNew(nameArg: string | undefined, options: NewOptions): Promise
   p.outro(pc.green(t("done")));
 }
 
-async function resolveProjectName(nameArg: string | undefined, yes: boolean | undefined): Promise<string> {
+async function resolveProjectName(
+  nameArg: string | undefined,
+  yes: boolean | undefined,
+): Promise<string> {
   if (nameArg && isValidName(nameArg)) return nameArg;
   if (nameArg && !isValidName(nameArg)) {
     p.cancel(t("projectNameInvalidArg", { name: nameArg }));
@@ -139,6 +166,29 @@ async function resolveBool(
     process.exit(1);
   }
   return answer;
+}
+
+async function resolveTemplate(
+  flag: string | undefined,
+  yes: boolean | undefined,
+): Promise<string> {
+  if (flag !== undefined) return flag;
+  if (yes) return "default";
+  const answer = await p.select({
+    message: t("selectTemplate"),
+    options: [
+      { value: "default", label: t("templateDefaultLabel") },
+      { value: "backend-only", label: t("templateBackendLabel") },
+      { value: "web-only", label: t("templateWebLabel") },
+      { value: "mobile-only", label: t("templateMobileLabel") },
+      { value: "minimal", label: t("templateMinimalLabel") },
+    ],
+  });
+  if (p.isCancel(answer)) {
+    p.cancel(t("aborted"));
+    process.exit(1);
+  }
+  return answer as string;
 }
 
 function isValidName(name: string): boolean {
