@@ -290,7 +290,6 @@ export const TEMPLATE_CATEGORIES: Record<string, SkillCategory[]> = {
 export const TEMPLATE_DEFAULTS: Record<string, string[]> = {
   default: [
     SKILL.NESTJS,
-    SKILL.PRISMA,
     SKILL.REACT,
     SKILL.NEXTJS,
     SKILL.TAILWIND,
@@ -300,14 +299,16 @@ export const TEMPLATE_DEFAULTS: Record<string, string[]> = {
     SKILL.CONVENTIONS,
     SKILL.GIT_FLOW,
     SKILL.SECURITY_BASICS,
+    SKILL.TYPESCRIPT_BACKEND,
+    SKILL.TYPESCRIPT_FRONTEND,
   ],
   "backend-only": [
     SKILL.NESTJS,
-    SKILL.PRISMA,
+    SKILL.SECURITY_BASICS,
+    SKILL.TYPESCRIPT_BACKEND,
     SKILL.DOCKER,
     SKILL.CONVENTIONS,
     SKILL.GIT_FLOW,
-    SKILL.SECURITY_BASICS,
   ],
   "web-only": [
     SKILL.REACT,
@@ -316,6 +317,7 @@ export const TEMPLATE_DEFAULTS: Record<string, string[]> = {
     SKILL.CONVENTIONS,
     SKILL.GIT_FLOW,
     SKILL.SECURITY_BASICS,
+    SKILL.TYPESCRIPT_FRONTEND,
   ],
   "mobile-only": [
     SKILL.EXPO,
@@ -324,6 +326,7 @@ export const TEMPLATE_DEFAULTS: Record<string, string[]> = {
     SKILL.CONVENTIONS,
     SKILL.GIT_FLOW,
     SKILL.SECURITY_BASICS,
+    SKILL.TYPESCRIPT_FRONTEND,
   ],
   minimal: [SKILL.CONVENTIONS, SKILL.GIT_FLOW, SKILL.SECURITY_BASICS],
 };
