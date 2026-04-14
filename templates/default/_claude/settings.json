@@ -10,7 +10,7 @@
       "Bash(find:*)",
       "Bash(grep:*)",
       "Bash(mkdir:*)",
-      "Bash(./scripts/*)"
+      "Bash(./.scripts/*)"
     ],
     "deny": [
       "Bash(rm -rf /*)",
