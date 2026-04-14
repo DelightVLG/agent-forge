@@ -16,5 +16,7 @@ export function resolveTemplatesDir(): string {
     if (parent === current) break;
     current = parent;
   }
-  throw new Error(`Could not locate templates/ directory starting from ${here}`);
+  throw new Error(
+    `Could not locate templates/ directory starting from ${here}`,
+  );
 }

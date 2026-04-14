@@ -5,8 +5,10 @@ const ru: Messages = {
   projectNamePrompt: "Название проекта?",
   projectNamePlaceholder: "my-app",
   projectNameInvalid: "Только строчные буквы, цифры, дефисы.",
-  projectNameRequiredWithYes: "При использовании --yes нужно передать название проекта аргументом.",
-  projectNameInvalidArg: 'Некорректное название проекта: "{name}". Только строчные буквы, цифры, дефисы.',
+  projectNameRequiredWithYes:
+    "При использовании --yes нужно передать название проекта аргументом.",
+  projectNameInvalidArg:
+    'Некорректное название проекта: "{name}". Только строчные буквы, цифры, дефисы.',
   dirNotEmpty: "Каталог {name} не пустой. Продолжить и перезаписать файлы?",
   dirNotEmptyFatal: "Целевой каталог {path} не пустой.",
   templateNotFound: 'Шаблон "{template}" не найден по пути {path}.',
@@ -24,7 +26,8 @@ const ru: Messages = {
   nextStepsComment: "# открой проект в Claude Code, затем выполни:",
   done: "Готово.",
   aborted: "Отменено.",
-  cliDescription: "Создаёт новый проект, настроенный под sub-агентов Claude Code.",
+  cliDescription:
+    "Создаёт новый проект, настроенный под sub-агентов Claude Code.",
   newDescription: "Создать новый проект из шаблона agentforge.",
   optTemplate: "используемый шаблон",
   optInstall: "выполнить pnpm install после создания",

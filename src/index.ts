@@ -53,7 +53,10 @@ const isEntry = (() => {
 
 if (isEntry) {
   main(process.argv).catch((err) => {
-    console.error(pc.red("✖"), err instanceof Error ? err.message : String(err));
+    console.error(
+      pc.red("✖"),
+      err instanceof Error ? err.message : String(err),
+    );
     process.exit(1);
   });
 }
