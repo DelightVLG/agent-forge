@@ -8,7 +8,8 @@
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![node](https://img.shields.io/badge/node-%3E%3D18-339933?logo=node.js&logoColor=white)](https://nodejs.org)
 
-> **English** · [Русский](./README.ru.md)
+> **English** ·
+> [Русский](https://github.com/DelightVLG/agent-forge/blob/main/README.ru.md)
 
 </div>
 
@@ -20,7 +21,7 @@ Everything runs through the local Claude Code CLI, no API keys needed.
 
 <div align="center">
 
-![agentforge new demo](./demo.gif)
+![agentforge new demo](https://raw.githubusercontent.com/DelightVLG/agent-forge/main/demo.gif)
 
 </div>
 
