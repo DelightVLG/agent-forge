@@ -37,12 +37,39 @@ const ru: Messages = {
   optYes: "принять значения по умолчанию, без вопросов",
   optLang: "язык: en или ru",
   optVersion: "показать текущую версию",
-  selectTemplate: "Выбери шаблон",
-  templateDefaultLabel: "default — полный стек (backend + web + mobile)",
-  templateBackendLabel: "backend-only — только серверная часть",
-  templateWebLabel: "web-only — только веб-фронтенд",
-  templateMobileLabel: "mobile-only — только React Native + Expo",
-  templateMinimalLabel: "minimal — фреймворк агентов, без apps",
+  needBackend: "Нужен бэкенд?",
+  needFrontend: "Нужен фронтенд?",
+  needWeb: "Web-приложение?",
+  needMobile: "Мобильное приложение?",
+  nothingSelectedInfo:
+    "Ничего не выбрано — создаю минимальный проект со всеми скиллами.",
+
+  // Skills
+  optSkills: "список ID скиллов через запятую (например, nestjs,prisma,react)",
+  optNoSkills: "пропустить выбор скиллов",
+  selectSkills_backend: "Выбери backend-скиллы",
+  selectSkills_frontend: "Выбери frontend-скиллы",
+  selectSkills_mobile: "Выбери mobile-скиллы",
+  selectSkills_common: "Выбери общие скиллы",
+  skillsCopied: "Добавлено скиллов: {count}",
+
+  // Add command
+  addDescription: "Добавить ресурс (скилл) в существующий проект.",
+  addTypeArg: 'тип ресурса: "skill"',
+  addNameArg: "имя ресурса (например, nestjs, react)",
+  addUnknownType: 'Неизвестный тип ресурса: "{type}". Доступно: skill',
+  addSkillIntro: " agentforge add skill ",
+  notAgentforgeProject:
+    "Это не проект agentforge (каталог .claude/ не найден).",
+  selectSkillToAdd: "Какой скилл добавить?",
+  skillNotFound: 'Скилл "{skill}" не найден. Доступные: {available}',
+  skillExists: 'Скилл "{skill}" уже существует. Перезаписать?',
+  copyingAgent: 'Добавляю агента "{agent}"',
+  agentAdded: 'Агент "{agent}" добавлен',
+  copyingSkill: 'Добавляю скилл "{skill}"',
+  skillAdded: 'Скилл "{skill}" добавлен',
+  skillAddedNote: "{skill} → {path}",
+  skillAddedTitle: "Скилл добавлен",
 };
 
 export default ru;

@@ -34,12 +34,39 @@ const en = {
   optYes: "accept defaults, no prompts",
   optLang: "language: en or ru",
   optVersion: "output the current version",
-  selectTemplate: "Choose a template",
-  templateDefaultLabel: "default — full stack (backend + web + mobile)",
-  templateBackendLabel: "backend-only — server-side only",
-  templateWebLabel: "web-only — web frontend only",
-  templateMobileLabel: "mobile-only — React Native + Expo only",
-  templateMinimalLabel: "minimal — agent framework, no apps",
+  needBackend: "Do you need a backend?",
+  needFrontend: "Do you need a frontend?",
+  needWeb: "Web app?",
+  needMobile: "Mobile app?",
+  nothingSelectedInfo:
+    "No layers selected — creating a minimal project with all skills.",
+
+  // Skills
+  optSkills: "comma-separated skill IDs (e.g., nestjs,prisma,react)",
+  optNoSkills: "skip skill selection entirely",
+  selectSkills_backend: "Select backend skills",
+  selectSkills_frontend: "Select frontend skills",
+  selectSkills_mobile: "Select mobile skills",
+  selectSkills_common: "Select common skills",
+  skillsCopied: "{count} skill(s) added to the project",
+
+  // Add command
+  addDescription: "Add a resource (skill) to an existing project.",
+  addTypeArg: 'resource type: "skill"',
+  addNameArg: "resource name (e.g., nestjs, react)",
+  addUnknownType: 'Unknown resource type: "{type}". Available: skill',
+  addSkillIntro: " agentforge add skill ",
+  notAgentforgeProject:
+    "Not in an agentforge project (.claude/ directory not found).",
+  selectSkillToAdd: "Which skill to add?",
+  skillNotFound: 'Skill "{skill}" not found. Available: {available}',
+  skillExists: 'Skill "{skill}" already exists. Overwrite?',
+  copyingAgent: 'Adding agent "{agent}"',
+  agentAdded: 'Agent "{agent}" added',
+  copyingSkill: 'Adding skill "{skill}"',
+  skillAdded: 'Skill "{skill}" added',
+  skillAddedNote: "{skill} → {path}",
+  skillAddedTitle: "Skill added",
 };
 
 export default en;
