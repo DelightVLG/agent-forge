@@ -18,13 +18,19 @@ One command — and you get a ready-made monorepo with a team of AI agents: PM
 plans, developer writes code, tester verifies, reviewer checks the diff.
 Everything runs through the local Claude Code CLI, no API keys needed.
 
+<div align="center">
+
+![agentforge new demo](./demo.gif)
+
+</div>
+
 ## ![Quick Start](https://img.shields.io/badge/Quick_Start-6C47FF?style=for-the-badge&logo=terminal&logoColor=white)
 
 ```bash
 # Install globally
 npm i -g @delightvlg/agent-forge
 
-# Create a project
+# Create a project (interactive mode)
 agentforge new my-app
 
 # Or without installing — via npx / pnpm
@@ -37,6 +43,44 @@ cd my-app && pnpm install
 claude                    # open Claude Code
 > /init-project           # interview → fills in the stack and configures the project
 ```
+
+## ![Skills](https://img.shields.io/badge/Interactive_Setup_&_Skills-8B5CF6?style=for-the-badge&logo=sparkles&logoColor=white)
+
+When you run `agentforge new`, the CLI walks you through an interactive setup:
+
+1. **Project structure** — choose which layers you need: backend, web, mobile.
+   The CLI picks the right template automatically.
+2. **Skill selection** — for each layer, pick the technologies and best
+   practices your agents should know. Skills are `.md` instruction files that
+   teach agents _how_ to write code for your specific stack.
+
+### What are skills?
+
+Skills are curated best-practice guides injected into `.claude/skills/`. Each
+skill contains rules, patterns, and anti-patterns for a specific technology.
+When an agent works on your code, it follows these instructions — resulting in
+consistent, idiomatic, production-quality output.
+
+<details>
+<summary><b>Available skills (40+)</b></summary>
+
+| Category     | Skills                                                                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Backend**  | NestJS, Express, TypeScript, PostgreSQL, Prisma, TypeORM, Drizzle, Redis, GraphQL, REST API, Backend Testing, BullMQ (Queues), S3 / Object Storage                             |
+| **Frontend** | React, Next.js, Vite + React, Tailwind CSS, TypeScript, Zustand, React Query, React Hook Form + Zod, Frontend Testing, Accessibility, Component Design, Performance, Storybook |
+| **Mobile**   | React Native, Expo, Expo Router, React Navigation, RN Testing Library, App Store / Google Play                                                                                 |
+| **Common**   | Monorepo, Docker, CI/CD, Auth (JWT/OAuth2), Conventions, Git Flow, Security, Error Handling, Logging & Observability, Environment & Config                                     |
+
+</details>
+
+You can also add skills to an existing project at any time:
+
+```bash
+agentforge add skill prisma
+```
+
+> **With `--yes`** the CLI uses sensible defaults (no prompts). **With
+> `-s nestjs,prisma,react`** you can pass skills explicitly.
 
 ---
 

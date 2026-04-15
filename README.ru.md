@@ -18,13 +18,19 @@
 разработчик пишет код, тестировщик проверяет, ревьюер смотрит diff. Всё работает
 через локальный Claude Code CLI, без API-ключей.
 
+<div align="center">
+
+![agentforge new demo](./demo.gif)
+
+</div>
+
 ## ![Quick Start](https://img.shields.io/badge/Quick_Start-6C47FF?style=for-the-badge&logo=terminal&logoColor=white)
 
 ```bash
 # Установи глобально
 npm i -g @delightvlg/agent-forge
 
-# Создай проект
+# Создай проект (интерактивный режим)
 agentforge new my-app
 
 # Или без установки — через npx / pnpm
@@ -37,6 +43,44 @@ cd my-app && pnpm install
 claude                    # открой Claude Code
 > /init-project           # интервью → заполнит стек и настроит проект
 ```
+
+## ![Skills](https://img.shields.io/badge/Интерактивная_настройка_и_скиллы-8B5CF6?style=for-the-badge&logo=sparkles&logoColor=white)
+
+При запуске `agentforge new` CLI проведёт тебя через интерактивную настройку:
+
+1. **Структура проекта** — выбери нужные слои: backend, web, mobile. CLI
+   автоматически подберёт правильный шаблон.
+2. **Выбор скиллов** — для каждого слоя выбери технологии и best practices,
+   которые должны знать твои агенты. Скиллы — это `.md`-инструкции, которые учат
+   агентов _как именно_ писать код для твоего стека.
+
+### Что такое скиллы?
+
+Скиллы — это курированные гайды по лучшим практикам, которые попадают в
+`.claude/skills/`. Каждый скилл содержит правила, паттерны и анти-паттерны для
+конкретной технологии. Когда агент работает с твоим кодом, он следует этим
+инструкциям — результат: консистентный, идиоматичный, production-ready код.
+
+<details>
+<summary><b>Доступные скиллы (40+)</b></summary>
+
+| Категория    | Скиллы                                                                                                                                                                         |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| **Backend**  | NestJS, Express, TypeScript, PostgreSQL, Prisma, TypeORM, Drizzle, Redis, GraphQL, REST API, Backend Testing, BullMQ (Queues), S3 / Object Storage                             |
+| **Frontend** | React, Next.js, Vite + React, Tailwind CSS, TypeScript, Zustand, React Query, React Hook Form + Zod, Frontend Testing, Accessibility, Component Design, Performance, Storybook |
+| **Mobile**   | React Native, Expo, Expo Router, React Navigation, RN Testing Library, App Store / Google Play                                                                                 |
+| **Common**   | Monorepo, Docker, CI/CD, Auth (JWT/OAuth2), Conventions, Git Flow, Security, Error Handling, Logging & Observability, Environment & Config                                     |
+
+</details>
+
+Добавить скилл в существующий проект можно в любой момент:
+
+```bash
+agentforge add skill prisma
+```
+
+> **С `--yes`** CLI использует разумные умолчания (без вопросов). **С
+> `-s nestjs,prisma,react`** можно передать скиллы явно.
 
 ---
 
