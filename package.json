@@ -13,7 +13,9 @@
   },
   "files": [
     "dist",
-    "templates"
+    "templates",
+    "demo.gif",
+    "README.ru.md"
   ],
   "scripts": {
     "build": "tsup",
