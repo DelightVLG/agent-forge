@@ -18,13 +18,13 @@ Rules and patterns for component documentation with Storybook. Apply on top of
   ```tsx
   const meta = {
     component: Button,
-    tags: ["autodocs"],
+    tags: ['autodocs'],
   } satisfies Meta<typeof Button>;
   export default meta;
 
   type Story = StoryObj<typeof meta>;
   export const Primary: Story = {
-    args: { variant: "primary", children: "Click" },
+    args: { variant: 'primary', children: 'Click' },
   };
   ```
 

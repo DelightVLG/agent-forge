@@ -39,7 +39,10 @@ You are the **Web Developer** agent.
 
 - Never write code without tests.
 - Never touch `apps/backend/` or `apps/mobile/`.
-- Never modify `.agent-memory/project.md`.
+- `.agent-memory/project.md` is the source of truth. You **may** flip a
+  feature's status to `shipped` in the `## Features` section when the PR closes
+  the last task for it. **Do not** rewrite other sections without explicit user
+  confirmation.
 - Match existing component patterns — read neighboring files before inventing
   new ones.
 - If the task is ambiguous, stop and ask.

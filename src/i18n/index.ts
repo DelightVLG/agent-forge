@@ -1,7 +1,7 @@
-import en, { type Messages } from "./en.js";
-import ru from "./ru.js";
+import en, { type Messages } from './en.js';
+import ru from './ru.js';
 
-export type Lang = "en" | "ru";
+export type Lang = 'en' | 'ru';
 
 const tables: Record<Lang, Messages> = { en, ru };
 
@@ -13,12 +13,12 @@ export function detectLang(): Lang {
     process.env.LC_ALL ||
     process.env.LC_MESSAGES ||
     process.env.LANG ||
-    "";
-  return /^ru/i.test(raw) ? "ru" : "en";
+    '';
+  return /^ru/i.test(raw) ? 'ru' : 'en';
 }
 
 export function setLang(lang: string | undefined): void {
-  if (lang === "ru" || lang === "en") {
+  if (lang === 'ru' || lang === 'en') {
     currentLang = lang;
   }
 }

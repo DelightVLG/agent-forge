@@ -38,21 +38,21 @@ Rules and patterns for working with Drizzle ORM. Apply on top of
 
 ```typescript
 // src/db/schema/users.ts
-import { pgTable, text, timestamp, pgEnum } from "drizzle-orm/pg-core";
-import { relations } from "drizzle-orm";
+import { pgTable, text, timestamp, pgEnum } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
-export const roleEnum = pgEnum("role", ["user", "admin", "editor"]);
+export const roleEnum = pgEnum('role', ['user', 'admin', 'editor']);
 
-export const users = pgTable("users", {
-  id: text("id")
+export const users = pgTable('users', {
+  id: text('id')
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
-  email: text("email").notNull().unique(),
-  name: text("name").notNull(),
-  role: roleEnum("role").default("user").notNull(),
-  passwordHash: text("password_hash").notNull(),
-  createdAt: timestamp("created_at").defaultNow().notNull(),
-  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+  email: text('email').notNull().unique(),
+  name: text('name').notNull(),
+  role: roleEnum('role').default('user').notNull(),
+  passwordHash: text('password_hash').notNull(),
+  createdAt: timestamp('created_at').defaultNow().notNull(),
+  updatedAt: timestamp('updated_at').defaultNow().notNull(),
 });
 
 export const usersRelations = relations(users, ({ many }) => ({
@@ -64,9 +64,9 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 ```typescript
 // src/db/index.ts
-import { drizzle } from "drizzle-orm/node-postgres";
-import { Pool } from "pg";
-import * as schema from "./schema";
+import { drizzle } from 'drizzle-orm/node-postgres';
+import { Pool } from 'pg';
+import * as schema from './schema';
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -79,25 +79,25 @@ export const db = drizzle(pool, { schema });
 ### Type-safe queries
 
 ```typescript
-import { eq, and, desc, ilike } from "drizzle-orm";
+import { eq, and, desc, ilike } from 'drizzle-orm';
 
 // Select specific columns
 const userList = await db
   .select({ id: users.id, email: users.email, name: users.name })
   .from(users)
-  .where(eq(users.role, "admin"))
+  .where(eq(users.role, 'admin'))
   .orderBy(desc(users.createdAt));
 
 // Insert with returning
 const [newUser] = await db
   .insert(users)
-  .values({ email: "user@example.com", name: "User", passwordHash: hash })
+  .values({ email: 'user@example.com', name: 'User', passwordHash: hash })
   .returning({ id: users.id, email: users.email });
 
 // Update
 await db
   .update(users)
-  .set({ name: "New Name", updatedAt: new Date() })
+  .set({ name: 'New Name', updatedAt: new Date() })
   .where(eq(users.id, userId));
 
 // Delete
@@ -127,8 +127,8 @@ const userWithPosts = await db.query.users.findFirst({
 const getUserById = db
   .select()
   .from(users)
-  .where(eq(users.id, sql.placeholder("id")))
-  .prepare("get_user_by_id");
+  .where(eq(users.id, sql.placeholder('id')))
+  .prepare('get_user_by_id');
 
 // Execute — skips SQL generation
 const user = await getUserById.execute({ id: userId });
@@ -143,10 +143,10 @@ async function transferCredits(fromId: string, toId: string, amount: number) {
       .select({ credits: users.credits })
       .from(users)
       .where(eq(users.id, fromId))
-      .for("update");
+      .for('update');
 
     if (sender.credits < amount) {
-      throw new AppError("INSUFFICIENT_CREDITS", "Not enough credits", 422);
+      throw new AppError('INSUFFICIENT_CREDITS', 'Not enough credits', 422);
     }
 
     await tx
@@ -165,12 +165,12 @@ async function transferCredits(fromId: string, toId: string, amount: number) {
 
 ```typescript
 // drizzle.config.ts
-import { defineConfig } from "drizzle-kit";
+import { defineConfig } from 'drizzle-kit';
 
 export default defineConfig({
-  schema: "./src/db/schema/index.ts",
-  out: "./drizzle",
-  dialect: "postgresql",
+  schema: './src/db/schema/index.ts',
+  out: './drizzle',
+  dialect: 'postgresql',
   dbCredentials: {
     url: process.env.DATABASE_URL!,
   },

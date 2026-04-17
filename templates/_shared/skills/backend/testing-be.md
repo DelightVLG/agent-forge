@@ -49,7 +49,7 @@ test/
 
 ```typescript
 // test/helpers/factories.ts
-import { faker } from "@faker-js/faker";
+import { faker } from '@faker-js/faker';
 
 export function buildUser(
   overrides: Partial<CreateUserDto> = {},
@@ -67,7 +67,7 @@ export function buildUser(
 
 ```typescript
 // users.service.spec.ts
-describe("UsersService", () => {
+describe('UsersService', () => {
   let service: UsersService;
   let repo: Repository<User>;
 
@@ -83,8 +83,8 @@ describe("UsersService", () => {
     repo = module.get(getRepositoryToken(User));
   });
 
-  it("throws ConflictException when email already exists", async () => {
-    jest.spyOn(repo, "findOne").mockResolvedValue({ id: "1" } as User);
+  it('throws ConflictException when email already exists', async () => {
+    jest.spyOn(repo, 'findOne').mockResolvedValue({ id: '1' } as User);
 
     await expect(service.create(buildUser())).rejects.toThrow(
       ConflictException,
@@ -97,7 +97,7 @@ describe("UsersService", () => {
 
 ```typescript
 // test/users.e2e-spec.ts
-describe("POST /users", () => {
+describe('POST /users', () => {
   let app: INestApplication;
 
   beforeAll(async () => {
@@ -109,29 +109,29 @@ describe("POST /users", () => {
   });
 
   beforeEach(async () => {
-    await truncateTables(["users"]); // clean state
+    await truncateTables(['users']); // clean state
   });
 
-  it("creates a user and returns 201", async () => {
-    const dto = buildUser({ email: "test@example.com" });
+  it('creates a user and returns 201', async () => {
+    const dto = buildUser({ email: 'test@example.com' });
 
     const response = await request(app.getHttpServer())
-      .post("/users")
+      .post('/users')
       .send(dto)
       .expect(201);
 
     expect(response.body).toMatchObject({
-      email: "test@example.com",
+      email: 'test@example.com',
       id: expect.any(String),
     });
-    expect(response.body).not.toHaveProperty("password");
+    expect(response.body).not.toHaveProperty('password');
   });
 
-  it("returns 409 when email already taken", async () => {
-    const dto = buildUser({ email: "dup@example.com" });
-    await request(app.getHttpServer()).post("/users").send(dto);
+  it('returns 409 when email already taken', async () => {
+    const dto = buildUser({ email: 'dup@example.com' });
+    await request(app.getHttpServer()).post('/users').send(dto);
 
-    await request(app.getHttpServer()).post("/users").send(dto).expect(409);
+    await request(app.getHttpServer()).post('/users').send(dto).expect(409);
   });
 });
 ```
@@ -159,10 +159,10 @@ export async function withRollback(
 
 ```typescript
 // ❌ Mocking the database — hides real query issues
-jest.spyOn(prisma.user, "findMany").mockResolvedValue([mockUser]);
+jest.spyOn(prisma.user, 'findMany').mockResolvedValue([mockUser]);
 
 // ✅ Use a real test database for integration tests
-const users = await request(app.getHttpServer()).get("/users").expect(200);
+const users = await request(app.getHttpServer()).get('/users').expect(200);
 ```
 
 ```typescript
@@ -177,29 +177,29 @@ it("returns 404 when user does not exist", async () => { ... });
 
 ```typescript
 // ❌ Tests depend on execution order
-it("creates a user", async () => {
-  await createUser({ email: "shared@test.com" });
+it('creates a user', async () => {
+  await createUser({ email: 'shared@test.com' });
 });
-it("fetches the user created above", async () => {
-  const user = await getUser("shared@test.com"); // depends on previous test
+it('fetches the user created above', async () => {
+  const user = await getUser('shared@test.com'); // depends on previous test
 });
 
 // ✅ Each test sets up its own data
-it("fetches a user by email", async () => {
-  await createUser({ email: "test@test.com" });
-  const user = await getUser("test@test.com");
-  expect(user.email).toBe("test@test.com");
+it('fetches a user by email', async () => {
+  await createUser({ email: 'test@test.com' });
+  const user = await getUser('test@test.com');
+  expect(user.email).toBe('test@test.com');
 });
 ```
 
 ```typescript
 // ❌ Testing implementation details
-expect(service.hashPassword).toHaveBeenCalledWith("secret");
+expect(service.hashPassword).toHaveBeenCalledWith('secret');
 expect(repo.save).toHaveBeenCalledTimes(1);
 
 // ✅ Testing observable behavior
 expect(response.status).toBe(201);
-expect(response.body.email).toBe("user@test.com");
+expect(response.body.email).toBe('user@test.com');
 ```
 
 ## Checklist

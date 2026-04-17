@@ -180,8 +180,8 @@ async createUser(@Args("input") input: CreateUserInput) {
 
 ```typescript
 // main.ts
-import depthLimit from "graphql-depth-limit";
-import { createComplexityRule } from "graphql-query-complexity";
+import depthLimit from 'graphql-depth-limit';
+import { createComplexityRule } from 'graphql-query-complexity';
 
 GraphQLModule.forRoot<ApolloDriverConfig>({
   driver: ApolloDriver,

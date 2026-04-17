@@ -17,7 +17,7 @@ configuration. Apply on top of `conventions.md` and `security-basics.md`.
   const envSchema = z.object({
     DATABASE_URL: z.string().url(),
     PORT: z.coerce.number().default(3000),
-    NODE_ENV: z.enum(["development", "production", "test"]),
+    NODE_ENV: z.enum(['development', 'production', 'test']),
   });
   export const config = envSchema.parse(process.env);
   ```

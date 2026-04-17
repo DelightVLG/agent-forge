@@ -37,7 +37,7 @@ Rules and patterns for React Native applications. Apply on top of
 
 ```tsx
 // components/user-card.tsx
-import { View, Text, Pressable, StyleSheet } from "react-native";
+import { View, Text, Pressable, StyleSheet } from 'react-native';
 
 interface Props {
   user: User;
@@ -57,9 +57,9 @@ const styles = StyleSheet.create({
   card: {
     padding: 16,
     borderRadius: 12,
-    backgroundColor: "#fff",
+    backgroundColor: '#fff',
     marginBottom: 8,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
     shadowOpacity: 0.1,
     shadowRadius: 3,
@@ -67,12 +67,12 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 16,
-    fontWeight: "600",
-    color: "#111",
+    fontWeight: '600',
+    color: '#111',
   },
   email: {
     fontSize: 14,
-    color: "#666",
+    color: '#666',
     marginTop: 4,
   },
 });
@@ -81,8 +81,8 @@ const styles = StyleSheet.create({
 ### Optimized FlatList
 
 ```tsx
-import { FlatList } from "react-native";
-import { useCallback } from "react";
+import { FlatList } from 'react-native';
+import { useCallback } from 'react';
 
 export function UserList({ users }: { users: User[] }) {
   const renderItem = useCallback(
@@ -114,12 +114,12 @@ export function UserList({ users }: { users: User[] }) {
 
 ```typescript
 // Via Platform.select for small differences
-import { Platform, StyleSheet } from "react-native";
+import { Platform, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   shadow: Platform.select({
     ios: {
-      shadowColor: "#000",
+      shadowColor: '#000',
       shadowOffset: { width: 0, height: 2 },
       shadowOpacity: 0.1,
       shadowRadius: 4,
@@ -142,7 +142,7 @@ components/
 ### Safe area handling
 
 ```tsx
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export function ScreenContainer({ children }: { children: ReactNode }) {
   const insets = useSafeAreaInsets();
@@ -167,7 +167,7 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withSpring,
-} from "react-native-reanimated";
+} from 'react-native-reanimated';
 
 export function AnimatedCard({ children }: { children: ReactNode }) {
   const scale = useSharedValue(1);

@@ -62,8 +62,8 @@ declare global {
 
 ```tsx
 // navigation/root-stack.tsx
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import type { RootStackParamList } from "./types";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import type { RootStackParamList } from './types';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -72,18 +72,18 @@ export function RootStack() {
     <Stack.Navigator
       screenOptions={{
         headerBackTitleVisible: false,
-        headerTintColor: "#111",
+        headerTintColor: '#111',
       }}
     >
       <Stack.Screen
         name="Home"
         component={HomeScreen}
-        options={{ title: "Dashboard" }}
+        options={{ title: 'Dashboard' }}
       />
       <Stack.Screen
         name="UserDetail"
         component={UserDetailScreen}
-        options={{ title: "User" }}
+        options={{ title: 'User' }}
       />
       <Stack.Screen name="Settings" component={SettingsScreen} />
     </Stack.Navigator>
@@ -95,9 +95,9 @@ export function RootStack() {
 
 ```tsx
 // navigation/main-tabs.tsx
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Home, User, Settings } from "lucide-react-native";
-import type { MainTabParamList } from "./types";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { Home, User, Settings } from 'lucide-react-native';
+import type { MainTabParamList } from './types';
 
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
@@ -105,7 +105,7 @@ export function MainTabs() {
   return (
     <Tab.Navigator
       screenOptions={{
-        tabBarActiveTintColor: "#3b82f6",
+        tabBarActiveTintColor: '#3b82f6',
         headerShown: false,
       }}
     >
@@ -113,7 +113,7 @@ export function MainTabs() {
         name="HomeTab"
         component={HomeScreen}
         options={{
-          title: "Home",
+          title: 'Home',
           tabBarIcon: ({ color }) => <Home color={color} size={24} />,
         }}
       />
@@ -121,7 +121,7 @@ export function MainTabs() {
         name="ProfileTab"
         component={ProfileScreen}
         options={{
-          title: "Profile",
+          title: 'Profile',
           tabBarIcon: ({ color }) => <User color={color} size={24} />,
         }}
       />
@@ -129,7 +129,7 @@ export function MainTabs() {
         name="SettingsTab"
         component={SettingsScreen}
         options={{
-          title: "Settings",
+          title: 'Settings',
           tabBarIcon: ({ color }) => <Settings color={color} size={24} />,
         }}
       />
@@ -142,16 +142,16 @@ export function MainTabs() {
 
 ```tsx
 // screens/home-screen.tsx
-import type { NativeStackScreenProps } from "@react-navigation/native-stack";
-import type { RootStackParamList } from "@/navigation/types";
+import type { NativeStackScreenProps } from '@react-navigation/native-stack';
+import type { RootStackParamList } from '@/navigation/types';
 
-type Props = NativeStackScreenProps<RootStackParamList, "Home">;
+type Props = NativeStackScreenProps<RootStackParamList, 'Home'>;
 
 export function HomeScreen({ navigation }: Props) {
   return (
     <View>
       <Pressable
-        onPress={() => navigation.navigate("UserDetail", { userId: "123" })}
+        onPress={() => navigation.navigate('UserDetail', { userId: '123' })}
       >
         <Text>View User</Text>
       </Pressable>
@@ -164,16 +164,16 @@ export function HomeScreen({ navigation }: Props) {
 
 ```tsx
 // navigation/linking.ts
-import type { LinkingOptions } from "@react-navigation/native";
-import type { RootStackParamList } from "./types";
+import type { LinkingOptions } from '@react-navigation/native';
+import type { RootStackParamList } from './types';
 
 export const linking: LinkingOptions<RootStackParamList> = {
-  prefixes: ["myapp://", "https://myapp.com"],
+  prefixes: ['myapp://', 'https://myapp.com'],
   config: {
     screens: {
-      Home: "",
-      UserDetail: "users/:userId",
-      Settings: "settings",
+      Home: '',
+      UserDetail: 'users/:userId',
+      Settings: 'settings',
     },
   },
 };
@@ -189,7 +189,7 @@ export const linking: LinkingOptions<RootStackParamList> = {
 ### Auth flow with stack reset
 
 ```typescript
-import { CommonActions, useNavigation } from "@react-navigation/native";
+import { CommonActions, useNavigation } from '@react-navigation/native';
 
 function useLogout() {
   const navigation = useNavigation();
@@ -199,7 +199,7 @@ function useLogout() {
     navigation.dispatch(
       CommonActions.reset({
         index: 0,
-        routes: [{ name: "Login" }],
+        routes: [{ name: 'Login' }],
       }),
     );
   };
@@ -209,8 +209,8 @@ function useLogout() {
 ### useFocusEffect for screen data
 
 ```tsx
-import { useFocusEffect } from "@react-navigation/native";
-import { useCallback } from "react";
+import { useFocusEffect } from '@react-navigation/native';
+import { useCallback } from 'react';
 
 export function ProfileScreen() {
   useFocusEffect(
@@ -231,18 +231,18 @@ export function ProfileScreen() {
 
 ```tsx
 // ❌ Passing full objects as params
-navigation.navigate("UserDetail", { user: fullUserObject });
+navigation.navigate('UserDetail', { user: fullUserObject });
 
 // ✅ Pass only the ID, fetch on the destination
-navigation.navigate("UserDetail", { userId: user.id });
+navigation.navigate('UserDetail', { userId: user.id });
 ```
 
 ```tsx
 // ❌ Untyped navigation — runtime crash if param is missing
-navigation.navigate("UserDetail"); // missing userId
+navigation.navigate('UserDetail'); // missing userId
 
 // ✅ TypeScript catches it at compile time
-navigation.navigate("UserDetail", { userId: "123" }); // required by ParamList
+navigation.navigate('UserDetail', { userId: '123' }); // required by ParamList
 ```
 
 ```tsx
@@ -261,13 +261,13 @@ useFocusEffect(
 
 ```tsx
 // ❌ Navigate after logout — protected screens still in stack
-navigation.navigate("Login");
+navigation.navigate('Login');
 
 // ✅ Reset stack — clean slate
 navigation.dispatch(
   CommonActions.reset({
     index: 0,
-    routes: [{ name: "Login" }],
+    routes: [{ name: 'Login' }],
   }),
 );
 ```

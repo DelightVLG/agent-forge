@@ -12,6 +12,8 @@ Template:
 - **Deciders:** <who>
 
 ## Context
+
 ## Decision
+
 ## Consequences
 ```

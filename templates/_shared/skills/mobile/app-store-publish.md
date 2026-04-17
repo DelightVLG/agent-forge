@@ -79,13 +79,13 @@ eas submit --platform android --profile production
 // app.config.ts
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  version: "1.3.0", // user-facing version — bump manually
+  version: '1.3.0', // user-facing version — bump manually
   ios: {
-    bundleIdentifier: "com.company.myapp",
-    buildNumber: "1", // auto-incremented by EAS
+    bundleIdentifier: 'com.company.myapp',
+    buildNumber: '1', // auto-incremented by EAS
   },
   android: {
-    package: "com.company.myapp",
+    package: 'com.company.myapp',
     versionCode: 1, // auto-incremented by EAS
   },
 });
@@ -218,7 +218,7 @@ eas submit --platform android --profile production  # goes to internal track
 ```typescript
 // ❌ Hardcoded API key in binary
 export const config = {
-  apiKey: "sk-live-abc123", // baked into the JS bundle
+  apiKey: 'sk-live-abc123', // baked into the JS bundle
 };
 
 // ✅ Runtime injection via EAS secrets + expo-constants

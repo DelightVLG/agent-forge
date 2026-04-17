@@ -95,10 +95,10 @@ export type Result<T, E = AppError> = Success<T> | Failure<E>;
 // Usage in service
 async function createUser(
   dto: CreateUserDto,
-): Promise<Result<User, "EMAIL_TAKEN">> {
+): Promise<Result<User, 'EMAIL_TAKEN'>> {
   const exists = await usersRepo.findByEmail(dto.email);
   if (exists) {
-    return { ok: false, error: "EMAIL_TAKEN" };
+    return { ok: false, error: 'EMAIL_TAKEN' };
   }
   const user = await usersRepo.create(dto);
   return { ok: true, data: user };
@@ -131,7 +131,7 @@ declare global {
 }
 
 // Now req.user is typed everywhere
-app.get("/me", authMiddleware, (req, res) => {
+app.get('/me', authMiddleware, (req, res) => {
   const userId = req.user.id; // typed as UserId
   res.json({ userId });
 });
@@ -140,19 +140,19 @@ app.get("/me", authMiddleware, (req, res) => {
 ### Type inference from Zod schema
 
 ```typescript
-import { z } from "zod";
+import { z } from 'zod';
 
 const createUserSchema = z.object({
   email: z.string().email(),
   name: z.string().min(1).max(100),
-  role: z.enum(["user", "admin", "editor"]).default("user"),
+  role: z.enum(['user', 'admin', 'editor']).default('user'),
 });
 
 // Infer type — no duplicate type definition
 type CreateUserDto = z.infer<typeof createUserSchema>;
 
 // Same pattern with Drizzle
-import { InferSelectModel, InferInsertModel } from "drizzle-orm";
+import { InferSelectModel, InferInsertModel } from 'drizzle-orm';
 type User = InferSelectModel<typeof users>;
 type NewUser = InferInsertModel<typeof users>;
 ```
@@ -193,7 +193,7 @@ class UsersService extends BaseService<User> {
 
 ```typescript
 // Config with literal types preserved
-const HTTP_METHODS = ["GET", "POST", "PUT", "PATCH", "DELETE"] as const;
+const HTTP_METHODS = ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'] as const;
 type HttpMethod = (typeof HTTP_METHODS)[number]; // "GET" | "POST" | ...
 
 const ERROR_CODES = {
@@ -227,20 +227,20 @@ interface User {
 // prisma/schema.prisma — separate definition, may not match
 
 // ✅ Infer from single source
-import { User } from "@prisma/client"; // generated from schema
+import { User } from '@prisma/client'; // generated from schema
 ```
 
 ```typescript
 // ❌ Type assertion instead of satisfies
 const config = {
   port: 3000,
-  host: "localhost",
+  host: 'localhost',
 } as AppConfig; // may be missing fields, no error
 
 // ✅ satisfies validates completeness
 const config = {
   port: 3000,
-  host: "localhost",
+  host: 'localhost',
 } satisfies AppConfig; // error if fields missing
 ```
 

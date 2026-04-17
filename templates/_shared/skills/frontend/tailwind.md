@@ -38,22 +38,22 @@ Rules and patterns for styling with Tailwind CSS. Apply on top of
 
 ```typescript
 // tailwind.config.ts
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss';
 
 export default {
-  darkMode: "class",
-  content: ["./src/**/*.{ts,tsx}"],
+  darkMode: 'class',
+  content: ['./src/**/*.{ts,tsx}'],
   theme: {
     extend: {
       colors: {
         brand: {
-          50: "#f0f9ff",
-          500: "#3b82f6",
-          900: "#1e3a5f",
+          50: '#f0f9ff',
+          500: '#3b82f6',
+          900: '#1e3a5f',
         },
       },
       fontFamily: {
-        sans: ["Inter", "system-ui", "sans-serif"],
+        sans: ['Inter', 'system-ui', 'sans-serif'],
       },
     },
   },
@@ -64,10 +64,10 @@ export default {
 ### Conditional classes with cn()
 
 ```tsx
-import { cn } from "@/lib/utils";
+import { cn } from '@/lib/utils';
 
 interface Props {
-  variant: "primary" | "ghost";
+  variant: 'primary' | 'ghost';
   className?: string;
 }
 
@@ -75,9 +75,9 @@ export function Button({ variant, className, ...props }: Props) {
   return (
     <button
       className={cn(
-        "rounded-lg px-4 py-2 font-medium transition-colors",
-        variant === "primary" && "bg-brand-500 text-white hover:bg-brand-600",
-        variant === "ghost" && "text-gray-700 hover:bg-gray-100",
+        'rounded-lg px-4 py-2 font-medium transition-colors',
+        variant === 'primary' && 'bg-brand-500 text-white hover:bg-brand-600',
+        variant === 'ghost' && 'text-gray-700 hover:bg-gray-100',
         className,
       )}
       {...props}
@@ -108,11 +108,11 @@ export function Button({ variant, className, ...props }: Props) {
 
 ```tsx
 // ❌ Dynamic class construction — purge can't detect
-const color = "blue";
+const color = 'blue';
 <div className={`bg-${color}-500`} />;
 
 // ✅ Map to full class names
-const colorMap = { blue: "bg-blue-500", red: "bg-red-500" };
+const colorMap = { blue: 'bg-blue-500', red: 'bg-red-500' };
 <div className={colorMap[color]} />;
 ```
 
@@ -135,10 +135,10 @@ const colorMap = { blue: "bg-blue-500", red: "bg-red-500" };
 
 ```tsx
 // ❌ Manual string concatenation
-<div className={"p-4 " + (active ? "bg-blue-500" : "")} />;
+<div className={'p-4 ' + (active ? 'bg-blue-500' : '')} />;
 
 // ✅ cn() / clsx()
-<div className={cn("p-4", active && "bg-blue-500")} />;
+<div className={cn('p-4', active && 'bg-blue-500')} />;
 ```
 
 ## Checklist

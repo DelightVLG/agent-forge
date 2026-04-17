@@ -33,8 +33,8 @@ and `conventions.md`.
 
 ```typescript
 // stores/use-cart-store.ts
-import { create } from "zustand";
-import { devtools } from "zustand/middleware";
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 interface CartItem {
   id: string;
@@ -44,7 +44,7 @@ interface CartItem {
 
 interface CartState {
   items: CartItem[];
-  addItem: (item: Omit<CartItem, "quantity">) => void;
+  addItem: (item: Omit<CartItem, 'quantity'>) => void;
   removeItem: (id: string) => void;
   clear: () => void;
 }
@@ -68,19 +68,19 @@ export const useCartStore = create<CartState>()(
             return { items: [...state.items, { ...item, quantity: 1 }] };
           },
           false,
-          "cart/addItem",
+          'cart/addItem',
         ),
 
       removeItem: (id) =>
         set(
           (state) => ({ items: state.items.filter((i) => i.id !== id) }),
           false,
-          "cart/removeItem",
+          'cart/removeItem',
         ),
 
-      clear: () => set({ items: [] }, false, "cart/clear"),
+      clear: () => set({ items: [] }, false, 'cart/clear'),
     }),
-    { name: "CartStore" },
+    { name: 'CartStore' },
   ),
 );
 ```
@@ -92,7 +92,7 @@ export const useCartStore = create<CartState>()(
 const itemCount = useCartStore((s) => s.items.length);
 
 // Derived selector with useShallow for object stability
-import { useShallow } from "zustand/react/shallow";
+import { useShallow } from 'zustand/react/shallow';
 
 const { items, addItem } = useCartStore(
   useShallow((s) => ({ items: s.items, addItem: s.addItem })),
@@ -102,22 +102,22 @@ const { items, addItem } = useCartStore(
 ### Persist middleware
 
 ```typescript
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
 interface ThemeState {
-  mode: "light" | "dark";
+  mode: 'light' | 'dark';
   toggle: () => void;
 }
 
 export const useThemeStore = create<ThemeState>()(
   persist(
     (set) => ({
-      mode: "light",
+      mode: 'light',
       toggle: () =>
-        set((s) => ({ mode: s.mode === "light" ? "dark" : "light" })),
+        set((s) => ({ mode: s.mode === 'light' ? 'dark' : 'light' })),
     }),
-    { name: "theme-storage" },
+    { name: 'theme-storage' },
   ),
 );
 ```
@@ -125,8 +125,8 @@ export const useThemeStore = create<ThemeState>()(
 ### Immer for nested updates
 
 ```typescript
-import { create } from "zustand";
-import { immer } from "zustand/middleware/immer";
+import { create } from 'zustand';
+import { immer } from 'zustand/middleware/immer';
 
 interface FormState {
   fields: {
@@ -134,20 +134,20 @@ interface FormState {
     address: { city: string; zip: string };
   };
   updateField: <
-    S extends keyof FormState["fields"],
-    K extends keyof FormState["fields"][S],
+    S extends keyof FormState['fields'],
+    K extends keyof FormState['fields'][S],
   >(
     section: S,
     key: K,
-    value: FormState["fields"][S][K],
+    value: FormState['fields'][S][K],
   ) => void;
 }
 
 export const useFormStore = create<FormState>()(
   immer((set) => ({
     fields: {
-      personal: { name: "", email: "" },
-      address: { city: "", zip: "" },
+      personal: { name: '', email: '' },
+      address: { city: '', zip: '' },
     },
     updateField: (section, key, value) =>
       set((state) => {
@@ -182,7 +182,7 @@ persist(
   (set) => ({
     users: [], // fetched from API — will go stale
   }),
-  { name: "users-storage" },
+  { name: 'users-storage' },
 );
 
 // ✅ Use React Query for server data, persist only client state
@@ -193,7 +193,7 @@ persist(
 const useStore = create(() => ({
   user: null,
   cart: [],
-  theme: "light",
+  theme: 'light',
   notifications: [],
   modalOpen: false,
   // ... 30 more fields
@@ -202,7 +202,7 @@ const useStore = create(() => ({
 // ✅ Split by domain
 const useAuthStore = create(() => ({ user: null }));
 const useCartStore = create(() => ({ items: [] }));
-const useUIStore = create(() => ({ theme: "light", modalOpen: false }));
+const useUIStore = create(() => ({ theme: 'light', modalOpen: false }));
 ```
 
 ## Checklist

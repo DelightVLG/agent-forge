@@ -80,7 +80,7 @@ services:
       - .:/app
       - /app/node_modules # anonymous volume to preserve node_modules
     ports:
-      - "3000:3000"
+      - '3000:3000'
     env_file: .env
     depends_on:
       db:
@@ -94,11 +94,11 @@ services:
       POSTGRES_PASSWORD: dev
       POSTGRES_DB: app
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - pgdata:/var/lib/postgresql/data
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U dev"]
+      test: ['CMD-SHELL', 'pg_isready -U dev']
       interval: 5s
       timeout: 3s
       retries: 5
@@ -106,9 +106,9 @@ services:
   redis:
     image: redis:7-alpine
     ports:
-      - "6379:6379"
+      - '6379:6379'
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ['CMD', 'redis-cli', 'ping']
       interval: 5s
       timeout: 3s
 

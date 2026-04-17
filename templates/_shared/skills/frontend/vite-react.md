@@ -32,24 +32,24 @@ Rules and patterns for Vite-based React projects. Apply on top of `react.md` and
 
 ```typescript
 // vite.config.ts
-import { defineConfig } from "vite";
-import react from "@vitejs/plugin-react";
-import { resolve } from "node:path";
+import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
 
   resolve: {
     alias: {
-      "@": resolve(__dirname, "src"),
+      '@': resolve(__dirname, 'src'),
     },
   },
 
   server: {
     port: 3000,
     proxy: {
-      "/api": {
-        target: "http://localhost:4000",
+      '/api': {
+        target: 'http://localhost:4000',
         changeOrigin: true,
       },
     },
@@ -59,7 +59,7 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          vendor: ["react", "react-dom"],
+          vendor: ['react', 'react-dom'],
         },
       },
     },
@@ -118,16 +118,16 @@ interface ImportMeta {
 
 ```tsx
 // src/router.tsx
-import { lazy, Suspense } from "react";
-import { createBrowserRouter } from "react-router-dom";
-import { Spinner } from "@/components/ui/spinner";
+import { lazy, Suspense } from 'react';
+import { createBrowserRouter } from 'react-router-dom';
+import { Spinner } from '@/components/ui/spinner';
 
-const Dashboard = lazy(() => import("@/pages/dashboard"));
-const Settings = lazy(() => import("@/pages/settings"));
+const Dashboard = lazy(() => import('@/pages/dashboard'));
+const Settings = lazy(() => import('@/pages/settings'));
 
 export const router = createBrowserRouter([
   {
-    path: "/dashboard",
+    path: '/dashboard',
     element: (
       <Suspense fallback={<Spinner />}>
         <Dashboard />
@@ -135,7 +135,7 @@ export const router = createBrowserRouter([
     ),
   },
   {
-    path: "/settings",
+    path: '/settings',
     element: (
       <Suspense fallback={<Spinner />}>
         <Settings />
@@ -149,20 +149,20 @@ export const router = createBrowserRouter([
 
 ```typescript
 // vitest.config.ts (or inside vite.config.ts)
-import { defineConfig } from "vitest/config";
-import react from "@vitejs/plugin-react";
-import { resolve } from "node:path";
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+import { resolve } from 'node:path';
 
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    alias: { "@": resolve(__dirname, "src") },
+    alias: { '@': resolve(__dirname, 'src') },
   },
   test: {
-    environment: "jsdom",
+    environment: 'jsdom',
     globals: true,
-    setupFiles: ["./src/test/setup.ts"],
-    include: ["src/**/*.test.{ts,tsx}"],
+    setupFiles: ['./src/test/setup.ts'],
+    include: ['src/**/*.test.{ts,tsx}'],
   },
 });
 ```
@@ -179,10 +179,10 @@ const url = import.meta.env.VITE_API_URL;
 
 ```typescript
 // ❌ Hard-coded backend URL
-fetch("http://localhost:4000/api/users");
+fetch('http://localhost:4000/api/users');
 
 // ✅ Relative path + dev proxy
-fetch("/api/users");
+fetch('/api/users');
 // vite.config: server.proxy["/api"] → http://localhost:4000
 ```
 
@@ -197,12 +197,12 @@ fetch("/api/users");
 ```typescript
 // ❌ Barrel file re-exporting everything in app code
 // src/components/index.ts
-export { Button } from "./button";
-export { Input } from "./input";
+export { Button } from './button';
+export { Input } from './input';
 // ... 40 more — slows HMR
 
 // ✅ Import directly
-import { Button } from "@/components/button";
+import { Button } from '@/components/button';
 ```
 
 ```typescript

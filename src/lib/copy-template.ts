@@ -1,8 +1,8 @@
-import path from "node:path";
-import fse from "fs-extra";
-import { renderString } from "./render.js";
-import { resolveTemplatesDir } from "./paths.js";
-import { getSkillDef, resolveAgents } from "./skills-registry.js";
+import path from 'node:path';
+import fse from 'fs-extra';
+import { renderString } from './render.js';
+import { resolveTemplatesDir } from './paths.js';
+import { getSkillDef, resolveAgents } from './skills-registry.js';
 
 export interface CopyTemplateOptions {
   sourceDir: string;
@@ -30,16 +30,13 @@ export async function copyTemplate(opts: CopyTemplateOptions): Promise<void> {
   }
 }
 
-async function copySkillsAndAgents(
-  targetDir: string,
-  skillIds: string[],
-): Promise<void> {
+async function copySkillsAndAgents(targetDir: string, skillIds: string[]): Promise<void> {
   const templatesDir = resolveTemplatesDir();
-  const sharedDir = path.join(templatesDir, "_shared");
-  const sharedSkillsDir = path.join(sharedDir, "skills");
-  const sharedAgentsDir = path.join(sharedDir, "agents");
+  const sharedDir = path.join(templatesDir, '_shared');
+  const sharedSkillsDir = path.join(sharedDir, 'skills');
+  const sharedAgentsDir = path.join(sharedDir, 'agents');
 
-  const claudeDir = path.join(targetDir, ".claude");
+  const claudeDir = path.join(targetDir, '.claude');
 
   // Copy selected skills
   for (const id of skillIds) {
@@ -47,7 +44,7 @@ async function copySkillsAndAgents(
     if (!def) continue;
 
     const src = path.join(sharedSkillsDir, def.file);
-    const dest = path.join(claudeDir, "skills", def.file);
+    const dest = path.join(claudeDir, 'skills', def.file);
 
     if (await fse.pathExists(src)) {
       await fse.ensureDir(path.dirname(dest));
@@ -59,7 +56,7 @@ async function copySkillsAndAgents(
   const agents = resolveAgents(skillIds);
   for (const agent of agents) {
     const src = path.join(sharedAgentsDir, `${agent}.md`);
-    const dest = path.join(claudeDir, "agents", `${agent}.md`);
+    const dest = path.join(claudeDir, 'agents', `${agent}.md`);
 
     if (await fse.pathExists(src)) {
       await fse.ensureDir(path.dirname(dest));
@@ -68,11 +65,7 @@ async function copySkillsAndAgents(
   }
 }
 
-async function walk(
-  src: string,
-  dest: string,
-  vars: Record<string, string>,
-): Promise<void> {
+async function walk(src: string, dest: string, vars: Record<string, string>): Promise<void> {
   const entries = await fse.readdir(src, { withFileTypes: true });
   for (const entry of entries) {
     const renamed = renameEntry(entry.name);
@@ -92,8 +85,8 @@ async function walk(
     }
 
     if (renamed.render) {
-      const raw = await fse.readFile(srcPath, "utf8");
-      await fse.writeFile(destPath, renderString(raw, vars), "utf8");
+      const raw = await fse.readFile(srcPath, 'utf8');
+      await fse.writeFile(destPath, renderString(raw, vars), 'utf8');
     } else {
       await fse.copyFile(srcPath, destPath);
     }
@@ -108,8 +101,8 @@ interface RenamedEntry {
 function renameEntry(name: string): RenamedEntry {
   let out = name;
   let render = false;
-  if (out.startsWith("_")) out = "." + out.slice(1);
-  if (out.endsWith(".hbs")) {
+  if (out.startsWith('_')) out = '.' + out.slice(1);
+  if (out.endsWith('.hbs')) {
     out = out.slice(0, -4);
     render = true;
   }

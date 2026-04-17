@@ -48,7 +48,7 @@ For auth-specific rules see `auth.md`.
 
 ```typescript
 // Zod schema for API input
-import { z } from "zod";
+import { z } from 'zod';
 
 const createUserSchema = z.object({
   email: z.string().email().max(255),
@@ -76,7 +76,7 @@ const user = await prisma.user.findUnique({
 const user = await sql`SELECT * FROM users WHERE email = ${input.email}`;
 
 // ✅ Parameterized (pg driver)
-const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
+const { rows } = await pool.query('SELECT * FROM users WHERE email = $1', [
   input.email,
 ]);
 ```
@@ -85,7 +85,7 @@ const { rows } = await pool.query("SELECT * FROM users WHERE email = $1", [
 
 ```typescript
 // main.ts (NestJS)
-import helmet from "helmet";
+import helmet from 'helmet';
 
 app.use(
   helmet({
@@ -94,7 +94,7 @@ app.use(
         defaultSrc: ["'self'"],
         scriptSrc: ["'self'"],
         styleSrc: ["'self'", "'unsafe-inline'"],
-        imgSrc: ["'self'", "data:", "https:"],
+        imgSrc: ["'self'", 'data:', 'https:'],
       },
     },
   }),
@@ -106,8 +106,8 @@ app.use(
 ```typescript
 // main.ts
 app.enableCors({
-  origin: ["https://app.example.com", "https://admin.example.com"],
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE"],
+  origin: ['https://app.example.com', 'https://admin.example.com'],
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE'],
   credentials: true,
 });
 ```
@@ -120,8 +120,8 @@ app.enableCors({
   imports: [
     ThrottlerModule.forRoot({
       throttlers: [
-        { name: "short", ttl: 1000, limit: 3 }, // 3 req/sec
-        { name: "medium", ttl: 60000, limit: 60 }, // 60 req/min
+        { name: 'short', ttl: 1000, limit: 3 }, // 3 req/sec
+        { name: 'medium', ttl: 60000, limit: 60 }, // 60 req/min
       ],
     }),
   ],
@@ -133,13 +133,13 @@ export class AppModule {}
 
 ```typescript
 // ❌ Leaking sensitive data
-logger.info("User login", { email, password, token });
+logger.info('User login', { email, password, token });
 
 // ✅ Redacted
-logger.info("User login", {
+logger.info('User login', {
   email,
   passwordProvided: !!password,
-  tokenPrefix: token?.slice(0, 8) + "...",
+  tokenPrefix: token?.slice(0, 8) + '...',
 });
 ```
 
@@ -156,12 +156,12 @@ await pool.query(query, [email]);
 
 ```typescript
 // ❌ Trusting client input without validation
-app.post("/users", (req, res) => {
+app.post('/users', (req, res) => {
   db.users.create(req.body); // anything can be in req.body
 });
 
 // ✅ Validate first
-app.post("/users", (req, res) => {
+app.post('/users', (req, res) => {
   const data = createUserSchema.parse(req.body);
   db.users.create(data);
 });
@@ -169,10 +169,10 @@ app.post("/users", (req, res) => {
 
 ```typescript
 // ❌ Wildcard CORS
-app.enableCors({ origin: "*" });
+app.enableCors({ origin: '*' });
 
 // ✅ Explicit allowlist
-app.enableCors({ origin: ["https://app.example.com"] });
+app.enableCors({ origin: ['https://app.example.com'] });
 ```
 
 ```tsx

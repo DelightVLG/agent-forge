@@ -119,7 +119,7 @@ async function idempotencyMiddleware(
   res: Response,
   next: NextFunction,
 ) {
-  const key = req.headers["idempotency-key"] as string;
+  const key = req.headers['idempotency-key'] as string;
   if (!key) return next();
 
   const cached = await redis.get(`idempotency:${key}`);
@@ -136,7 +136,7 @@ async function idempotencyMiddleware(
         status: res.statusCode,
         body,
       }),
-      "EX",
+      'EX',
       86400,
     );
     return originalJson(body);
@@ -150,9 +150,9 @@ async function idempotencyMiddleware(
 
 ```typescript
 // GET /v1/orders?status=active&sort=-createdAt&limit=20
-function parseSort(sort: string): { field: string; order: "ASC" | "DESC" } {
-  const order = sort.startsWith("-") ? "DESC" : "ASC";
-  const field = sort.replace(/^-/, "");
+function parseSort(sort: string): { field: string; order: 'ASC' | 'DESC' } {
+  const order = sort.startsWith('-') ? 'DESC' : 'ASC';
+  const field = sort.replace(/^-/, '');
   return { field, order };
 }
 ```
@@ -173,16 +173,16 @@ DELETE /v1/users/123
 
 ```typescript
 // ❌ Inconsistent error shapes
-res.status(400).json({ msg: "bad input" });
-res.status(404).json({ error: "not found" });
-res.status(422).json({ errors: ["invalid email"] });
+res.status(400).json({ msg: 'bad input' });
+res.status(404).json({ error: 'not found' });
+res.status(422).json({ errors: ['invalid email'] });
 
 // ✅ Consistent error envelope everywhere
 res.status(400).json({
   error: {
-    code: "VALIDATION_FAILED",
-    message: "Invalid input",
-    fields: { email: ["required"] },
+    code: 'VALIDATION_FAILED',
+    message: 'Invalid input',
+    fields: { email: ['required'] },
   },
 });
 ```

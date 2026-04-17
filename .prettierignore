@@ -1,0 +1,11 @@
+node_modules
+dist
+.claude
+pnpm-lock.yaml
+*.log
+demo.gif
+demo.tape
+
+templates/**/_gitignore
+
+templates/**/package.json.hbs

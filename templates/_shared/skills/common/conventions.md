@@ -51,38 +51,38 @@ export class AppError extends Error {
     public readonly details?: Record<string, unknown>,
   ) {
     super(message);
-    this.name = "AppError";
+    this.name = 'AppError';
   }
 }
 
 // Usage
-throw new AppError("USER_NOT_FOUND", "User does not exist", 404);
+throw new AppError('USER_NOT_FOUND', 'User does not exist', 404);
 ```
 
 ### Barrel re-export at package boundary
 
 ```typescript
 // packages/shared/src/index.ts
-export { AppError } from "./errors/app-error";
-export type { UserDto } from "./dto/user.dto";
+export { AppError } from './errors/app-error';
+export type { UserDto } from './dto/user.dto';
 ```
 
 ## Anti-patterns
 
 ```typescript
 // ❌ Stringly-typed error
-throw new Error("user not found");
+throw new Error('user not found');
 
 // ✅ Structured error
-throw new AppError("USER_NOT_FOUND", "User does not exist", 404);
+throw new AppError('USER_NOT_FOUND', 'User does not exist', 404);
 ```
 
 ```typescript
 // ❌ Leftover debug log
-console.log(">>> data", data);
+console.log('>>> data', data);
 
 // ✅ Use project logger
-logger.debug("Fetched data", { count: data.length });
+logger.debug('Fetched data', { count: data.length });
 ```
 
 ```typescript

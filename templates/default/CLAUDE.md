@@ -10,12 +10,24 @@ This template does **not** assume a stack. The real stack lives in `.agent-memor
 
 Persistent context lives in `.agent-memory/`. Always consult it before planning or coding:
 
-- @.agent-memory/project.md — stack, architecture, deploy, conventions (source of truth)
+- @.agent-memory/project.md — identity, **features**, stack, architecture, deploy, conventions (source of truth)
 - @.agent-memory/session-log.md — what happened in recent sessions
 - @.agent-memory/tasks/ — active task specs (one file per task)
 - @.agent-memory/decisions/ — ADR-style decisions
 
 After any meaningful action (task done, decision made, stack change), **update the relevant file**. Treat `.agent-memory/` as the project's long-term memory — if it's not written there, it's forgotten.
+
+### Keeping `project.md` alive
+
+`project.md` is a **living document**, not a one-time artifact. Every agent is responsible for keeping it current:
+
+- **Shipped a feature?** Flip its status in the `## Features` section (`planned → in-progress → shipped`) in the same PR that ships the code.
+- **Scoped a new feature?** `project-manager` adds it to the right bucket (must-have / nice-to-have / later) before creating tasks.
+- **Added a library, service, or integration?** Update the matching stack section (Backend / Web / Mobile / Integrations) in the same PR.
+- **Made an architectural decision?** Write an ADR in `.agent-memory/decisions/`, then link to it from `project.md`.
+- **Learned something non-obvious** (tribal knowledge, quirk, constraint)? Append to `## Conventions` or `## Hard constraints`.
+
+Before editing `project.md`, re-read it. Never silently rewrite sections — append or amend precisely.
 
 ## Monorepo layout
 
@@ -60,7 +72,7 @@ Check `.agent-memory/project.md` → **Platforms** section to see which apps are
 ## Hard rules
 
 - **Never** commit without running tests locally (lefthook `pre-push` enforces this).
-- **Never** modify `.agent-memory/project.md` without explicit user confirmation — it's the source of truth.
+- **Never** rewrite `.agent-memory/project.md` stack / architecture / conventions sections without explicit user confirmation — it's the source of truth. Feature status updates (`planned → in-progress → shipped`) and appends to the `## Features` list by `project-manager` / dev agents are expected and encouraged.
 - **Always** update the task file status as you work: `todo` → `in-progress` → `in-review` → `done`.
 - **Always** write tests in the same PR as the code they cover.
 - Use Conventional Commits (`feat:`, `fix:`, `chore:`, `docs:`, `test:`, `refactor:`).

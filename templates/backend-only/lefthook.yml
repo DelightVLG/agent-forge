@@ -11,4 +11,4 @@ pre-push:
     tests:
       run: pnpm -r test --if-present
     review:
-      run: ./.scripts/review.sh || true  # non-blocking locally; remove `|| true` to hard-block
+      run: ./.scripts/review.sh || true # non-blocking locally; remove `|| true` to hard-block

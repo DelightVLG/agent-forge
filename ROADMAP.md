@@ -34,15 +34,15 @@
 
 ## Документация
 
-- [ ] **Скриншоты / asciinema** в README с демо интерактивного режима.
+- [x] **Скриншоты / asciinema** в README с демо интерактивного режима.
 - [ ] **Страница шаблонов** в `docs/templates/` с описанием каждого пресета.
 - [ ] **ADR о выборе single-package репо** в `.agent-memory/decisions/`
       сгенерированного проекта как пример.
 
 ## Локализация
 
-- [ ] **README на английском** уже есть (`README.en.md`). Держать в синхроне.
-- [ ] **Расширить i18n CLI** на `en` + `ru` — сейчас покрыт базовый набор. По
+- [x] **README на английском** уже есть (`README.en.md`). Держать в синхроне.
+- [x] **Расширить i18n CLI** на `en` + `ru` — сейчас покрыт базовый набор. По
       мере добавления команд переводить новые строки в обе локали.
 - [ ] **Больше локалей** (es, de, zh) — после стабилизации API сообщений.
 
@@ -53,47 +53,79 @@
 
 ### Backend
 
-- [ ] **NestJS** — модули, контроллеры, провайдеры, guards, interceptors, pipes,
+- [x] **NestJS** — модули, контроллеры, провайдеры, guards, interceptors, pipes,
       декораторы
-- [ ] **Express** — middleware, роутинг, error handling
-- [ ] **TypeScript (backend)** — строгая типизация, generics, utility types,
+- [x] **Express** — middleware, роутинг, error handling
+- [x] **TypeScript (backend)** — строгая типизация, generics, utility types,
       конвенции
-- [ ] **PostgreSQL** — запросы, индексы, миграции, оптимизация,
+- [x] **PostgreSQL** — запросы, индексы, миграции, оптимизация,
       партиционирование
-- [ ] **Prisma** — схема, миграции, seeding, relations, client generation
-- [ ] **TypeORM** — entities, repositories, migrations, query builder, relations
-- [ ] **Drizzle** — schema definition, migrations, queries
-- [ ] **Redis** — кэширование, pub/sub, сессии
-- [ ] **GraphQL** — schema-first / code-first, resolvers, dataloaders
-- [ ] **REST API** — OpenAPI/Swagger, валидация, versioning
+- [x] **Prisma** — схема, миграции, seeding, relations, client generation
+- [x] **TypeORM** — entities, repositories, migrations, query builder, relations
+- [x] **Drizzle** — schema definition, migrations, queries
+- [x] **Redis** — кэширование, pub/sub, сессии
+- [x] **GraphQL** — schema-first / code-first, resolvers, dataloaders
+- [x] **REST API** — OpenAPI/Swagger, валидация, versioning
 
 ### Web frontend
 
-- [ ] **React** — хуки, паттерны композиции, memo, Suspense, Server Components
-- [ ] **Next.js** — App Router, SSR/SSG/ISR, middleware, API routes
-- [ ] **Vite + React** — конфигурация, плагины, HMR
-- [ ] **Tailwind CSS** — утилиты, кастомизация темы, responsive design
-- [ ] **TypeScript (frontend)** — типизация компонентов, пропсов, событий
-- [ ] **Zustand / Redux Toolkit** — state management patterns
-- [ ] **React Query / TanStack Query** — data fetching, caching, mutations
-- [ ] **React Hook Form + Zod** — формы и валидация
+- [x] **React** — хуки, паттерны композиции, memo, Suspense, Server Components
+- [x] **Next.js** — App Router, SSR/SSG/ISR, middleware, API routes
+- [x] **Vite + React** — конфигурация, плагины, HMR
+- [x] **Tailwind CSS** — утилиты, кастомизация темы, responsive design
+- [x] **TypeScript (frontend)** — типизация компонентов, пропсов, событий
+- [x] **Zustand / Redux Toolkit** — state management patterns
+- [x] **React Query / TanStack Query** — data fetching, caching, mutations
+- [x] **React Hook Form + Zod** — формы и валидация
 
 ### Mobile
 
-- [ ] **React Native** — компоненты, стилизация, платформо-специфичный код,
+- [x] **React Native** — компоненты, стилизация, платформо-специфичный код,
       производительность
-- [ ] **Expo** — managed workflow, config plugins, EAS Build, EAS Update, OTA
-- [ ] **Expo Router** — file-based routing, layouts, deep linking
-- [ ] **React Navigation** — stack, tab, drawer navigators, deep linking
-- [ ] **React Native Testing Library** — тестирование компонентов и хуков
-- [ ] **App Store / Google Play** — подготовка к публикации, скриншоты, metadata
+- [x] **Expo** — managed workflow, config plugins, EAS Build, EAS Update, OTA
+- [x] **Expo Router** — file-based routing, layouts, deep linking
+- [x] **React Navigation** — stack, tab, drawer navigators, deep linking
+- [x] **React Native Testing Library** — тестирование компонентов и хуков
+- [x] **App Store / Google Play** — подготовка к публикации, скриншоты, metadata
 
 ### Common
 
-- [ ] **Monorepo** — pnpm workspaces, shared packages, зависимости между apps
-- [ ] **Docker** — Dockerfile, multi-stage builds, docker-compose
-- [ ] **CI/CD** — GitHub Actions, pipelines для тестов и деплоя
-- [ ] **Auth** — JWT, OAuth2, session-based, роли и permissions
+- [x] **Monorepo** — pnpm workspaces, shared packages, зависимости между apps
+- [x] **Docker** — Dockerfile, multi-stage builds, docker-compose
+- [x] **CI/CD** — GitHub Actions, pipelines для тестов и деплоя
+- [x] **Auth** — JWT, OAuth2, session-based, роли и permissions
+
+## 0.3.0 — Миграция wizard на Ink
+
+Переводим интерактивный мастер `agentforge new` с `@clack/prompts` на
+[Ink](https://github.com/vadimdemedes/ink) (React для CLI). Цель — полноценный
+wizard со стейтом вместо линейной цепочки prompt'ов.
+
+Предпосылки: clack не умеет навигацию назад, условные шаги и живой preview без
+костылей. По мере роста количества скиллов и шаблонов это становится
+ограничением.
+
+- [ ] **Каркас на Ink.** Один корневой `<Wizard>` со стейтом шагов и ответов,
+      хинт-бар снизу (`↑↓ navigate · ⏎ confirm · Esc back · Ctrl+C cancel`),
+      breadcrumbs «Шаг N из M».
+- [ ] **Навигация назад (`Esc`).** Явная и видимая пользователю возможность
+      вернуться к любому предыдущему шагу без потери уже введённых ответов.
+- [ ] **Живой preview шаблона.** При выборе структуры (backend / web / mobile)
+      справа показывается, какой пресет будет применён (`default`,
+      `backend-only`, `web-only`, `mobile-only`, `minimal`) и краткое описание
+      его содержимого.
+- [ ] **Группировка и поиск по скиллам.** Скиллы разбиты по категориям (backend
+      / frontend / mobile / common) с поиском по имени/описанию, мульти-выбором
+      и indicator'ом «N selected».
+- [ ] **Прогресс копирования и установки.** Полноценный прогресс-бар на этапе
+      `copyTemplate` (файл за файлом) и `pnpm install` с возможностью отмены по
+      `Esc`.
+- [ ] **Review-экран.** Финальный шаг со сводкой всех ответов и возможностью
+      отредактировать любую секцию перед запуском генерации.
+- [ ] **Headless-режим сохранён.** `--yes`, `-t <template>`, `-s <skills>`,
+      `--skip-skills`, `--no-install`, `--no-git` продолжают работать без TTY
+      (CI, скрипты) — Ink рендерится только в интерактивном режиме.
+- [ ] **Тесты UI** через `ink-testing-library` для ключевых шагов мастера.
 
 ## Крупное
 
@@ -109,6 +141,5 @@
 ## Отложено / обсуждается
 
 - [ ] Поддержка `deno` и `bun` в качестве рантайма сгенерированного проекта.
-- [ ] GUI-обёртка (TUI на `ink`) для тех, кто не любит `@clack/prompts`.
 - [ ] Telemetry (opt-in) для статистики использования шаблонов — только с явным
       согласием.

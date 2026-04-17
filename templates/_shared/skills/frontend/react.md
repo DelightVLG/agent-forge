@@ -52,7 +52,7 @@ export function UserCard({ user, onEdit }: Props) {
 
 ```typescript
 // use-debounced-value.ts
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react';
 
 export function useDebouncedValue<T>(value: T, delayMs = 300): T {
   const [debounced, setDebounced] = useState(value);
@@ -88,7 +88,7 @@ export function useDebouncedValue<T>(value: T, delayMs = 300): T {
 
 ```tsx
 // ErrorBoundary.tsx
-import { Component, type ReactNode } from "react";
+import { Component, type ReactNode } from 'react';
 
 interface Props {
   fallback: ReactNode;
