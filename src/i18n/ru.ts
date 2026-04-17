@@ -66,6 +66,32 @@ const ru: Messages = {
   skillAdded: 'Скилл "{skill}" добавлен',
   skillAddedNote: '{skill} → {path}',
   skillAddedTitle: 'Скилл добавлен',
+
+  // Review / edit summary
+  reviewTitle: 'Проверь выбор',
+  reviewHint: 'Можно отредактировать любой раздел перед созданием проекта.',
+  reviewName: 'Название проекта',
+  reviewStructure: 'Структура',
+  reviewTemplate: 'Шаблон',
+  reviewSkills: 'Скиллы',
+  reviewGit: 'git init',
+  reviewInstall: 'pnpm install',
+  reviewStructureBackend: 'бэкенд',
+  reviewStructureWeb: 'web',
+  reviewStructureMobile: 'mobile',
+  reviewStructureEmpty: '—',
+  reviewSkillsCount: 'выбрано: {count}',
+  reviewSkillsNone: 'нет',
+  reviewYes: 'да',
+  reviewNo: 'нет',
+  reviewAction: 'Что дальше?',
+  reviewActionCreate: 'Создать проект',
+  reviewActionEditName: 'Изменить название',
+  reviewActionEditStructure: 'Изменить структуру',
+  reviewActionEditSkills: 'Изменить скиллы',
+  reviewActionEditGit: 'Переключить git init',
+  reviewActionEditInstall: 'Переключить pnpm install',
+  reviewActionCancel: 'Отменить',
 };
 
 export default ru;

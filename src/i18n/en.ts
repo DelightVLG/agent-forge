@@ -63,6 +63,32 @@ const en = {
   skillAdded: 'Skill "{skill}" added',
   skillAddedNote: '{skill} → {path}',
   skillAddedTitle: 'Skill added',
+
+  // Review / edit summary
+  reviewTitle: 'Review your choices',
+  reviewHint: 'You can edit any section before creating the project.',
+  reviewName: 'Project name',
+  reviewStructure: 'Structure',
+  reviewTemplate: 'Template',
+  reviewSkills: 'Skills',
+  reviewGit: 'git init',
+  reviewInstall: 'pnpm install',
+  reviewStructureBackend: 'backend',
+  reviewStructureWeb: 'web',
+  reviewStructureMobile: 'mobile',
+  reviewStructureEmpty: '—',
+  reviewSkillsCount: '{count} selected',
+  reviewSkillsNone: 'none',
+  reviewYes: 'yes',
+  reviewNo: 'no',
+  reviewAction: 'What next?',
+  reviewActionCreate: 'Create project',
+  reviewActionEditName: 'Change project name',
+  reviewActionEditStructure: 'Change structure',
+  reviewActionEditSkills: 'Change skills',
+  reviewActionEditGit: 'Toggle git init',
+  reviewActionEditInstall: 'Toggle pnpm install',
+  reviewActionCancel: 'Cancel',
 };
 
 export default en;
