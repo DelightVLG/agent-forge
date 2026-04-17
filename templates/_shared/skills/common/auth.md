@@ -149,11 +149,11 @@ remove(@Param("id") id: string) { ... }
 
 ```typescript
 // Set refresh token as httpOnly cookie
-response.cookie("refresh_token", refreshToken, {
+response.cookie('refresh_token', refreshToken, {
   httpOnly: true,
   secure: true,
-  sameSite: "strict",
-  path: "/api/auth/refresh",
+  sameSite: 'strict',
+  path: '/api/auth/refresh',
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
 });
 ```
@@ -162,23 +162,23 @@ response.cookie("refresh_token", refreshToken, {
 
 ```typescript
 // ❌ Long-lived access token
-this.jwtService.sign(payload, { expiresIn: "7d" });
+this.jwtService.sign(payload, { expiresIn: '7d' });
 
 // ✅ Short-lived access + refresh rotation
-this.jwtService.sign(payload, { expiresIn: "15m" });
+this.jwtService.sign(payload, { expiresIn: '15m' });
 ```
 
 ```typescript
 // ❌ Token in localStorage
-localStorage.setItem("token", accessToken);
+localStorage.setItem('token', accessToken);
 
 // ✅ httpOnly cookie or in-memory variable
-response.cookie("refresh_token", token, { httpOnly: true, secure: true });
+response.cookie('refresh_token', token, { httpOnly: true, secure: true });
 ```
 
 ```typescript
 // ❌ Weak hashing
-const hash = crypto.createHash("sha256").update(password).digest("hex");
+const hash = crypto.createHash('sha256').update(password).digest('hex');
 
 // ✅ Password-specific hashing
 const hash = await bcrypt.hash(password, 12);

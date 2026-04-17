@@ -147,7 +147,7 @@ on:
     inputs:
       node-version:
         type: string
-        default: "22"
+        default: '22'
 
 jobs:
   setup:
@@ -173,7 +173,7 @@ name: Docker
 
 on:
   push:
-    tags: ["v*"]
+    tags: ['v*']
 
 jobs:
   build-push:

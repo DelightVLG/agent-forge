@@ -32,7 +32,7 @@ Rules and patterns for file-based routing in Expo. Apply on top of `expo.md`,
 
 ```tsx
 // app/_layout.tsx
-import { Stack } from "expo-router";
+import { Stack } from 'expo-router';
 
 export default function RootLayout() {
   return (
@@ -41,7 +41,7 @@ export default function RootLayout() {
       <Stack.Screen name="(auth)" options={{ headerShown: false }} />
       <Stack.Screen
         name="modal"
-        options={{ presentation: "modal", title: "Details" }}
+        options={{ presentation: 'modal', title: 'Details' }}
       />
     </Stack>
   );
@@ -52,30 +52,30 @@ export default function RootLayout() {
 
 ```tsx
 // app/(tabs)/_layout.tsx
-import { Tabs } from "expo-router";
-import { Home, Settings, User } from "lucide-react-native";
+import { Tabs } from 'expo-router';
+import { Home, Settings, User } from 'lucide-react-native';
 
 export default function TabLayout() {
   return (
-    <Tabs screenOptions={{ tabBarActiveTintColor: "#3b82f6" }}>
+    <Tabs screenOptions={{ tabBarActiveTintColor: '#3b82f6' }}>
       <Tabs.Screen
         name="index"
         options={{
-          title: "Home",
+          title: 'Home',
           tabBarIcon: ({ color }) => <Home color={color} size={24} />,
         }}
       />
       <Tabs.Screen
         name="profile"
         options={{
-          title: "Profile",
+          title: 'Profile',
           tabBarIcon: ({ color }) => <User color={color} size={24} />,
         }}
       />
       <Tabs.Screen
         name="settings"
         options={{
-          title: "Settings",
+          title: 'Settings',
           tabBarIcon: ({ color }) => <Settings color={color} size={24} />,
         }}
       />
@@ -88,8 +88,8 @@ export default function TabLayout() {
 
 ```tsx
 // app/users/[id].tsx
-import { useLocalSearchParams, useRouter } from "expo-router";
-import { View, Text, Pressable } from "react-native";
+import { useLocalSearchParams, useRouter } from 'expo-router';
+import { View, Text, Pressable } from 'react-native';
 
 export default function UserDetailScreen() {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -113,9 +113,9 @@ export default function UserDetailScreen() {
 
 ```tsx
 // app/_layout.tsx
-import { useEffect } from "react";
-import { useRouter, useSegments, Stack } from "expo-router";
-import { useAuth } from "@/hooks/use-auth";
+import { useEffect } from 'react';
+import { useRouter, useSegments, Stack } from 'expo-router';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function RootLayout() {
   const { user, isLoading } = useAuth();
@@ -125,12 +125,12 @@ export default function RootLayout() {
   useEffect(() => {
     if (isLoading) return;
 
-    const inAuthGroup = segments[0] === "(auth)";
+    const inAuthGroup = segments[0] === '(auth)';
 
     if (!user && !inAuthGroup) {
-      router.replace("/(auth)/login");
+      router.replace('/(auth)/login');
     } else if (user && inAuthGroup) {
-      router.replace("/(tabs)");
+      router.replace('/(tabs)');
     }
   }, [user, segments, isLoading]);
 
@@ -171,12 +171,12 @@ app/
 
 ```tsx
 // app/+not-found.tsx
-import { Link } from "expo-router";
-import { View, Text } from "react-native";
+import { Link } from 'expo-router';
+import { View, Text } from 'react-native';
 
 export default function NotFoundScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
       <Text>Page not found</Text>
       <Link href="/">Go home</Link>
     </View>
@@ -220,11 +220,11 @@ const { id } = useLocalSearchParams<{ id: string }>();
 ```tsx
 // ❌ Configuring modal presentation inside the modal file
 export default function ModalScreen() {
-  return <Stack.Screen options={{ presentation: "modal" }} />;
+  return <Stack.Screen options={{ presentation: 'modal' }} />;
 }
 
 // ✅ Configure in parent layout
-<Stack.Screen name="modal" options={{ presentation: "modal" }} />;
+<Stack.Screen name="modal" options={{ presentation: 'modal' }} />;
 ```
 
 ## Checklist

@@ -34,10 +34,10 @@ of `react.md` and `conventions.md`.
 ```typescript
 // lib/query-keys.ts
 export const userKeys = {
-  all: ["users"] as const,
-  lists: () => [...userKeys.all, "list"] as const,
+  all: ['users'] as const,
+  lists: () => [...userKeys.all, 'list'] as const,
   list: (filters: UserFilters) => [...userKeys.lists(), filters] as const,
-  details: () => [...userKeys.all, "detail"] as const,
+  details: () => [...userKeys.all, 'detail'] as const,
   detail: (id: string) => [...userKeys.details(), id] as const,
 };
 ```
@@ -46,9 +46,9 @@ export const userKeys = {
 
 ```typescript
 // hooks/use-users.ts
-import { useQuery } from "@tanstack/react-query";
-import { userKeys } from "@/lib/query-keys";
-import { usersApi } from "@/lib/api/users";
+import { useQuery } from '@tanstack/react-query';
+import { userKeys } from '@/lib/query-keys';
+import { usersApi } from '@/lib/api/users';
 
 export function useUsers(filters: UserFilters) {
   return useQuery({
@@ -63,9 +63,9 @@ export function useUsers(filters: UserFilters) {
 
 ```typescript
 // hooks/use-create-user.ts
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { userKeys } from "@/lib/query-keys";
-import { usersApi } from "@/lib/api/users";
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { userKeys } from '@/lib/query-keys';
+import { usersApi } from '@/lib/api/users';
 
 export function useCreateUser() {
   const queryClient = useQueryClient();
@@ -150,7 +150,7 @@ export function useUsersFeed() {
 
 ```typescript
 // ❌ String query key — typo-prone, can't invalidate hierarchically
-useQuery({ queryKey: "users", queryFn: getUsers });
+useQuery({ queryKey: 'users', queryFn: getUsers });
 
 // ✅ Array key from factory
 useQuery({
@@ -163,7 +163,7 @@ useQuery({
 // ❌ useEffect + fetch instead of useQuery
 const [users, setUsers] = useState([]);
 useEffect(() => {
-  fetch("/api/users")
+  fetch('/api/users')
     .then((r) => r.json())
     .then(setUsers);
 }, []);

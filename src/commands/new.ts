@@ -1,18 +1,18 @@
-import path from "node:path";
-import { existsSync } from "node:fs";
-import { readdir } from "node:fs/promises";
-import { spawnSync } from "node:child_process";
-import { Command } from "commander";
-import * as p from "@clack/prompts";
-import pc from "picocolors";
-import { copyTemplate } from "../lib/copy-template.js";
-import { resolveTemplatesDir } from "../lib/paths.js";
-import { t } from "../i18n/index.js";
+import path from 'node:path';
+import { existsSync } from 'node:fs';
+import { readdir } from 'node:fs/promises';
+import { spawnSync } from 'node:child_process';
+import { type Command } from 'commander';
+import * as p from '@clack/prompts';
+import pc from 'picocolors';
+import { copyTemplate } from '../lib/copy-template.js';
+import { resolveTemplatesDir } from '../lib/paths.js';
+import { t } from '../i18n/index.js';
 import {
   type SkillCategory,
   getSkillsByCategory,
   getDefaultSkills,
-} from "../lib/skills-registry.js";
+} from '../lib/skills-registry.js';
 
 interface ProjectStructure {
   backend: boolean;
@@ -31,26 +31,23 @@ interface NewOptions {
 
 export function registerNewCommand(program: Command): void {
   program
-    .command("new [name]")
-    .description(t("newDescription"))
-    .option("-t, --template <name>", t("optTemplate"))
-    .option("--install", t("optInstall"))
-    .option("--no-install", t("optNoInstall"))
-    .option("--git", t("optGit"))
-    .option("--no-git", t("optNoGit"))
-    .option("-y, --yes", t("optYes"))
-    .option("-s, --skills <list>", t("optSkills"))
-    .option("--skip-skills", t("optNoSkills"))
+    .command('new [name]')
+    .description(t('newDescription'))
+    .option('-t, --template <name>', t('optTemplate'))
+    .option('--install', t('optInstall'))
+    .option('--no-install', t('optNoInstall'))
+    .option('--git', t('optGit'))
+    .option('--no-git', t('optNoGit'))
+    .option('-y, --yes', t('optYes'))
+    .option('-s, --skills <list>', t('optSkills'))
+    .option('--skip-skills', t('optNoSkills'))
     .action(async (nameArg: string | undefined, options: NewOptions) => {
       await runNew(nameArg, options);
     });
 }
 
-async function runNew(
-  nameArg: string | undefined,
-  options: NewOptions,
-): Promise<void> {
-  p.intro(pc.bgCyan(pc.black(t("intro"))));
+async function runNew(nameArg: string | undefined, options: NewOptions): Promise<void> {
+  p.intro(pc.bgCyan(pc.black(t('intro'))));
 
   const projectName = await resolveProjectName(nameArg, options.yes);
   const targetDir = path.resolve(process.cwd(), projectName);
@@ -59,15 +56,15 @@ async function runNew(
     const entries = await readdir(targetDir);
     if (entries.length > 0) {
       if (options.yes) {
-        p.cancel(t("dirNotEmptyFatal", { path: targetDir }));
+        p.cancel(t('dirNotEmptyFatal', { path: targetDir }));
         process.exit(1);
       }
       const proceed = await p.confirm({
-        message: t("dirNotEmpty", { name: pc.cyan(projectName) }),
+        message: t('dirNotEmpty', { name: pc.cyan(projectName) }),
         initialValue: false,
       });
       if (p.isCancel(proceed) || !proceed) {
-        p.cancel(t("aborted"));
+        p.cancel(t('aborted'));
         process.exit(1);
       }
     }
@@ -82,7 +79,7 @@ async function runNew(
     template = options.template;
     structure = templateToStructure(template);
   } else if (options.yes) {
-    template = "default";
+    template = 'default';
     structure = { backend: true, web: true, mobile: true };
   } else {
     structure = await resolveProjectStructure();
@@ -91,7 +88,7 @@ async function runNew(
 
   const templateDir = path.join(templatesDir, template);
   if (!existsSync(templateDir)) {
-    p.cancel(t("templateNotFound", { template, path: templateDir }));
+    p.cancel(t('templateNotFound', { template, path: templateDir }));
     process.exit(1);
   }
 
@@ -100,26 +97,16 @@ async function runNew(
   const skills = await resolveSkills(
     template,
     skillCategories,
-    typeof options.skills === "string" ? options.skills : undefined,
+    typeof options.skills === 'string' ? options.skills : undefined,
     options.yes,
     options.skipSkills,
   );
 
-  const shouldGit = await resolveBool(
-    options.git,
-    options.yes,
-    t("confirmGit"),
-    true,
-  );
-  const shouldInstall = await resolveBool(
-    options.install,
-    options.yes,
-    t("confirmInstall"),
-    false,
-  );
+  const shouldGit = await resolveBool(options.git, options.yes, t('confirmGit'), true);
+  const shouldInstall = await resolveBool(options.install, options.yes, t('confirmInstall'), false);
 
   const spin = p.spinner();
-  spin.start(t("copyingTemplate", { template }));
+  spin.start(t('copyingTemplate', { template }));
   await copyTemplate({
     sourceDir: templateDir,
     targetDir,
@@ -127,48 +114,43 @@ async function runNew(
     skills,
   });
   spin.stop(
-    t("templateCopied", {
-      path: pc.cyan(path.relative(process.cwd(), targetDir) || "."),
+    t('templateCopied', {
+      path: pc.cyan(path.relative(process.cwd(), targetDir) || '.'),
     }),
   );
 
   if (skills.length > 0) {
-    p.log.info(t("skillsCopied", { count: String(skills.length) }));
+    p.log.info(t('skillsCopied', { count: String(skills.length) }));
   }
 
   if (shouldGit) {
-    spin.start(t("gitInit"));
-    const res = spawnSync("git", ["init", "-q"], {
+    spin.start(t('gitInit'));
+    const res = spawnSync('git', ['init', '-q'], {
       cwd: targetDir,
-      stdio: "ignore",
+      stdio: 'ignore',
     });
-    if (res.status === 0) spin.stop(t("gitInitialized"));
-    else spin.stop(pc.yellow(t("gitSkipped")));
+    if (res.status === 0) spin.stop(t('gitInitialized'));
+    else spin.stop(pc.yellow(t('gitSkipped')));
   }
 
   if (shouldInstall) {
-    spin.start(t("pnpmInstall"));
-    const res = spawnSync("pnpm", ["install"], {
+    spin.start(t('pnpmInstall'));
+    const res = spawnSync('pnpm', ['install'], {
       cwd: targetDir,
-      stdio: "ignore",
+      stdio: 'ignore',
     });
-    if (res.status === 0) spin.stop(t("pnpmInstalled"));
-    else spin.stop(pc.yellow(t("pnpmFailed")));
+    if (res.status === 0) spin.stop(t('pnpmInstalled'));
+    else spin.stop(pc.yellow(t('pnpmFailed')));
   }
 
-  const rel = path.relative(process.cwd(), targetDir) || ".";
+  const rel = path.relative(process.cwd(), targetDir) || '.';
   p.note(
-    [
-      `cd ${rel}`,
-      shouldInstall ? null : "pnpm install",
-      t("nextStepsComment"),
-      "/init-project",
-    ]
+    [`cd ${rel}`, shouldInstall ? null : 'pnpm install', t('nextStepsComment'), '/init-project']
       .filter(Boolean)
-      .join("\n"),
-    t("nextStepsTitle"),
+      .join('\n'),
+    t('nextStepsTitle'),
   );
-  p.outro(pc.green(t("done")));
+  p.outro(pc.green(t('done')));
 }
 
 async function resolveSkills(
@@ -179,7 +161,7 @@ async function resolveSkills(
   skipSkills: boolean | undefined,
 ): Promise<string[]> {
   if (skipSkills) return [];
-  if (flag) return flag.split(",").map((s) => s.trim());
+  if (flag) return flag.split(',').map((s) => s.trim());
   if (yes) return getDefaultSkills(template);
 
   const selected: string[] = [];
@@ -189,9 +171,7 @@ async function resolveSkills(
     if (skills.length === 0) continue;
 
     const defaults = getDefaultSkills(template);
-    const initialValues = skills
-      .filter((s) => defaults.includes(s.id))
-      .map((s) => s.id);
+    const initialValues = skills.filter((s) => defaults.includes(s.id)).map((s) => s.id);
 
     const answer = await p.multiselect({
       message: t(`selectSkills_${category}` as keyof typeof t),
@@ -204,7 +184,7 @@ async function resolveSkills(
     });
 
     if (p.isCancel(answer)) {
-      p.cancel(t("aborted"));
+      p.cancel(t('aborted'));
       process.exit(1);
     }
 
@@ -220,20 +200,20 @@ async function resolveProjectName(
 ): Promise<string> {
   if (nameArg && isValidName(nameArg)) return nameArg;
   if (nameArg && !isValidName(nameArg)) {
-    p.cancel(t("projectNameInvalidArg", { name: nameArg }));
+    p.cancel(t('projectNameInvalidArg', { name: nameArg }));
     process.exit(1);
   }
   if (yes) {
-    p.cancel(t("projectNameRequiredWithYes"));
+    p.cancel(t('projectNameRequiredWithYes'));
     process.exit(1);
   }
   const answer = await p.text({
-    message: t("projectNamePrompt"),
-    placeholder: t("projectNamePlaceholder"),
-    validate: (v) => (isValidName(v) ? undefined : t("projectNameInvalid")),
+    message: t('projectNamePrompt'),
+    placeholder: t('projectNamePlaceholder'),
+    validate: (v) => (isValidName(v) ? undefined : t('projectNameInvalid')),
   });
   if (p.isCancel(answer)) {
-    p.cancel(t("aborted"));
+    p.cancel(t('aborted'));
     process.exit(1);
   }
   return answer;
@@ -245,26 +225,26 @@ async function resolveBool(
   message: string,
   defaultValue: boolean,
 ): Promise<boolean> {
-  if (typeof flag === "boolean") return flag;
+  if (typeof flag === 'boolean') return flag;
   if (yes) return defaultValue;
   const answer = await p.confirm({ message, initialValue: defaultValue });
   if (p.isCancel(answer)) {
-    p.cancel(t("aborted"));
+    p.cancel(t('aborted'));
     process.exit(1);
   }
   return answer;
 }
 
 async function resolveProjectStructure(): Promise<ProjectStructure> {
-  const backend = await confirmOrCancel(t("needBackend"), true);
+  const backend = await confirmOrCancel(t('needBackend'), true);
 
   let web = false;
   let mobile = false;
 
-  const frontend = await confirmOrCancel(t("needFrontend"), true);
+  const frontend = await confirmOrCancel(t('needFrontend'), true);
   if (frontend) {
-    web = await confirmOrCancel(t("needWeb"), true);
-    mobile = await confirmOrCancel(t("needMobile"), true);
+    web = await confirmOrCancel(t('needWeb'), true);
+    mobile = await confirmOrCancel(t('needMobile'), true);
     if (!web && !mobile) {
       web = true;
     }
@@ -273,7 +253,7 @@ async function resolveProjectStructure(): Promise<ProjectStructure> {
   const structure = { backend, web, mobile };
 
   if (!backend && !web && !mobile) {
-    p.log.info(t("nothingSelectedInfo"));
+    p.log.info(t('nothingSelectedInfo'));
   }
 
   return structure;
@@ -281,23 +261,23 @@ async function resolveProjectStructure(): Promise<ProjectStructure> {
 
 function structureToTemplate(s: ProjectStructure): string {
   const has = { b: s.backend, w: s.web, m: s.mobile };
-  if (has.b && (has.w || has.m)) return "default";
-  if (has.b && !has.w && !has.m) return "backend-only";
-  if (!has.b && has.w && !has.m) return "web-only";
-  if (!has.b && !has.w && has.m) return "mobile-only";
-  if (!has.b && has.w && has.m) return "default";
-  return "minimal";
+  if (has.b && (has.w || has.m)) return 'default';
+  if (has.b && !has.w && !has.m) return 'backend-only';
+  if (!has.b && has.w && !has.m) return 'web-only';
+  if (!has.b && !has.w && has.m) return 'mobile-only';
+  if (!has.b && has.w && has.m) return 'default';
+  return 'minimal';
 }
 
 function templateToStructure(template: string): ProjectStructure {
   switch (template) {
-    case "default":
+    case 'default':
       return { backend: true, web: true, mobile: true };
-    case "backend-only":
+    case 'backend-only':
       return { backend: true, web: false, mobile: false };
-    case "web-only":
+    case 'web-only':
       return { backend: false, web: true, mobile: false };
-    case "mobile-only":
+    case 'mobile-only':
       return { backend: false, web: false, mobile: true };
     default:
       return { backend: false, web: false, mobile: false };
@@ -306,23 +286,20 @@ function templateToStructure(template: string): ProjectStructure {
 
 function structureToCategories(s: ProjectStructure): SkillCategory[] {
   const cats: SkillCategory[] = [];
-  if (s.backend) cats.push("backend");
-  if (s.web) cats.push("frontend");
-  if (s.mobile) cats.push("mobile");
-  cats.push("common");
+  if (s.backend) cats.push('backend');
+  if (s.web) cats.push('frontend');
+  if (s.mobile) cats.push('mobile');
+  cats.push('common');
   if (!s.backend && !s.web && !s.mobile) {
-    return ["backend", "frontend", "mobile", "common"];
+    return ['backend', 'frontend', 'mobile', 'common'];
   }
   return cats;
 }
 
-async function confirmOrCancel(
-  message: string,
-  initialValue: boolean,
-): Promise<boolean> {
+async function confirmOrCancel(message: string, initialValue: boolean): Promise<boolean> {
   const answer = await p.confirm({ message, initialValue });
   if (p.isCancel(answer)) {
-    p.cancel(t("aborted"));
+    p.cancel(t('aborted'));
     process.exit(1);
   }
   return answer;

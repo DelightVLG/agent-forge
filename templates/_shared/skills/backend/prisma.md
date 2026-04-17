@@ -99,7 +99,7 @@ const userWithPosts = await prisma.user.findUnique({
     posts: {
       where: { published: true },
       select: { id: true, title: true },
-      orderBy: { createdAt: "desc" },
+      orderBy: { createdAt: 'desc' },
       take: 10,
     },
   },
@@ -117,7 +117,7 @@ async function transferCredits(fromId: string, toId: string, amount: number) {
     });
 
     if (sender.credits < amount) {
-      throw new AppError("INSUFFICIENT_CREDITS", "Not enough credits", 422);
+      throw new AppError('INSUFFICIENT_CREDITS', 'Not enough credits', 422);
     }
 
     await tx.user.update({
@@ -143,7 +143,7 @@ async function getUsers(cursor?: string, limit = 20) {
       cursor: { id: cursor },
       skip: 1,
     }),
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: 'desc' },
   });
 
   const hasMore = users.length > limit;
@@ -163,18 +163,18 @@ async function getUsers(cursor?: string, limit = 20) {
 
 ```typescript
 // prisma/seed.ts
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient } from '@prisma/client';
 
 const prisma = new PrismaClient();
 
 async function main() {
   await prisma.user.upsert({
-    where: { email: "admin@example.com" },
+    where: { email: 'admin@example.com' },
     update: {},
     create: {
-      email: "admin@example.com",
-      name: "Admin",
-      role: "ADMIN",
+      email: 'admin@example.com',
+      name: 'Admin',
+      role: 'ADMIN',
     },
   });
 }

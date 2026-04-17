@@ -43,11 +43,11 @@ Rules and patterns for queue-based processing with BullMQ. Apply on top of
 
 ```ts
 // Queue definition
-const emailQueue = new Queue("email", {
+const emailQueue = new Queue('email', {
   connection: redisConnection,
   defaultJobOptions: {
     attempts: 3,
-    backoff: { type: "exponential", delay: 1000 },
+    backoff: { type: 'exponential', delay: 1000 },
     removeOnComplete: { age: 86400 },
     removeOnFail: { age: 604800 },
   },
@@ -55,19 +55,19 @@ const emailQueue = new Queue("email", {
 
 // Adding a job
 await emailQueue.add(
-  "welcome",
-  { userId: "123" },
+  'welcome',
+  { userId: '123' },
   { jobId: `welcome-${userId}` },
 );
 
 // Worker
 const worker = new Worker(
-  "email",
+  'email',
   async (job) => {
     // Idempotent: check before acting
     const user = await db.user.findUnique({ where: { id: job.data.userId } });
     if (user.welcomeEmailSent) return;
-    await sendEmail(user.email, "welcome");
+    await sendEmail(user.email, 'welcome');
     await db.user.update({
       where: { id: user.id },
       data: { welcomeEmailSent: true },

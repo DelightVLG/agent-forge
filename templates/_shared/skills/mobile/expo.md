@@ -38,38 +38,38 @@ Rules and patterns for Expo-based React Native projects. Apply on top of
 
 ```typescript
 // app.config.ts
-import type { ExpoConfig, ConfigContext } from "expo/config";
+import type { ExpoConfig, ConfigContext } from 'expo/config';
 
 export default ({ config }: ConfigContext): ExpoConfig => ({
   ...config,
-  name: process.env.APP_ENV === "production" ? "MyApp" : "MyApp (Dev)",
-  slug: "my-app",
-  version: "1.2.0",
+  name: process.env.APP_ENV === 'production' ? 'MyApp' : 'MyApp (Dev)',
+  slug: 'my-app',
+  version: '1.2.0',
   ios: {
     bundleIdentifier:
-      process.env.APP_ENV === "production"
-        ? "com.company.myapp"
-        : "com.company.myapp.dev",
-    buildNumber: "1",
+      process.env.APP_ENV === 'production'
+        ? 'com.company.myapp'
+        : 'com.company.myapp.dev',
+    buildNumber: '1',
   },
   android: {
     package:
-      process.env.APP_ENV === "production"
-        ? "com.company.myapp"
-        : "com.company.myapp.dev",
+      process.env.APP_ENV === 'production'
+        ? 'com.company.myapp'
+        : 'com.company.myapp.dev',
     versionCode: 1,
   },
   extra: {
-    apiUrl: process.env.API_URL ?? "http://localhost:4000",
+    apiUrl: process.env.API_URL ?? 'http://localhost:4000',
     eas: {
-      projectId: "your-project-id",
+      projectId: 'your-project-id',
     },
   },
   plugins: [
-    "expo-router",
+    'expo-router',
     [
-      "expo-camera",
-      { cameraPermission: "Allow $(PRODUCT_NAME) to access the camera." },
+      'expo-camera',
+      { cameraPermission: 'Allow $(PRODUCT_NAME) to access the camera.' },
     ],
   ],
 });
@@ -119,14 +119,14 @@ export default ({ config }: ConfigContext): ExpoConfig => ({
 
 ```typescript
 // lib/config.ts
-import Constants from "expo-constants";
+import Constants from 'expo-constants';
 
 interface AppConfig {
   apiUrl: string;
 }
 
 export const config: AppConfig = {
-  apiUrl: Constants.expoConfig?.extra?.apiUrl ?? "http://localhost:4000",
+  apiUrl: Constants.expoConfig?.extra?.apiUrl ?? 'http://localhost:4000',
 };
 ```
 
@@ -134,7 +134,7 @@ export const config: AppConfig = {
 
 ```typescript
 // plugins/with-background-modes.ts
-import { withInfoPlist, type ConfigPlugin } from "expo/config-plugins";
+import { withInfoPlist, type ConfigPlugin } from 'expo/config-plugins';
 
 const withBackgroundModes: ConfigPlugin<string[]> = (config, modes) => {
   return withInfoPlist(config, (modConfig) => {
@@ -194,7 +194,7 @@ export default ({ config }) => ({
 
 // ✅ Config plugin
 withInfoPlist(config, (mod) => {
-  mod.modResults.NSCameraUsageDescription = "Camera access for scanning";
+  mod.modResults.NSCameraUsageDescription = 'Camera access for scanning';
   return mod;
 });
 ```
@@ -219,10 +219,10 @@ eas build --platform all --profile production
 
 ```typescript
 // ❌ Community package when Expo SDK has it
-import * as ImagePicker from "react-native-image-picker";
+import * as ImagePicker from 'react-native-image-picker';
 
 // ✅ Expo SDK module — maintained, config-plugin-ready
-import * as ImagePicker from "expo-image-picker";
+import * as ImagePicker from 'expo-image-picker';
 ```
 
 ## Checklist

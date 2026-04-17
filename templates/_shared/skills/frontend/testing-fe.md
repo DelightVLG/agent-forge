@@ -35,27 +35,27 @@ and `conventions.md`.
 
 ```tsx
 // user-card.test.tsx
-import { render, screen } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
-import { UserCard } from "./user-card";
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { UserCard } from './user-card';
 
-const mockUser = { id: "1", name: "Alice", email: "alice@example.com" };
+const mockUser = { id: '1', name: 'Alice', email: 'alice@example.com' };
 
-describe("UserCard", () => {
-  it("renders user name and email", () => {
+describe('UserCard', () => {
+  it('renders user name and email', () => {
     render(<UserCard user={mockUser} onEdit={vi.fn()} />);
 
-    expect(screen.getByRole("heading", { name: "Alice" })).toBeInTheDocument();
-    expect(screen.getByText("alice@example.com")).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Alice' })).toBeInTheDocument();
+    expect(screen.getByText('alice@example.com')).toBeInTheDocument();
   });
 
-  it("calls onEdit with user id when edit button is clicked", async () => {
+  it('calls onEdit with user id when edit button is clicked', async () => {
     const onEdit = vi.fn();
     render(<UserCard user={mockUser} onEdit={onEdit} />);
 
-    await userEvent.click(screen.getByRole("button", { name: /edit/i }));
+    await userEvent.click(screen.getByRole('button', { name: /edit/i }));
 
-    expect(onEdit).toHaveBeenCalledWith("1");
+    expect(onEdit).toHaveBeenCalledWith('1');
   });
 });
 ```
@@ -64,38 +64,38 @@ describe("UserCard", () => {
 
 ```typescript
 // mocks/handlers.ts
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.get("/api/users", () => {
+  http.get('/api/users', () => {
     return HttpResponse.json([
-      { id: "1", name: "Alice" },
-      { id: "2", name: "Bob" },
+      { id: '1', name: 'Alice' },
+      { id: '2', name: 'Bob' },
     ]);
   }),
 
-  http.post("/api/users", async ({ request }) => {
+  http.post('/api/users', async ({ request }) => {
     const body = await request.json();
-    return HttpResponse.json({ id: "3", ...body }, { status: 201 });
+    return HttpResponse.json({ id: '3', ...body }, { status: 201 });
   }),
 
-  http.get("/api/users/:id", ({ params }) => {
-    return HttpResponse.json({ id: params.id, name: "Alice" });
+  http.get('/api/users/:id', ({ params }) => {
+    return HttpResponse.json({ id: params.id, name: 'Alice' });
   }),
 ];
 ```
 
 ```typescript
 // mocks/server.ts
-import { setupServer } from "msw/node";
-import { handlers } from "./handlers";
+import { setupServer } from 'msw/node';
+import { handlers } from './handlers';
 
 export const server = setupServer(...handlers);
 ```
 
 ```typescript
 // setup-tests.ts
-import { server } from "./mocks/server";
+import { server } from './mocks/server';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -105,9 +105,9 @@ afterAll(() => server.close());
 ### Testing async data loading
 
 ```tsx
-import { render, screen } from "@testing-library/react";
-import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
-import { UserList } from "./user-list";
+import { render, screen } from '@testing-library/react';
+import { QueryClientProvider, QueryClient } from '@tanstack/react-query';
+import { UserList } from './user-list';
 
 function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({
@@ -118,32 +118,32 @@ function renderWithProviders(ui: React.ReactElement) {
   );
 }
 
-it("shows users after loading", async () => {
+it('shows users after loading', async () => {
   renderWithProviders(<UserList />);
 
   expect(screen.getByText(/loading/i)).toBeInTheDocument();
 
-  expect(await screen.findByText("Alice")).toBeInTheDocument();
-  expect(screen.getByText("Bob")).toBeInTheDocument();
+  expect(await screen.findByText('Alice')).toBeInTheDocument();
+  expect(screen.getByText('Bob')).toBeInTheDocument();
 });
 ```
 
 ### Testing error state
 
 ```tsx
-import { http, HttpResponse } from "msw";
-import { server } from "@/mocks/server";
+import { http, HttpResponse } from 'msw';
+import { server } from '@/mocks/server';
 
-it("shows error message when API fails", async () => {
+it('shows error message when API fails', async () => {
   server.use(
-    http.get("/api/users", () => {
-      return HttpResponse.json({ message: "Server error" }, { status: 500 });
+    http.get('/api/users', () => {
+      return HttpResponse.json({ message: 'Server error' }, { status: 500 });
     }),
   );
 
   renderWithProviders(<UserList />);
 
-  expect(await screen.findByRole("alert")).toHaveTextContent(/failed to load/i);
+  expect(await screen.findByRole('alert')).toHaveTextContent(/failed to load/i);
 });
 ```
 
@@ -151,17 +151,17 @@ it("shows error message when API fails", async () => {
 
 ```typescript
 // e2e/login.spec.ts
-import { test, expect } from "@playwright/test";
+import { test, expect } from '@playwright/test';
 
-test("user can log in and see dashboard", async ({ page }) => {
-  await page.goto("/login");
+test('user can log in and see dashboard', async ({ page }) => {
+  await page.goto('/login');
 
-  await page.getByLabel("Email").fill("alice@example.com");
-  await page.getByLabel("Password").fill("secret123");
-  await page.getByRole("button", { name: /sign in/i }).click();
+  await page.getByLabel('Email').fill('alice@example.com');
+  await page.getByLabel('Password').fill('secret123');
+  await page.getByRole('button', { name: /sign in/i }).click();
 
-  await expect(page.getByRole("heading", { name: /dashboard/i })).toBeVisible();
-  await expect(page.getByText("Welcome, Alice")).toBeVisible();
+  await expect(page.getByRole('heading', { name: /dashboard/i })).toBeVisible();
+  await expect(page.getByText('Welcome, Alice')).toBeVisible();
 });
 ```
 
@@ -173,32 +173,32 @@ expect(component.state.isOpen).toBe(true);
 expect(useToggle).toHaveBeenCalled();
 
 // ✅ Testing visible behavior
-expect(screen.getByRole("dialog")).toBeInTheDocument();
+expect(screen.getByRole('dialog')).toBeInTheDocument();
 ```
 
 ```tsx
 // ❌ getByTestId as first choice
-screen.getByTestId("submit-btn");
+screen.getByTestId('submit-btn');
 
 // ✅ Accessible query
-screen.getByRole("button", { name: /submit/i });
+screen.getByRole('button', { name: /submit/i });
 ```
 
 ```tsx
 // ❌ fireEvent for user interactions
-fireEvent.change(input, { target: { value: "test" } });
+fireEvent.change(input, { target: { value: 'test' } });
 
 // ✅ userEvent simulates real behavior
-await userEvent.type(input, "test");
+await userEvent.type(input, 'test');
 ```
 
 ```tsx
 // ❌ Fixed delay for async
 await new Promise((r) => setTimeout(r, 1000));
-expect(screen.getByText("Alice")).toBeInTheDocument();
+expect(screen.getByText('Alice')).toBeInTheDocument();
 
 // ✅ Async-aware query
-expect(await screen.findByText("Alice")).toBeInTheDocument();
+expect(await screen.findByText('Alice')).toBeInTheDocument();
 ```
 
 ```tsx

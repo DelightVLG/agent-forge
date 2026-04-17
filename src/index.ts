@@ -1,14 +1,14 @@
-import { Command } from "commander";
-import pc from "picocolors";
-import { createRequire } from "node:module";
-import { realpathSync } from "node:fs";
-import { pathToFileURL } from "node:url";
-import { registerNewCommand } from "./commands/new.js";
-import { registerAddCommand } from "./commands/add.js";
-import { setLang, t } from "./i18n/index.js";
+import { Command } from 'commander';
+import pc from 'picocolors';
+import { createRequire } from 'node:module';
+import { realpathSync } from 'node:fs';
+import { pathToFileURL } from 'node:url';
+import { registerNewCommand } from './commands/new.js';
+import { registerAddCommand } from './commands/add.js';
+import { setLang, t } from './i18n/index.js';
 
 const require = createRequire(import.meta.url);
-const pkg = require("../package.json") as { version: string };
+const pkg = require('../package.json') as { version: string };
 
 export async function main(argv: string[]): Promise<void> {
   // Pre-parse --lang so that command descriptions pick up the right locale.
@@ -17,15 +17,15 @@ export async function main(argv: string[]): Promise<void> {
   const program = new Command();
 
   program
-    .name("agentforge")
-    .description(t("cliDescription"))
-    .option("--lang <lang>", t("optLang"))
-    .version(pkg.version, "-v, --version", t("optVersion"));
+    .name('agentforge')
+    .description(t('cliDescription'))
+    .option('--lang <lang>', t('optLang'))
+    .version(pkg.version, '-v, --version', t('optVersion'));
 
   registerNewCommand(program);
   registerAddCommand(program);
 
-  program.hook("preAction", (thisCommand) => {
+  program.hook('preAction', (thisCommand) => {
     const { lang } = thisCommand.optsWithGlobals<{ lang?: string }>();
     setLang(lang);
   });
@@ -34,13 +34,13 @@ export async function main(argv: string[]): Promise<void> {
 }
 
 function applyLangFromArgv(argv: string[]): void {
-  const idx = argv.indexOf("--lang");
+  const idx = argv.indexOf('--lang');
   if (idx !== -1 && argv[idx + 1]) {
     setLang(argv[idx + 1]);
     return;
   }
-  const eq = argv.find((a) => a.startsWith("--lang="));
-  if (eq) setLang(eq.slice("--lang=".length));
+  const eq = argv.find((a) => a.startsWith('--lang='));
+  if (eq) setLang(eq.slice('--lang='.length));
 }
 
 const isEntry = (() => {
@@ -55,10 +55,7 @@ const isEntry = (() => {
 
 if (isEntry) {
   main(process.argv).catch((err) => {
-    console.error(
-      pc.red("✖"),
-      err instanceof Error ? err.message : String(err),
-    );
+    console.error(pc.red('✖'), err instanceof Error ? err.message : String(err));
     process.exit(1);
   });
 }

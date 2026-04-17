@@ -72,8 +72,8 @@ Rules and patterns for managing a pnpm-based monorepo. Apply on top of
 
 ```yaml
 packages:
-  - "apps/*"
-  - "packages/*"
+  - 'apps/*'
+  - 'packages/*'
 ```
 
 ### Workspace protocol in package.json

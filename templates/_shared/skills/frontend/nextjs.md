@@ -60,9 +60,9 @@ app/
 
 ```tsx
 // app/dashboard/page.tsx
-import { getStats } from "@/lib/api/stats";
+import { getStats } from '@/lib/api/stats';
 
-export const metadata = { title: "Dashboard" };
+export const metadata = { title: 'Dashboard' };
 
 export default async function DashboardPage() {
   const stats = await getStats(); // runs on server, no useEffect
@@ -80,7 +80,7 @@ export default async function DashboardPage() {
 
 ```tsx
 // app/dashboard/page.tsx (Server Component)
-import { SearchFilter } from "./search-filter"; // client component
+import { SearchFilter } from './search-filter'; // client component
 
 export default async function DashboardPage() {
   const data = await getData();
@@ -95,12 +95,12 @@ export default async function DashboardPage() {
 
 ```tsx
 // app/dashboard/search-filter.tsx
-"use client";
+'use client';
 
-import { useState } from "react";
+import { useState } from 'react';
 
 export function SearchFilter() {
-  const [query, setQuery] = useState("");
+  const [query, setQuery] = useState('');
   return <input value={query} onChange={(e) => setQuery(e.target.value)} />;
 }
 ```
@@ -109,23 +109,23 @@ export function SearchFilter() {
 
 ```tsx
 // app/users/actions.ts
-"use server";
+'use server';
 
-import { revalidatePath } from "next/cache";
-import { usersService } from "@/lib/services/users";
+import { revalidatePath } from 'next/cache';
+import { usersService } from '@/lib/services/users';
 
 export async function createUser(formData: FormData) {
-  const name = formData.get("name") as string;
+  const name = formData.get('name') as string;
   await usersService.create({ name });
-  revalidatePath("/users");
+  revalidatePath('/users');
 }
 ```
 
 ```tsx
 // app/users/create-form.tsx
-"use client";
+'use client';
 
-import { createUser } from "./actions";
+import { createUser } from './actions';
 
 export function CreateUserForm() {
   return (
@@ -141,8 +141,8 @@ export function CreateUserForm() {
 
 ```typescript
 // app/api/users/route.ts
-import { NextResponse } from "next/server";
-import { usersService } from "@/lib/services/users";
+import { NextResponse } from 'next/server';
+import { usersService } from '@/lib/services/users';
 
 export async function GET() {
   const users = await usersService.findAll();
@@ -160,7 +160,7 @@ export async function POST(request: Request) {
 
 ```tsx
 // ❌ "use client" at the top of a page that doesn't need it
-"use client";
+'use client';
 export default function AboutPage() {
   return <div>About us</div>; // no interactivity — should be Server Component
 }
@@ -191,7 +191,7 @@ export default async function UsersPage() {
 <img src="/hero.png" />;
 
 // ✅ next/image with dimensions
-import Image from "next/image";
+import Image from 'next/image';
 <Image src="/hero.png" width={1200} height={600} alt="Hero" />;
 ```
 

@@ -70,7 +70,7 @@ export function List<T>({
   emptyMessage,
 }: Props<T>) {
   if (items.length === 0) {
-    return <p>{emptyMessage ?? "No items"}</p>;
+    return <p>{emptyMessage ?? 'No items'}</p>;
   }
 
   return (
@@ -110,9 +110,9 @@ export function SearchInput({ onChange }: Props) {
 
 ```typescript
 const routes = {
-  home: "/",
-  users: "/users",
-  userDetail: "/users/:id",
+  home: '/',
+  users: '/users',
+  userDetail: '/users/:id',
 } satisfies Record<string, string>;
 
 // routes.home is typed as "/" (literal), not string
@@ -158,7 +158,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function useAuth(): AuthContextValue {
   const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within <AuthProvider>");
+  if (!ctx) throw new Error('useAuth must be used within <AuthProvider>');
   return ctx;
 }
 ```
@@ -167,11 +167,11 @@ export function useAuth(): AuthContextValue {
 
 ```typescript
 // ❌ any disables type checking
-const data: any = await fetch("/api").then((r) => r.json());
+const data: any = await fetch('/api').then((r) => r.json());
 data.whatever.you.want; // no error, no safety
 
 // ✅ unknown + narrowing
-const data: unknown = await fetch("/api").then((r) => r.json());
+const data: unknown = await fetch('/api').then((r) => r.json());
 if (isUserResponse(data)) {
   console.log(data.name); // safe
 }
@@ -201,16 +201,16 @@ const [data, setData] = useState<User[] | null>(null);
 // What if isLoading AND isError are both true?
 
 // ✅ Discriminated union — impossible states are unrepresentable
-const [state, setState] = useState<AsyncState<User[]>>({ status: "idle" });
+const [state, setState] = useState<AsyncState<User[]>>({ status: 'idle' });
 ```
 
 ```typescript
 // ❌ Over-annotating what TypeScript can infer
-const name: string = "Alice";
+const name: string = 'Alice';
 const double: (n: number) => number = (n) => n * 2;
 
 // ✅ Let inference work
-const name = "Alice";
+const name = 'Alice';
 const double = (n: number) => n * 2;
 ```
 

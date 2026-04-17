@@ -32,7 +32,7 @@ and `conventions.md`.
 
 ```tsx
 // tabs/tabs.tsx
-import { createContext, useContext, useState, type ReactNode } from "react";
+import { createContext, useContext, useState, type ReactNode } from 'react';
 
 interface TabsContextValue {
   active: string;
@@ -43,7 +43,7 @@ const TabsContext = createContext<TabsContextValue | null>(null);
 
 function useTabs() {
   const ctx = useContext(TabsContext);
-  if (!ctx) throw new Error("useTabs must be used within <Tabs>");
+  if (!ctx) throw new Error('useTabs must be used within <Tabs>');
   return ctx;
 }
 
@@ -98,10 +98,10 @@ export function TabContent({
 
 ```tsx
 type ViewState<T> =
-  | { status: "loading" }
-  | { status: "error"; error: string }
-  | { status: "empty" }
-  | { status: "success"; data: T };
+  | { status: 'loading' }
+  | { status: 'error'; error: string }
+  | { status: 'empty' }
+  | { status: 'success'; data: T };
 
 interface Props {
   state: ViewState<User[]>;
@@ -109,13 +109,13 @@ interface Props {
 
 export function UserList({ state }: Props) {
   switch (state.status) {
-    case "loading":
+    case 'loading':
       return <Skeleton count={5} />;
-    case "error":
+    case 'error':
       return <ErrorBanner message={state.error} />;
-    case "empty":
+    case 'empty':
       return <EmptyState message="No users found" />;
-    case "success":
+    case 'success':
       return (
         <ul>
           {state.data.map((user) => (
@@ -130,10 +130,10 @@ export function UserList({ state }: Props) {
 ### Forwarded ref primitive
 
 ```tsx
-import { forwardRef, type ComponentPropsWithoutRef } from "react";
-import { cn } from "@/lib/utils";
+import { forwardRef, type ComponentPropsWithoutRef } from 'react';
+import { cn } from '@/lib/utils';
 
-interface Props extends ComponentPropsWithoutRef<"input"> {
+interface Props extends ComponentPropsWithoutRef<'input'> {
   label: string;
   error?: string;
 }
@@ -147,8 +147,8 @@ export const Input = forwardRef<HTMLInputElement, Props>(
         id={id}
         aria-invalid={!!error}
         className={cn(
-          "rounded border px-3 py-2",
-          error && "border-red-500",
+          'rounded border px-3 py-2',
+          error && 'border-red-500',
           className,
         )}
         {...props}
@@ -158,7 +158,7 @@ export const Input = forwardRef<HTMLInputElement, Props>(
   ),
 );
 
-Input.displayName = "Input";
+Input.displayName = 'Input';
 ```
 
 ### Co-located folder structure
@@ -222,7 +222,7 @@ interface Props {
 // ❌ Logic-heavy component — mixing data fetching with rendering
 export function UserDashboard() {
   const [users, setUsers] = useState([]);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState('');
   // ... 60 lines of effects and handlers
   return <div>...</div>;
 }

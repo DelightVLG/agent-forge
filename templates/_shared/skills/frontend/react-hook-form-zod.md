@@ -33,13 +33,13 @@ Rules and patterns for type-safe forms with validation. Apply on top of
 
 ```typescript
 // schemas/create-user.schema.ts
-import { z } from "zod";
+import { z } from 'zod';
 
 export const createUserSchema = z.object({
-  name: z.string().min(2, "Name must be at least 2 characters"),
-  email: z.string().email("Invalid email address"),
-  age: z.coerce.number().min(18, "Must be at least 18").optional(),
-  role: z.enum(["admin", "member", "viewer"]),
+  name: z.string().min(2, 'Name must be at least 2 characters'),
+  email: z.string().email('Invalid email address'),
+  age: z.coerce.number().min(18, 'Must be at least 18').optional(),
+  role: z.enum(['admin', 'member', 'viewer']),
 });
 
 export type CreateUserInput = z.infer<typeof createUserSchema>;
@@ -49,14 +49,14 @@ export type CreateUserInput = z.infer<typeof createUserSchema>;
 
 ```tsx
 // components/create-user-form.tsx
-"use client";
+'use client';
 
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   createUserSchema,
   type CreateUserInput,
-} from "@/schemas/create-user.schema";
+} from '@/schemas/create-user.schema';
 
 interface Props {
   onSubmit: (data: CreateUserInput) => Promise<void>;
@@ -71,8 +71,8 @@ export function CreateUserForm({ onSubmit }: Props) {
     formState: { errors, isSubmitting },
   } = useForm<CreateUserInput>({
     resolver: zodResolver(createUserSchema),
-    mode: "onBlur",
-    defaultValues: { role: "member" },
+    mode: 'onBlur',
+    defaultValues: { role: 'member' },
   });
 
   const submit = async (data: CreateUserInput) => {
@@ -80,7 +80,7 @@ export function CreateUserForm({ onSubmit }: Props) {
       await onSubmit(data);
       reset();
     } catch (err) {
-      setError("root", { message: "Failed to create user. Try again." });
+      setError('root', { message: 'Failed to create user. Try again.' });
     }
   };
 
@@ -88,26 +88,26 @@ export function CreateUserForm({ onSubmit }: Props) {
     <form onSubmit={handleSubmit(submit)} noValidate>
       <div>
         <label htmlFor="name">Name</label>
-        <input id="name" {...register("name")} />
+        <input id="name" {...register('name')} />
         {errors.name && <p role="alert">{errors.name.message}</p>}
       </div>
 
       <div>
         <label htmlFor="email">Email</label>
-        <input id="email" type="email" {...register("email")} />
+        <input id="email" type="email" {...register('email')} />
         {errors.email && <p role="alert">{errors.email.message}</p>}
       </div>
 
       <div>
         <label htmlFor="age">Age</label>
-        <input id="age" type="number" {...register("age")} />
+        <input id="age" type="number" {...register('age')} />
         {errors.age && <p role="alert">{errors.age.message}</p>}
       </div>
 
       {errors.root && <p role="alert">{errors.root.message}</p>}
 
       <button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Creating..." : "Create User"}
+        {isSubmitting ? 'Creating...' : 'Create User'}
       </button>
     </form>
   );
@@ -117,7 +117,7 @@ export function CreateUserForm({ onSubmit }: Props) {
 ### Dynamic field array
 
 ```tsx
-import { useFieldArray, useForm } from "react-hook-form";
+import { useFieldArray, useForm } from 'react-hook-form';
 
 const schema = z.object({
   items: z
@@ -127,7 +127,7 @@ const schema = z.object({
         quantity: z.coerce.number().min(1),
       }),
     )
-    .min(1, "At least one item required"),
+    .min(1, 'At least one item required'),
 });
 
 type FormValues = z.infer<typeof schema>;
@@ -135,10 +135,10 @@ type FormValues = z.infer<typeof schema>;
 export function OrderForm() {
   const { control, register, handleSubmit } = useForm<FormValues>({
     resolver: zodResolver(schema),
-    defaultValues: { items: [{ name: "", quantity: 1 }] },
+    defaultValues: { items: [{ name: '', quantity: 1 }] },
   });
 
-  const { fields, append, remove } = useFieldArray({ control, name: "items" });
+  const { fields, append, remove } = useFieldArray({ control, name: 'items' });
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
@@ -151,7 +151,7 @@ export function OrderForm() {
           </button>
         </div>
       ))}
-      <button type="button" onClick={() => append({ name: "", quantity: 1 })}>
+      <button type="button" onClick={() => append({ name: '', quantity: 1 })}>
         Add Item
       </button>
       <button type="submit">Submit</button>
@@ -163,8 +163,8 @@ export function OrderForm() {
 ### Controller for third-party components
 
 ```tsx
-import { Controller } from "react-hook-form";
-import { DatePicker } from "@/components/ui/date-picker";
+import { Controller } from 'react-hook-form';
+import { DatePicker } from '@/components/ui/date-picker';
 
 <Controller
   control={control}
@@ -198,7 +198,7 @@ type CreateUserInput = z.infer<typeof schema>;
 const { register } = useForm({
   validate: (values) => {
     const errors = {};
-    if (!values.name) errors.name = "Required";
+    if (!values.name) errors.name = 'Required';
     return errors;
   },
 });

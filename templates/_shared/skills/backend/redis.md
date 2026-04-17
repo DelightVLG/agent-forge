@@ -46,7 +46,7 @@ async function getUserCached(userId: string): Promise<User> {
 
   const user = await db.users.findById(userId);
   if (user) {
-    await redis.set(cacheKey, JSON.stringify(user), "EX", 900); // 15 min
+    await redis.set(cacheKey, JSON.stringify(user), 'EX', 900); // 15 min
   }
   return user;
 }
@@ -77,7 +77,7 @@ async function withLock<T>(
   const lockValue = randomUUID();
   const ttlSec = Math.ceil(ttlMs / 1000);
 
-  const acquired = await redis.set(lockKey, lockValue, "EX", ttlSec, "NX");
+  const acquired = await redis.set(lockKey, lockValue, 'EX', ttlSec, 'NX');
   if (!acquired) {
     throw new ConflictError(`Resource ${key} is locked`);
   }
@@ -155,46 +155,46 @@ async function getSession(sessionId: string): Promise<SessionData | null> {
 
 ```typescript
 // ❌ No TTL — key lives forever
-await redis.set("cache:users:list", JSON.stringify(users));
+await redis.set('cache:users:list', JSON.stringify(users));
 
 // ✅ Always set expiration
-await redis.set("cache:users:list", JSON.stringify(users), "EX", 900);
+await redis.set('cache:users:list', JSON.stringify(users), 'EX', 900);
 ```
 
 ```typescript
 // ❌ Bare key names
-await redis.set("data", value);
-await redis.set("123", value);
+await redis.set('data', value);
+await redis.set('123', value);
 
 // ✅ Namespaced keys
-await redis.set("users:123:profile", value);
-await redis.set("cache:orders:list:page1", value);
+await redis.set('users:123:profile', value);
+await redis.set('cache:orders:list:page1', value);
 ```
 
 ```typescript
 // ❌ KEYS * in production — blocks the event loop
-const allKeys = await redis.keys("users:*");
+const allKeys = await redis.keys('users:*');
 
 // ✅ Use SCAN for iteration
 async function* scanKeys(pattern: string) {
-  let cursor = "0";
+  let cursor = '0';
   do {
     const [next, keys] = await redis.scan(
       cursor,
-      "MATCH",
+      'MATCH',
       pattern,
-      "COUNT",
+      'COUNT',
       100,
     );
     cursor = next;
     yield* keys;
-  } while (cursor !== "0");
+  } while (cursor !== '0');
 }
 ```
 
 ```typescript
 // ❌ New connection per request
-app.get("/users/:id", async (req, res) => {
+app.get('/users/:id', async (req, res) => {
   const client = new Redis(); // connection leak
   const data = await client.get(`users:${req.params.id}`);
   res.json(data);
@@ -203,7 +203,7 @@ app.get("/users/:id", async (req, res) => {
 // ✅ Shared client instance
 const redis = new Redis(process.env.REDIS_URL);
 
-app.get("/users/:id", async (req, res) => {
+app.get('/users/:id', async (req, res) => {
   const data = await redis.get(`users:${req.params.id}`);
   res.json(data);
 });
@@ -218,7 +218,7 @@ let cached: string | null = null;
 try {
   cached = await redis.get(key);
 } catch (err) {
-  logger.warn("Redis unavailable, falling through to DB", {
+  logger.warn('Redis unavailable, falling through to DB', {
     error: err.message,
   });
 }

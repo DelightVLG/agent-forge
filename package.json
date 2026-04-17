@@ -25,6 +25,11 @@
     "release": "node scripts/release.mjs patch",
     "release:minor": "node scripts/release.mjs minor",
     "release:major": "node scripts/release.mjs major",
+    "lint": "eslint \"src/**/*.{ts,js}\"",
+    "lint:fix": "eslint \"src/**/*.{ts,js}\" --fix",
+    "format": "prettier --write \"**/*.{ts,js,json,md,mdx,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{ts,js,json,md,mdx,yml,yaml}\"",
+    "typecheck": "tsc --noEmit",
     "prepare": "husky"
   },
   "engines": {
@@ -46,17 +51,26 @@
     "picocolors": "^1.0.1"
   },
   "devDependencies": {
+    "@eslint/js": "^10.0.1",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^20.14.0",
+    "eslint": "^10.2.0",
+    "eslint-config-prettier": "^10.1.8",
+    "globals": "^17.5.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.4.0",
     "prettier": "^3.8.2",
     "tsup": "^8.1.0",
     "tsx": "^4.15.0",
-    "typescript": "^5.5.0"
+    "typescript": "^5.5.0",
+    "typescript-eslint": "^8.58.2"
   },
   "packageManager": "pnpm@9.0.0",
   "lint-staged": {
-    "*.{ts,js,json,md}": "prettier --write"
+    "*.{ts,js}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md,mdx,yml,yaml}": "prettier --write"
   }
 }

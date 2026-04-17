@@ -55,23 +55,23 @@ src/
 
 ```typescript
 // app.ts
-import express from "express";
-import helmet from "helmet";
-import cors from "cors";
-import { router } from "./routes";
-import { errorHandler } from "./middleware/error-handler";
+import express from 'express';
+import helmet from 'helmet';
+import cors from 'cors';
+import { router } from './routes';
+import { errorHandler } from './middleware/error-handler';
 
 const app = express();
 
 // Security
 app.use(helmet());
-app.use(cors({ origin: ["https://app.example.com"], credentials: true }));
+app.use(cors({ origin: ['https://app.example.com'], credentials: true }));
 
 // Parsing
-app.use(express.json({ limit: "100kb" }));
+app.use(express.json({ limit: '100kb' }));
 
 // Routes
-app.use("/api/v1", router);
+app.use('/api/v1', router);
 
 // Error handler — must be last
 app.use(errorHandler);
@@ -83,19 +83,19 @@ export { app };
 
 ```typescript
 // routes/users.router.ts
-import { Router } from "express";
-import { usersService } from "../services/users.service";
-import { validate } from "../middleware/validate";
-import { createUserSchema } from "../schemas/user.schema";
+import { Router } from 'express';
+import { usersService } from '../services/users.service';
+import { validate } from '../middleware/validate';
+import { createUserSchema } from '../schemas/user.schema';
 
 const router = Router();
 
-router.get("/", async (req, res) => {
+router.get('/', async (req, res) => {
   const users = await usersService.findAll(req.query);
   res.json({ data: users });
 });
 
-router.post("/", validate(createUserSchema), async (req, res) => {
+router.post('/', validate(createUserSchema), async (req, res) => {
   const user = await usersService.create(req.body);
   res.status(201).json({ data: user });
 });
@@ -107,16 +107,16 @@ export { router as usersRouter };
 
 ```typescript
 // middleware/validate.ts
-import { ZodSchema } from "zod";
-import { AppError } from "../errors/app-error";
+import { ZodSchema } from 'zod';
+import { AppError } from '../errors/app-error';
 
 function validate(schema: ZodSchema) {
   return (req: Request, _res: Response, next: NextFunction) => {
     const result = schema.safeParse(req.body);
     if (!result.success) {
       throw new AppError(
-        "VALIDATION_FAILED",
-        "Invalid input",
+        'VALIDATION_FAILED',
+        'Invalid input',
         400,
         result.error.flatten().fieldErrors,
       );
@@ -143,9 +143,9 @@ function errorHandler(
     });
   }
 
-  logger.error("Unhandled error", { error: err.message, stack: err.stack });
+  logger.error('Unhandled error', { error: err.message, stack: err.stack });
   res.status(500).json({
-    error: { code: "INTERNAL_ERROR", message: "Internal server error" },
+    error: { code: 'INTERNAL_ERROR', message: 'Internal server error' },
   });
 }
 ```
@@ -154,16 +154,16 @@ function errorHandler(
 
 ```typescript
 // server.ts
-import { app } from "./app";
+import { app } from './app';
 
 const server = app.listen(3000, () => {
-  logger.info("Server started on port 3000");
+  logger.info('Server started on port 3000');
 });
 
 function shutdown(signal: string) {
   logger.info(`${signal} received, shutting down gracefully`);
   server.close(() => {
-    logger.info("HTTP server closed");
+    logger.info('HTTP server closed');
     process.exit(0);
   });
 
@@ -171,17 +171,17 @@ function shutdown(signal: string) {
   setTimeout(() => process.exit(1), 10000);
 }
 
-process.on("SIGTERM", () => shutdown("SIGTERM"));
-process.on("SIGINT", () => shutdown("SIGINT"));
+process.on('SIGTERM', () => shutdown('SIGTERM'));
+process.on('SIGINT', () => shutdown('SIGINT'));
 ```
 
 ## Anti-patterns
 
 ```typescript
 // ❌ Business logic in route handler
-router.post("/users", async (req, res) => {
+router.post('/users', async (req, res) => {
   const exists = await db.user.findUnique({ where: { email: req.body.email } });
-  if (exists) return res.status(409).json({ error: "exists" });
+  if (exists) return res.status(409).json({ error: 'exists' });
   const hashed = await bcrypt.hash(req.body.password, 12);
   const user = await db.user.create({
     data: { ...req.body, password: hashed },
@@ -190,7 +190,7 @@ router.post("/users", async (req, res) => {
 });
 
 // ✅ Thin handler delegates to service
-router.post("/users", validate(createUserSchema), async (req, res) => {
+router.post('/users', validate(createUserSchema), async (req, res) => {
   const user = await usersService.create(req.body);
   res.status(201).json({ data: user });
 });
@@ -198,13 +198,13 @@ router.post("/users", validate(createUserSchema), async (req, res) => {
 
 ```typescript
 // ❌ Unhandled async errors — crashes the server
-router.get("/users/:id", async (req, res) => {
+router.get('/users/:id', async (req, res) => {
   const user = await usersService.findById(req.params.id); // throws, no catch
   res.json(user);
 });
 
 // ✅ Use express-async-errors or wrap handlers
-import "express-async-errors"; // patches Express to catch async errors
+import 'express-async-errors'; // patches Express to catch async errors
 ```
 
 ```typescript
@@ -223,7 +223,7 @@ app.listen(3000); // can't test without starting the server
 app.use(express.json()); // accepts payloads of any size
 
 // ✅ Set a reasonable limit
-app.use(express.json({ limit: "100kb" }));
+app.use(express.json({ limit: '100kb' }));
 ```
 
 ## Checklist

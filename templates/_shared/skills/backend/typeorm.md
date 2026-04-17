@@ -45,34 +45,34 @@ import {
   UpdateDateColumn,
   OneToMany,
   Index,
-} from "typeorm";
-import { Post } from "./post.entity";
+} from 'typeorm';
+import { Post } from './post.entity';
 
-@Entity("users")
+@Entity('users')
 export class User {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
   @Index({ unique: true })
-  @Column({ type: "text" })
+  @Column({ type: 'text' })
   email: string;
 
-  @Column({ type: "text" })
+  @Column({ type: 'text' })
   name: string;
 
-  @Column({ type: "text", default: "user" })
+  @Column({ type: 'text', default: 'user' })
   role: string;
 
-  @Column({ type: "text", name: "password_hash" })
+  @Column({ type: 'text', name: 'password_hash' })
   passwordHash: string;
 
   @OneToMany(() => Post, (post) => post.author)
   posts: Post[];
 
-  @CreateDateColumn({ name: "created_at", type: "timestamptz" })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 
-  @UpdateDateColumn({ name: "updated_at", type: "timestamptz" })
+  @UpdateDateColumn({ name: 'updated_at', type: 'timestamptz' })
   updatedAt: Date;
 }
 ```
@@ -81,28 +81,28 @@ export class User {
 
 ```typescript
 // entities/post.entity.ts
-@Entity("posts")
+@Entity('posts')
 export class Post {
-  @PrimaryGeneratedColumn("uuid")
+  @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ type: "text" })
+  @Column({ type: 'text' })
   title: string;
 
-  @Column({ type: "text", nullable: true })
+  @Column({ type: 'text', nullable: true })
   content: string | null;
 
-  @Column({ type: "boolean", default: false })
+  @Column({ type: 'boolean', default: false })
   published: boolean;
 
-  @ManyToOne(() => User, (user) => user.posts, { onDelete: "CASCADE" })
-  @JoinColumn({ name: "author_id" })
+  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
+  @JoinColumn({ name: 'author_id' })
   author: User;
 
-  @Column({ name: "author_id", type: "uuid" })
+  @Column({ name: 'author_id', type: 'uuid' })
   authorId: string;
 
-  @CreateDateColumn({ name: "created_at", type: "timestamptz" })
+  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
 }
 ```
@@ -121,14 +121,14 @@ export class UsersService {
   async findById(id: string): Promise<User | null> {
     return this.usersRepo.findOne({
       where: { id },
-      select: ["id", "email", "name", "role"],
+      select: ['id', 'email', 'name', 'role'],
     });
   }
 
   async findWithPosts(id: string): Promise<User | null> {
     return this.usersRepo.findOne({
       where: { id },
-      relations: ["posts"],
+      relations: ['posts'],
     });
   }
 
@@ -238,7 +238,7 @@ const users = await usersRepo.find();
 
 // ✅ Select only needed columns
 const users = await usersRepo.find({
-  select: ["id", "email", "name"],
+  select: ['id', 'email', 'name'],
 });
 ```
 

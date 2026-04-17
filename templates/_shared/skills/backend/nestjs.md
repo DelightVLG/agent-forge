@@ -51,11 +51,11 @@ src/
 
 ```typescript
 // dto/create-user.dto.ts
-import { IsEmail, IsString, MinLength } from "class-validator";
-import { ApiProperty } from "@nestjs/swagger";
+import { IsEmail, IsString, MinLength } from 'class-validator';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class CreateUserDto {
-  @ApiProperty({ example: "user@example.com" })
+  @ApiProperty({ example: 'user@example.com' })
   @IsEmail()
   email: string;
 
@@ -69,7 +69,7 @@ export class CreateUserDto {
 ### Thin controller
 
 ```typescript
-@Controller("users")
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -98,12 +98,12 @@ export class AllExceptionsFilter implements ExceptionFilter {
           }
         : {
             status: HttpStatus.INTERNAL_SERVER_ERROR,
-            body: { message: "Internal server error" },
+            body: { message: 'Internal server error' },
           };
 
     response.status(status).json({
       statusCode: status,
-      ...(typeof body === "string" ? { message: body } : body),
+      ...(typeof body === 'string' ? { message: body } : body),
       timestamp: new Date().toISOString(),
     });
   }
@@ -114,7 +114,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
 ```typescript
 // config/app.config.ts
-import { z } from "zod";
+import { z } from 'zod';
 
 export const appConfigSchema = z.object({
   PORT: z.coerce.number().default(3000),
@@ -149,7 +149,7 @@ create(@Body() dto: CreateUserDto) {
 const port = Number(process.env.PORT);
 
 // ✅ Using ConfigService
-const port = this.configService.get<number>("PORT");
+const port = this.configService.get<number>('PORT');
 ```
 
 ```typescript

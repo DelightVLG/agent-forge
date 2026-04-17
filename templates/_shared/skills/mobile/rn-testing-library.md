@@ -36,28 +36,28 @@ Rules and patterns for testing React Native components. Apply on top of
 
 ```tsx
 // user-card.test.tsx
-import { render, screen } from "@testing-library/react-native";
-import { userEvent } from "@testing-library/react-native";
-import { UserCard } from "./user-card";
+import { render, screen } from '@testing-library/react-native';
+import { userEvent } from '@testing-library/react-native';
+import { UserCard } from './user-card';
 
-const mockUser = { id: "1", name: "Alice", email: "alice@example.com" };
+const mockUser = { id: '1', name: 'Alice', email: 'alice@example.com' };
 
-describe("UserCard", () => {
-  it("renders user name and email", () => {
+describe('UserCard', () => {
+  it('renders user name and email', () => {
     render(<UserCard user={mockUser} onPress={jest.fn()} />);
 
-    expect(screen.getByText("Alice")).toBeOnTheScreen();
-    expect(screen.getByText("alice@example.com")).toBeOnTheScreen();
+    expect(screen.getByText('Alice')).toBeOnTheScreen();
+    expect(screen.getByText('alice@example.com')).toBeOnTheScreen();
   });
 
-  it("calls onPress with user id when pressed", async () => {
+  it('calls onPress with user id when pressed', async () => {
     const onPress = jest.fn();
     const user = userEvent.setup();
     render(<UserCard user={mockUser} onPress={onPress} />);
 
-    await user.press(screen.getByRole("button", { name: "Alice" }));
+    await user.press(screen.getByRole('button', { name: 'Alice' }));
 
-    expect(onPress).toHaveBeenCalledWith("1");
+    expect(onPress).toHaveBeenCalledWith('1');
   });
 });
 ```
@@ -66,23 +66,23 @@ describe("UserCard", () => {
 
 ```tsx
 // user-list-screen.test.tsx
-import { render, screen } from "@testing-library/react-native";
-import { UserListScreen } from "./user-list-screen";
-import { renderWithProviders } from "@/test/render-with-providers";
+import { render, screen } from '@testing-library/react-native';
+import { UserListScreen } from './user-list-screen';
+import { renderWithProviders } from '@/test/render-with-providers';
 
-describe("UserListScreen", () => {
-  it("shows loading state then users", async () => {
+describe('UserListScreen', () => {
+  it('shows loading state then users', async () => {
     renderWithProviders(<UserListScreen />);
 
     expect(screen.getByText(/loading/i)).toBeOnTheScreen();
 
-    expect(await screen.findByText("Alice")).toBeOnTheScreen();
-    expect(screen.getByText("Bob")).toBeOnTheScreen();
+    expect(await screen.findByText('Alice')).toBeOnTheScreen();
+    expect(screen.getByText('Bob')).toBeOnTheScreen();
   });
 
-  it("shows error state when API fails", async () => {
+  it('shows error state when API fails', async () => {
     server.use(
-      http.get("/api/users", () => {
+      http.get('/api/users', () => {
         return HttpResponse.json(null, { status: 500 });
       }),
     );
@@ -92,9 +92,9 @@ describe("UserListScreen", () => {
     expect(await screen.findByText(/failed to load/i)).toBeOnTheScreen();
   });
 
-  it("shows empty state when no users", async () => {
+  it('shows empty state when no users', async () => {
     server.use(
-      http.get("/api/users", () => {
+      http.get('/api/users', () => {
         return HttpResponse.json([]);
       }),
     );
@@ -110,9 +110,9 @@ describe("UserListScreen", () => {
 
 ```tsx
 // test/render-with-providers.tsx
-import { render } from "@testing-library/react-native";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { NavigationContainer } from "@react-navigation/native";
+import { render } from '@testing-library/react-native';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { NavigationContainer } from '@react-navigation/native';
 
 export function renderWithProviders(ui: React.ReactElement) {
   const queryClient = new QueryClient({
@@ -131,21 +131,21 @@ export function renderWithProviders(ui: React.ReactElement) {
 
 ```typescript
 // test/mocks/server.ts
-import { setupServer } from "msw/native";
-import { handlers } from "./handlers";
+import { setupServer } from 'msw/native';
+import { handlers } from './handlers';
 
 export const server = setupServer(...handlers);
 ```
 
 ```typescript
 // test/mocks/handlers.ts
-import { http, HttpResponse } from "msw";
+import { http, HttpResponse } from 'msw';
 
 export const handlers = [
-  http.get("/api/users", () => {
+  http.get('/api/users', () => {
     return HttpResponse.json([
-      { id: "1", name: "Alice" },
-      { id: "2", name: "Bob" },
+      { id: '1', name: 'Alice' },
+      { id: '2', name: 'Bob' },
     ]);
   }),
 ];
@@ -153,7 +153,7 @@ export const handlers = [
 
 ```typescript
 // jest.setup.ts
-import { server } from "./test/mocks/server";
+import { server } from './test/mocks/server';
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
@@ -164,11 +164,11 @@ afterAll(() => server.close());
 
 ```typescript
 // jest.setup.ts
-jest.mock("react-native-reanimated", () =>
-  require("react-native-reanimated/mock"),
+jest.mock('react-native-reanimated', () =>
+  require('react-native-reanimated/mock'),
 );
 
-jest.mock("expo-router", () => ({
+jest.mock('expo-router', () => ({
   useRouter: () => ({
     push: jest.fn(),
     replace: jest.fn(),
@@ -179,31 +179,31 @@ jest.mock("expo-router", () => ({
   Link: ({ children }: { children: React.ReactNode }) => children,
 }));
 
-jest.mock("@react-native-async-storage/async-storage", () =>
-  require("@react-native-async-storage/async-storage/jest/async-storage-mock"),
+jest.mock('@react-native-async-storage/async-storage', () =>
+  require('@react-native-async-storage/async-storage/jest/async-storage-mock'),
 );
 ```
 
 ### Testing navigation
 
 ```tsx
-import { render, screen } from "@testing-library/react-native";
-import { userEvent } from "@testing-library/react-native";
-import { useRouter } from "expo-router";
+import { render, screen } from '@testing-library/react-native';
+import { userEvent } from '@testing-library/react-native';
+import { useRouter } from 'expo-router';
 
-jest.mock("expo-router");
+jest.mock('expo-router');
 
-describe("HomeScreen", () => {
-  it("navigates to user detail on press", async () => {
+describe('HomeScreen', () => {
+  it('navigates to user detail on press', async () => {
     const push = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({ push });
 
     const user = userEvent.setup();
     render(<HomeScreen />);
 
-    await user.press(screen.getByText("View Profile"));
+    await user.press(screen.getByText('View Profile'));
 
-    expect(push).toHaveBeenCalledWith("/users/123");
+    expect(push).toHaveBeenCalledWith('/users/123');
   });
 });
 ```
@@ -219,26 +219,26 @@ expect(result.current.count).toBe(1);
 
 // ✅ Test via the component that uses the hook
 render(<Counter />);
-expect(screen.getByText("0")).toBeOnTheScreen();
-await user.press(screen.getByRole("button", { name: /increment/i }));
-expect(screen.getByText("1")).toBeOnTheScreen();
+expect(screen.getByText('0')).toBeOnTheScreen();
+await user.press(screen.getByRole('button', { name: /increment/i }));
+expect(screen.getByText('1')).toBeOnTheScreen();
 ```
 
 ```tsx
 // ❌ testID as first choice
-screen.getByTestId("submit-button");
+screen.getByTestId('submit-button');
 
 // ✅ Accessible query
-screen.getByRole("button", { name: /submit/i });
+screen.getByRole('button', { name: /submit/i });
 ```
 
 ```tsx
 // ❌ Fixed timeout for async content
 await new Promise((r) => setTimeout(r, 2000));
-expect(screen.getByText("Alice")).toBeOnTheScreen();
+expect(screen.getByText('Alice')).toBeOnTheScreen();
 
 // ✅ Async-aware query
-expect(await screen.findByText("Alice")).toBeOnTheScreen();
+expect(await screen.findByText('Alice')).toBeOnTheScreen();
 ```
 
 ```tsx
@@ -246,8 +246,8 @@ expect(await screen.findByText("Alice")).toBeOnTheScreen();
 expect(tree).toMatchSnapshot();
 
 // ✅ Behavioral assertion
-expect(screen.getByText("Alice")).toBeOnTheScreen();
-expect(screen.getByRole("button", { name: /edit/i })).toBeEnabled();
+expect(screen.getByText('Alice')).toBeOnTheScreen();
+expect(screen.getByRole('button', { name: /edit/i })).toBeEnabled();
 ```
 
 ```tsx
