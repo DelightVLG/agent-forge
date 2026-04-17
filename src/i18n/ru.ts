@@ -48,6 +48,7 @@ const ru: Messages = {
   selectSkills_frontend: 'Выбери frontend-скиллы',
   selectSkills_mobile: 'Выбери mobile-скиллы',
   selectSkills_common: 'Выбери общие скиллы',
+  multiselectHint: 'space — выбрать, a — все, ↵ — подтвердить',
   skillsCopied: 'Добавлено скиллов: {count}',
 
   // Add command

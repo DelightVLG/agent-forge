@@ -45,6 +45,7 @@ const en = {
   selectSkills_frontend: 'Select frontend skills',
   selectSkills_mobile: 'Select mobile skills',
   selectSkills_common: 'Select common skills',
+  multiselectHint: 'space to select, a to toggle all, ↵ to confirm',
   skillsCopied: '{count} skill(s) added to the project',
 
   // Add command

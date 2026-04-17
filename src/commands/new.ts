@@ -323,7 +323,7 @@ async function resolveSkillsInteractive(
     const initialValues = skills.filter((s) => preselected.includes(s.id)).map((s) => s.id);
 
     const answer = await p.multiselect({
-      message: t(`selectSkills_${category}` as Parameters<typeof t>[0]),
+      message: `${t(`selectSkills_${category}` as Parameters<typeof t>[0])} ${pc.dim(`(${t('multiselectHint')})`)}`,
       options: skills.map((s) => ({
         value: s.id,
         label: s.name,
