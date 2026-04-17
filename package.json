@@ -1,7 +1,7 @@
 {
   "name": "@delightvlg/agent-forge",
   "author": "Sergey Kompanietc",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "CLI that scaffolds new projects pre-wired for Claude Code sub-agent workflows.",
   "type": "module",
   "main": "./dist/index.js",
