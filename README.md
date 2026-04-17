@@ -186,13 +186,18 @@ agentforge new <name> -t default          # pick a template
 agentforge new <name> --lang en           # CLI language
 ```
 
-| Flag                       |  Default  | Description            |
-| -------------------------- | :-------: | ---------------------- |
-| `-t, --template <name>`    | `default` | Project template       |
-| `--git / --no-git`         |  prompts  | Initialize git         |
-| `--install / --no-install` |  prompts  | Run `pnpm install`     |
-| `-y, --yes`                |  `false`  | Accept all defaults    |
-| `--lang <en\|ru>`          |   auto    | CLI interface language |
+| Flag                       |  Default  | Description                |
+| -------------------------- | :-------: | -------------------------- |
+| `-t, --template <name>`    | `default` | Project preset (see below) |
+| `--git / --no-git`         |  prompts  | Initialize git             |
+| `--install / --no-install` |  prompts  | Run `pnpm install`         |
+| `-y, --yes`                |  `false`  | Accept all defaults        |
+| `--lang <en\|ru>`          |   auto    | CLI interface language     |
+
+Available `--template` presets: `default` (backend + web + mobile),
+`backend-web`, `backend-mobile`, `web-mobile`, `backend-only`, `web-only`,
+`mobile-only`, `minimal`. In interactive mode the CLI picks the preset for you
+based on which platforms you enable — any combination is valid.
 
 ### Localization
 
@@ -239,29 +244,27 @@ pnpm smoke                                             # E2E smoke test
 <summary><b>Repository structure</b></summary>
 
 ```
-src/                 CLI source (TypeScript, ESM)
-  index.ts           entry point
-  commands/new.ts    `agentforge new` command
-  lib/               copy-template, render, paths
-  i18n/              en.ts, ru.ts, index.ts
+src/                    CLI source (TypeScript, ESM)
+  index.ts              entry point
+  commands/new.ts       `agentforge new` command
+  lib/                  copy-template, render, paths
+  i18n/                 en.ts, ru.ts, index.ts
 templates/
-  default/           project template
+  _base/                shared root (CLAUDE.md.hbs, .claude/, .agent-memory/, scripts, configs)
+  _apps/                one folder per platform (backend / web / mobile)
+  _shared/              skills + agents copied into .claude/ on demand
+  minimal/              self-contained minimal preset (no apps/)
 packages/
-  create-agent-forge/  package for `pnpm create`
+  create-agent-forge/   package for `pnpm create`
 scripts/
-  smoke.mjs          E2E smoke test
+  smoke.mjs             E2E smoke test
 ```
 
-</details>
-
-<details>
-<summary><b>Template authoring rules</b></summary>
-
-- Dotfiles are stored with a `_` prefix: `_claude/`, `_gitignore` → renamed to
-  `.name` on copy
-- Files with `.hbs` suffix are rendered with `{{projectName}}` substitution and
-  lose the suffix
-- Plain files are copied byte-for-byte
+Every platform-aware preset (`default`, `backend-web`, `backend-mobile`,
+`web-mobile`, `backend-only`, `web-only`, `mobile-only`) is composed on the fly
+from `_base` + the subset of `_apps/*` that was requested. The `minimal` preset
+is kept as a separate tree because it ships a slightly different `package.json`
+/ `lefthook.yml`.
 
 </details>
 

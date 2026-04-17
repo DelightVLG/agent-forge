@@ -5,7 +5,7 @@ import { spawnSync } from 'node:child_process';
 import { type Command } from 'commander';
 import * as p from '@clack/prompts';
 import pc from 'picocolors';
-import { copyTemplate } from '../lib/copy-template.js';
+import { copyTemplate, pruneEmptyAppsArtifacts } from '../lib/copy-template.js';
 import { resolveTemplatesDir } from '../lib/paths.js';
 import { t } from '../i18n/index.js';
 import {
@@ -90,22 +90,32 @@ async function runNew(nameArg: string | undefined, options: NewOptions): Promise
     await reviewLoop(answers, options);
   }
 
-  // 3. Валидация шаблона после всех изменений.
-  const templateDir = path.join(templatesDir, answers.template);
-  if (!existsSync(templateDir)) {
-    p.cancel(t('templateNotFound', { template: answers.template, path: templateDir }));
-    process.exit(1);
-  }
-
-  // 4. Копируем и настраиваем.
+  // 3. Копируем и настраиваем.
   const spin = p.spinner();
   spin.start(t('copyingTemplate', { template: answers.template }));
-  await copyTemplate({
-    sourceDir: templateDir,
-    targetDir,
-    variables: { projectName: answers.projectName },
-    skills: answers.skills,
-  });
+  if (answers.template === 'minimal') {
+    const templateDir = path.join(templatesDir, 'minimal');
+    if (!existsSync(templateDir)) {
+      p.cancel(t('templateNotFound', { template: answers.template, path: templateDir }));
+      process.exit(1);
+    }
+    await copyTemplate({
+      sourceDir: templateDir,
+      targetDir,
+      variables: { projectName: answers.projectName },
+      skills: answers.skills,
+    });
+  } else {
+    await copyTemplate({
+      structure: answers.structure,
+      targetDir,
+      variables: { projectName: answers.projectName },
+      skills: answers.skills,
+    });
+    if (!hasAnyApp(answers.structure)) {
+      await pruneEmptyAppsArtifacts(targetDir);
+    }
+  }
   spin.stop(
     t('templateCopied', {
       path: pc.cyan(path.relative(process.cwd(), targetDir) || '.'),
@@ -423,13 +433,21 @@ async function resolveProjectStructure(initial?: ProjectStructure): Promise<Proj
   return structure;
 }
 
+/**
+ * Map a user-picked structure to a logical template id. The id is surfaced in
+ * the review summary and used by the skills registry to pick sensible defaults.
+ * It is **not** a template directory name anymore — the project is composed
+ * from `_base` + `_apps/<name>` by the copier, except for `minimal`.
+ */
 function structureToTemplate(s: ProjectStructure): string {
-  const has = { b: s.backend, w: s.web, m: s.mobile };
-  if (has.b && (has.w || has.m)) return 'default';
-  if (has.b && !has.w && !has.m) return 'backend-only';
-  if (!has.b && has.w && !has.m) return 'web-only';
-  if (!has.b && !has.w && has.m) return 'mobile-only';
-  if (!has.b && has.w && has.m) return 'default';
+  const { backend: b, web: w, mobile: m } = s;
+  if (b && w && m) return 'default';
+  if (b && w && !m) return 'backend-web';
+  if (b && !w && m) return 'backend-mobile';
+  if (!b && w && m) return 'web-mobile';
+  if (b && !w && !m) return 'backend-only';
+  if (!b && w && !m) return 'web-only';
+  if (!b && !w && m) return 'mobile-only';
   return 'minimal';
 }
 
@@ -437,15 +455,27 @@ function templateToStructure(template: string): ProjectStructure {
   switch (template) {
     case 'default':
       return { backend: true, web: true, mobile: true };
+    case 'backend-web':
+      return { backend: true, web: true, mobile: false };
+    case 'backend-mobile':
+      return { backend: true, web: false, mobile: true };
+    case 'web-mobile':
+      return { backend: false, web: true, mobile: true };
     case 'backend-only':
       return { backend: true, web: false, mobile: false };
     case 'web-only':
       return { backend: false, web: true, mobile: false };
     case 'mobile-only':
       return { backend: false, web: false, mobile: true };
+    case 'minimal':
+      return { backend: false, web: false, mobile: false };
     default:
       return { backend: false, web: false, mobile: false };
   }
+}
+
+function hasAnyApp(s: ProjectStructure): boolean {
+  return s.backend || s.web || s.mobile;
 }
 
 function structureToCategories(s: ProjectStructure): SkillCategory[] {

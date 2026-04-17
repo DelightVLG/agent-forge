@@ -9,3 +9,6 @@ demo.tape
 templates/**/_gitignore
 
 templates/**/package.json.hbs
+
+templates/**/*.hbs
+
