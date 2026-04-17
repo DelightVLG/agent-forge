@@ -188,11 +188,16 @@ agentforge new <name> --lang en           # язык CLI
 
 | Флаг                       | По умолчанию | Описание                 |
 | -------------------------- | :----------: | ------------------------ |
-| `-t, --template <name>`    |  `default`   | Шаблон проекта           |
+| `-t, --template <name>`    |  `default`   | Пресет (см. ниже)        |
 | `--git / --no-git`         |  спрашивает  | Инициализировать git     |
 | `--install / --no-install` |  спрашивает  | Запустить `pnpm install` |
 | `-y, --yes`                |   `false`    | Принять все умолчания    |
 | `--lang <en\|ru>`          |     авто     | Язык интерфейса CLI      |
+
+Доступные пресеты для `--template`: `default` (backend + web + mobile),
+`backend-web`, `backend-mobile`, `web-mobile`, `backend-only`, `web-only`,
+`mobile-only`, `minimal`. В интерактивном режиме CLI сам подбирает пресет по
+выбранным платформам — любая комбинация валидна.
 
 ### Локализация
 
@@ -239,18 +244,26 @@ pnpm smoke                                             # E2E smoke-тест
 <summary><b>Структура репозитория</b></summary>
 
 ```
-src/                 исходники CLI (TypeScript, ESM)
-  index.ts           точка входа
-  commands/new.ts    команда `agentforge new`
-  lib/               copy-template, render, paths
-  i18n/              en.ts, ru.ts, index.ts
+src/                    исходники CLI (TypeScript, ESM)
+  index.ts              точка входа
+  commands/new.ts       команда `agentforge new`
+  lib/                  copy-template, render, paths
+  i18n/                 en.ts, ru.ts, index.ts
 templates/
-  default/           шаблон проекта
+  _base/                общий корень (CLAUDE.md.hbs, .claude/, .agent-memory/, scripts, configs)
+  _apps/                по одной папке на платформу (backend / web / mobile)
+  _shared/              скиллы + агенты, подключаются в .claude/ по запросу
+  minimal/              самостоятельный минимальный пресет (без apps/)
 packages/
-  create-agent-forge/  пакет для `pnpm create`
+  create-agent-forge/   пакет для `pnpm create`
 scripts/
-  smoke.mjs          E2E smoke-тест
+  smoke.mjs             E2E smoke-тест
 ```
+
+Любой пресет с платформами (`default`, `backend-web`, `backend-mobile`,
+`web-mobile`, `backend-only`, `web-only`, `mobile-only`) собирается на лету из
+`_base` + нужных `_apps/*`. `minimal` вынесен отдельно, потому что у него свой
+`package.json` / `lefthook.yml`.
 
 </details>
 
@@ -259,7 +272,10 @@ scripts/
 
 - Дотфайлы хранятся с префиксом `_`: `_claude/`, `_gitignore` → при копировании
   становятся `.name`
-- Файлы `*.hbs` проходят через рендер с `{{projectName}}` и теряют суффикс
+- Файлы `*.hbs` проходят через рендер и теряют суффикс. Рендер поддерживает
+  `{{var}}`, `{{#if var}}…{{else}}…{{/if}}` и `{{#unless var}}…{{/unless}}`.
+  Доступные булевые переменные: `backend`, `web`, `mobile`, `hasApps`,
+  `hasFrontend`, `hasSharedPackages`.
 - Обычные файлы копируются как есть
 
 </details>
