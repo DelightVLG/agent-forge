@@ -267,19 +267,6 @@ scripts/
 
 </details>
 
-<details>
-<summary><b>Правила авторинга шаблонов</b></summary>
-
-- Дотфайлы хранятся с префиксом `_`: `_claude/`, `_gitignore` → при копировании
-  становятся `.name`
-- Файлы `*.hbs` проходят через рендер и теряют суффикс. Рендер поддерживает
-  `{{var}}`, `{{#if var}}…{{else}}…{{/if}}` и `{{#unless var}}…{{/unless}}`.
-  Доступные булевые переменные: `backend`, `web`, `mobile`, `hasApps`,
-  `hasFrontend`, `hasSharedPackages`.
-- Обычные файлы копируются как есть
-
-</details>
-
 ---
 
 <div align="center">

@@ -268,19 +268,6 @@ is kept as a separate tree because it ships a slightly different `package.json`
 
 </details>
 
-<details>
-<summary><b>Template authoring rules</b></summary>
-
-- Dotfiles are stored with a `_` prefix: `_claude/`, `_gitignore` → renamed to
-  `.name` on copy
-- Files with `.hbs` suffix are rendered and lose the suffix. The renderer
-  supports `{{var}}`, `{{#if var}}…{{else}}…{{/if}}`, and
-  `{{#unless var}}…{{/unless}}`. Available booleans: `backend`, `web`, `mobile`,
-  `hasApps`, `hasFrontend`, `hasSharedPackages`.
-- Plain files are copied byte-for-byte
-
-</details>
-
 ---
 
 <div align="center">
